@@ -4,9 +4,6 @@ var game_model = require('../engine/models/game.js');
 var fs = require('fs');
 
 document.addEventListener("DOMContentLoaded", () => {
-    var entries = fs.readdirSync('/home/douglas');
-    console.log(entries);
-
     var titlebar = new hx.TitleBar('.example-heading')
 
     // the options are not normally needed when initialising the sidebar - they are

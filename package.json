@@ -9,6 +9,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "easystarjs": "^0.2.3",
     "electron": "^0.4.1",
     "font-awesome": "^4.5.0",
     "gl-matrix": "^2.3.1",

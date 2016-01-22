@@ -10,6 +10,13 @@ class MapInstance {
         this.warps = {};
         this.entity_instances = null;
     }
+    update(time_delta) {
+        this.map.layers.forEach((layer) => {
+            layer.sprite_instances.forEach((sprite_instance) => {
+                sprite_instance.update(time_delta);
+            });
+        });
+    }
 }
 
 module.exports = MapInstance;

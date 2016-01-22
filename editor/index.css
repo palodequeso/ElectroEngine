@@ -1,0 +1,6 @@
+.inline-btn {
+    display: inline-block !important;
+    width: auto !important;
+    float: right !important;
+    margin: -4px 0 0 4px !important;
+}

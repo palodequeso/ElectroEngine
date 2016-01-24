@@ -1,17 +1,24 @@
 'use strict';
 
+var Model = require('../../lib/model.js');
+
 class Particle {
-    constructor() {
-        this.position = [0, 0];
-        this.velocity = [0, 0];
-        this.start_color = [0, 0, 0];
-        this.end_color = [0, 0, 0];
-        this.color = [0, 0, 0];
-        this.size = 0.0;
-        this.fade = 0.0;
-        this.start_life = 0.0;
-        this.life = 0.0;
-        this.decay = 0.0;
+    get defaults() {
+        return {
+            position: [0, 0],
+            velocity: [0, 0],
+            start_color: [0, 0, 0],
+            end_color: [0, 0, 0],
+            color: [0, 0, 0],
+            size: 0.0,
+            fade: 0.0,
+            start_life: 0.0,
+            life: 0.0,
+            decay: 0.0
+        };
+    }
+    constructor(data) {
+        super(data);
     }
     update(time_delta) {
         var position = this.position;

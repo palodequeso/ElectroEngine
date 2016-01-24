@@ -1,13 +1,19 @@
 'use strict';
 
+var Model = require('../../lib/model.js');
+
 class Sprite {
-    constructor() {
-        this.id = null;
-        this.image = null;
-        this.animations = null;
-        this.tiles = null;
-        this.width = 0;
-        this.height = 0;
+    get defaults() {
+        return {
+            image: null,
+            animations: null,
+            tiles: null,
+            width: 0,
+            height: 0
+        };
+    }
+    constructor(data) {
+        super(data);
     }
 }
 

@@ -1,5 +1,6 @@
 "use strict";
 
+var View = require('../../lib/view.js');
 var glmatrix = require("glmatrix");
 
 var textured_quad_shader_vert_source = '' +

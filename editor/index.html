@@ -9,12 +9,11 @@
         <script src="index.js"></script>
     </head>
     <body>
-        <div class="hx-sidebar-page sidebar-example">
-          <div class="hx-heading example-heading">
+        <div class="hx-sidebar-page sidebar">
+          <div class="hx-heading heading">
             <div class="hx-titlebar">
               <div class="hx-titlebar-container">
-                <div class="hx-titlebar-header example-titlebar">
-                  <!-- <a class="hx-titlebar-icon" href="#"><img class="hx-logo"></img></a> -->
+                <div class="hx-titlebar-header titlebar">
                   <div class="hx-titlebar-title">Electro Engine</div>
                   <div class="hx-titlebar-subtitle">Editor</div>
                   <div class="hx-titlebar-menu-icon-mobile"><i class="fa fa-reorder"></i></div>
@@ -33,42 +32,41 @@
 
             <div id="collapsible1" class="hx-collapsible">
               <div class="hx-collapsible-heading"><i class="fa fa-gamepad"></i> Games
-                  <button class="inline-btn hx-btn">Create</button>
+                  <button class="inline-btn hx-btn" id="create_game_button">Create</button>
+                  <button class="inline-btn hx-btn" id="load_game_button">Load</button>
               </div>
               <div class="hx-collapsible-content">
-                  <div class="hx-sidebar-section">Sample Game</div>
+                  <button class="hx-btn" style="display: none;" id="edit_game_button">Edit Game</button>
               </div>
             </div>
 
             <div id="collapsible2" class="hx-collapsible">
               <div class="hx-collapsible-heading"><i class="fa fa-map"></i> Maps
-                  <button class="inline-btn hx-btn">Create</button>
+                  <button class="inline-btn hx-btn" id="create_map_button">Create</button>
               </div>
-              <div class="hx-collapsible-content">
-                  <div class="hx-sidebar-section">Sample Map</div>
+              <div class="hx-collapsible-content" id="map_selector">
+                  <!-- <div class="hx-sidebar-section">Sample Map</div> -->
               </div>
             </div>
 
             <div id="collapsible3" class="hx-collapsible">
               <div class="hx-collapsible-heading"><i class="fa fa-transgender"></i> Entities
-                  <button class="inline-btn hx-btn">Create</button>
+                  <button class="inline-btn hx-btn" id="create_entity_button">Create</button>
               </div>
-              <div class="hx-collapsible-content">
-                  <div class="hx-sidebar-section">Sample Entity</div>
+              <div class="hx-collapsible-content" id="entity_selector">
               </div>
             </div>
 
             <div id="collapsible4" class="hx-collapsible">
               <div class="hx-collapsible-heading"><i class="fa fa-circle-o"></i> Particle Systems
-                  <button class="inline-btn hx-btn">Create</button>
+                  <button class="inline-btn hx-btn" id="create_particle_system_button">Create</button>
               </div>
-              <div class="hx-collapsible-content">
-                  <div class="hx-sidebar-section">Sample Particle System</div>
+              <div class="hx-collapsible-content" id="particle_system_selector">
               </div>
             </div>
 
           </div>
-          <div class="hx-content example-content"></div>
+          <div class="hx-content content"></div>
 
         </div>
     </body>

@@ -1,17 +1,23 @@
 'use strict';
 
 var EasyStar = require('easystar');
+var Model = require('../../lib/model.js');
 
-class CollisionLayer {
-    constructor() {
-        this.tiles_x = 0;
-        this.tiles_y = 0;
-        this.tile_width = 0;
-        this.tile_height = 0;
-        this.image_width = 0;
-        this.image_height = 0;
-        this.blocks = null;
-        this.easystar_grid = null;
+class CollisionLayer extends Model {
+    get defaults() {
+        return {
+            tiles_x: 0,
+            tiles_y: 0,
+            tile_width: 0,
+            tile_height: 0,
+            image_width: 0,
+            image_height: 0,
+            blocks: null,
+            easystar_grid: null
+        };
+    }
+    constructor(data) {
+        super(data);
         this.easystar = null;
     }
     find_path(position, end_position, callback) {

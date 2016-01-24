@@ -1,18 +1,21 @@
 'use strict';
 
+var Model = require('../../lib/model.js');
 var Map = require('./map.js');
 
 class Game {
-    constructor() {
-        this.id = null;
-        this.name = '';
-        this.version = 0;
-        this.maps = null;
-        this.entities = null;
-        this.particle_systems = null;
-        this.map_instances = null;
-        this.entity_instances = null;
-        this.particle_system_instances = null;
+    get defaults() {
+        name: '',
+        version: 0,
+        maps: null,
+        entities: null,
+        particle_systems: null,
+        map_instances: null,
+        entity_instances: null,
+        particle_system_instances: null
+    }
+    constructor(data) {
+        super(data);
     }
     game_logic() {
         // Override Me

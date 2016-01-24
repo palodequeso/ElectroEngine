@@ -1,19 +1,26 @@
 'use strict';
 
+var Model = require('../../lib/model.js');
+
 class SpriteInstance {
-    constructor() {
-        this.position = [0, 0];
-        this.sprite_id = null;
-        this.current_animation = '';
-        this.frame_time = 0.0;
-        this.layer = null;
-        this.opacity = 0.0;
-        this.sprite = null;
-        this.tile = null;
+    get defaults() {
+        return {
+            position: [0, 0],
+            sprite_id: null,
+            current_animation: '',
+            frame_time: 0.0,
+            layer: null,
+            opacity: 0.0,
+            sprite: null,
+            tile: null
+        };
+    }
+    constructor(data) {
+        super(data);
     }
     update(time_delta) {
         var animations = this.sprite.animations;
-        if (!_.isNull(animations)) {
+        if (animations === null) {
             var animation = animations[this.current_animation];
 
             var frame_time = (this.frame_time + time_delta) % animation.time;
@@ -21,7 +28,7 @@ class SpriteInstance {
 
             var time_index = 0;
             var found = false;
-            _.each(animation.frames, (frame, frame_index) => {
+            animation.frames.forEach((frame) => {
                 time_index += frame.duration;
                 if (!found && frame_time <= time_index) {
                     var tile = this.sprite.tiles[frame.index];

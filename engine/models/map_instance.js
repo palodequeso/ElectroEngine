@@ -1,14 +1,20 @@
 'use strict';
 
+var Model = require('../../lib/model.js');
+
 class MapInstance {
-    constructor() {
-        this.id = null;
-        this.name = '';
-        this.map_id = null;
-        this.map = null;
-        this.position = [0, 0];
-        this.warps = {};
-        this.entity_instances = null;
+    get defaults() {
+        return {
+            name: ''.
+            map_id: null,
+            map: null,
+            position: [0, 0],
+            warps: {},
+            entity_instances: null
+        };
+    }
+    constructor(data) {
+        super(data);
     }
     update(time_delta) {
         this.map.layers.forEach((layer) => {

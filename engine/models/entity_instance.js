@@ -1,14 +1,20 @@
 'use strict';
 
-class EntityInstance {
-    constructor() {
-        this.id = null;
-        this.name = '';
-        this.entity_id = null;
-        this.entity = null;
-        this.sprite_instance = null;
-        this.velocity = [0, 0];
-        this.previous_velocity = [0, 0];
+var Model = require('../../lib/model.js');
+
+class EntityInstance extends Model {
+    get defaults() {
+        return {
+            name: '',
+            entity_id: null,
+            entity: null,
+            sprite_instance: null,
+            velocity: [0, 0],
+            previous_velocity: [0, 0]
+        };
+    }
+    constructor(data) {
+        super(data);
     }
     update(time_delta) {
         var position = this.sprite_instance.position;

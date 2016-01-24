@@ -1,12 +1,18 @@
 'use strict';
 
+var Model = require('../../lib/model.js');
+
 class Map {
-    constructor() {
-        this.id = null;
-        this.name = '';
-        this.layers = null;
-        this.collision_layer = null;
-        this.entity_layer = null;
+    get defaults() {
+        return {
+            name: '',
+            layers: null,
+            collision_layer: null,
+            entity_layer: null
+        };
+    }
+    constructor(data) {
+        super(data);
     }
 }
 

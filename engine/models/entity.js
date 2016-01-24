@@ -1,13 +1,20 @@
 'use strict';
 
-class Entity {
-    constructor() {
-        this.name = '';
-        this.sprite_id = '';
-        this.sprite = null;
-        this.type = '';
-        this.position_offset = [0, 0];
-        this.dimensions = [0, 0];
+var Model = require('../../lib/model.js');
+
+class Entity extends Model {
+    get defaults() {
+        return {
+            name: '',
+            sprite_id: '',
+            sprite: null,
+            type: '',
+            position_offset: [0, 0],
+            dimensions: [0, 0]
+        };
+    }
+    constructor(data) {
+        super(data);
     }
 }
 

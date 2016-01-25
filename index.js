@@ -20,6 +20,9 @@ app.on('window-all-closed', function() {
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
 app.on('ready', function() {
+    // app.commandLine.appendSwitch('js-flags', '--harmony');
+    // app.commandLine.appendSwitch('js-flags', '--es_staging');
+
     // Create the browser window.
     mainWindow = new BrowserWindow({width: 800, height: 600, 'auto-hide-menu-bar': true});
     mainWindow.maximize();

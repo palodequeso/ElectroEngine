@@ -2,7 +2,7 @@
 
 var Model = require('../../lib/model.js');
 
-class Map {
+class Map extends Model {
     get defaults() {
         return {
             name: '',

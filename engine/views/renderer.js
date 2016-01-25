@@ -2,6 +2,7 @@
 
 var View = require('../../lib/view.js');
 var glmatrix = require("glmatrix");
+var View = require('../../lib/view.js');
 
 var textured_quad_shader_vert_source = '' +
     'attribute vec4 vertex_position;' +
@@ -36,13 +37,14 @@ var textured_quad_shader_frag_source = '' +
     '}';
 
 
-class Renderer {
-    constructor: function() {
-        this.elemet = document.createElement('div');
+class Renderer extends View {
+    constructor: function(options) {
+        super(options);
+
         this.canvas = document.createElement('canvas');
         this.canvas.setAttribute("width", "650px");
         this.canvas.setAttribute("height", "500px");
-        this.elemet.appendChild(this.canvas);
+        this.$element.append(canvas);
         this.gl = this.canvas.getContext('webgl');
         this.max_texture_size = this.gl.getParameter(this.gl.MAX_TEXTURE_SIZE);
 

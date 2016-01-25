@@ -3,16 +3,18 @@
 var Model = require('../../lib/model.js');
 var Map = require('./map.js');
 
-class Game {
+class Game extends Model {
     get defaults() {
-        name: '',
-        version: 0,
-        maps: null,
-        entities: null,
-        particle_systems: null,
-        map_instances: null,
-        entity_instances: null,
-        particle_system_instances: null
+        return {
+            name: '',
+            version: 0,
+            maps: null,
+            entities: null,
+            particle_systems: null,
+            map_instances: null,
+            entity_instances: null,
+            particle_system_instances: null
+        };
     }
     constructor(data) {
         super(data);

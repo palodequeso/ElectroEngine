@@ -3,6 +3,7 @@
 var $ = require('jquery');
 
 var game_model = require('../engine/models/game.js');
+var game_view = require('./views/game.js');
 var fs = require('fs');
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -12,4 +13,12 @@ document.addEventListener("DOMContentLoaded", () => {
     $("#create_game_button").on('click', () => {
         console.log("Game Button Clicked!");
     });
+
+    var gv = new game_view({
+        model: new game_model()
+    });
+    gv.render();
+
+    $(".content").empty();
+    $(".content").append(gv.$element);
 });

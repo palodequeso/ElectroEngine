@@ -7,6 +7,7 @@ class Game extends Model {
     get defaults() {
         return {
             name: '',
+            description: '',
             version: 0,
             maps: null,
             entities: null,

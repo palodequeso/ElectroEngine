@@ -4,3 +4,11 @@
     float: right !important;
     margin: -4px 0 0 4px !important;
 }
+
+#game_edit_buttons {
+    display: none;
+}
+
+#game_edit_buttons button {
+    margin-top: 10px;
+}

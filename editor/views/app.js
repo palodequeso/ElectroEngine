@@ -13,6 +13,10 @@ var game_model = require('../../engine/models/game.js');
 var game_views = require('./game.js');
 var gameio = require('../gameio.js');
 
+var Map = require('../../engine/models/map.js');
+var Maps = require('../../engine/models/maps.js');
+var MapEditor = require('./map.js');
+
 class App extends View {
     constructor(options) {
         super(options);
@@ -20,6 +24,7 @@ class App extends View {
 
         this.$element.on('click', '#create_game_button', this.create_game.bind(this));
         this.$element.on('click', '#load_game_button', this.load_game.bind(this));
+        this.$element.on('click', '#create_map_button', this.create_map.bind(this));
     }
     create_game() {
         var gv = new game_views.CreateGameView({
@@ -35,6 +40,18 @@ class App extends View {
 
         this.$element.find(".content").empty();
         this.$element.find(".content").append(gv.$element);
+    }
+    create_map() {
+        console.log("Create Map");
+        var model = new Map();
+        var view = new MapEditor({
+            model: model
+        });
+
+        this.$element.find(".content").empty();
+        this.$element.find(".content").append(view.$element);
+
+        view.render();
     }
     load_game() {
         var choice = dialog.showOpenDialog({properties: ['openDirectory']});

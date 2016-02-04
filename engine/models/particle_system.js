@@ -2,7 +2,7 @@
 
 var Model = require('../../lib/model.js');
 
-class ParticleSystem {
+class ParticleSystem extends Model {
     get defaults() {
         return {
             name: '',

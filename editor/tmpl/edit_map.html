@@ -1,11 +1,13 @@
 <div>
-    <div id="map_editor_tiles">Tiles Go Here</div>
+    <div id="map_editor_tiles"></div>
     <div id="map_editor_tools">
         <div class="hx-well">
             <div id="map_properties">
                 <div class="hx-collapsible-heading">Properties</div>
                 <div class="hx-collapsible-content">
-                    <label>Name</label><input type="text" value="{{namne}}" />
+                    <label>Name</label><input type="text" value="{{name}}" /><br>
+                    <label>Width</label><input type="number" value="{{width}}" /><br>
+                    <label>Height</label><input type="number" value="{{height}}" /><br>
                 </div>
             </div>
         </div>
@@ -32,22 +34,18 @@
                     <button class="hx-btn hx-positive btn-sm" id="add_sprite_sheet_button">Add...</button>
                 </div>
                 <div class="hx-collapsible-content hx-tabs" id="sprite_sheet_tabs">
-                    <div id="sprite_sheet_0" class="hx-tab hx-positive" data-content="sprite_sheet_0_content">Sprite Sheet 0</div>
-                    <div id="sprite_sheet_1" class="hx-tab hx-positive" data-content="sprite_sheet_1_content">Sprite Sheet 1</div>
-                    <div id="sprite_sheet_2" class="hx-tab hx-positive" data-content="sprite_sheet_2_content">Sprite Sheet 2</div>
+                    {{#each sprite_sheets}}
+                        <div id="sprite_sheet_{{id}}" class="hx-tab hx-positive" data-content="sprite_sheet_{{id}}_content">
+                            <a href="#"><i class="fa fa-trash"></i></a>
+                            {{name}}
+                        </div>
+                    {{/each}}
                     <div class="hx-tabs-content">
-                        <div id="sprite_sheet_0_content" class="hx-tab-content">
-                            <button class="hx-btn hx-negative btn-sm">Delete</button>
-                            Sprite Sheet Selection Grid 0
-                        </div>
-                        <div id="sprite_sheet_1_content" class="hx-tab-content">
-                            <button class="hx-btn hx-negative btn-sm">Delete</button>
-                            Sprite Sheet Selection Grid 1
-                        </div>
-                        <div id="sprite_sheet_2_content" class="hx-tab-content">
-                            <button class="hx-btn hx-negative btn-sm">Delete</button>
-                            Sprite Sheet Selection Grid 2
-                        </div>
+                        {{#each sprite_sheets}}
+                            <div id="sprite_sheet_{{id}}_content" class="hx-tab-content">
+                                <img src="{{modified_path}}"/>
+                            </div>
+                        {{/each}}
                     </div>
                 </div>
             </div>

@@ -6,7 +6,6 @@ class EntityInstance extends Model {
     get defaults() {
         return {
             name: '',
-            entity_id: null,
             entity: null,
             sprite_instance: null,
             velocity: [0, 0],

@@ -1,15 +1,15 @@
 'use strict';
 
 var Collection = require('../../lib/collection.js');
-var SpriteSheet = require('./sprite_sheet.js');
+var MapLayer = require('./map_layer.js');
 
-class SpriteSheets extends Collection {
+class MapLayers extends Collection {
     get model() {
-        return SpriteSheet;
+        return MapLayer;
     }
     constructor(data) {
         super(data);
     }
 }
 
-module.exports = SpriteSheets;
+module.exports = MapLayers;

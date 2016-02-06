@@ -5,7 +5,8 @@ var Model = require('../../lib/model.js');
 class SpriteSheet extends Model {
     get defaults() {
         return {
-            image_src: '',
+            name: '',
+            path: '',
             width: 0,
             height: 0,
             tile_width: 32,

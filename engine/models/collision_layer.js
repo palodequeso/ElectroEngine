@@ -31,7 +31,7 @@ class CollisionLayer extends Model {
             callback(path);
         });
         this.easystar.calculate();
-    },
+    }
     check_collision(position, velocity, dimensions) {
         // NOTE: position is top left of collision rect.
         var tile_width = this.tile_width;

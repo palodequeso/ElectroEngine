@@ -16,6 +16,9 @@
 #map_editor_tiles {
     min-height: 10px;
     width: calc(100% - 285px);
+    height: calc(100vh - 50px);
+    overflow-x: auto;
+    overflow-y: auto;
     display: inline-block;
     vertical-align: top;
 }
@@ -23,6 +26,9 @@
 #map_editor_tools {
     width: 250px;
     display: inline-block;
+    height: calc(100vh - 50px);
+    overflow-x: auto;
+    overflow-y: auto;
 }
 
 #sprite_sheet_tabs .hx-tab {

@@ -57,7 +57,7 @@ class App extends View {
     load_game() {
         var choice = dialog.showOpenDialog({properties: ['openDirectory']});
         console.log("Game Folder: ", choice);
-        var result = gameio.load(choice);
+        var result = gameio.load(choice[0]);
         if (result === null) {
             console.error("Oopsies!");
         } else {

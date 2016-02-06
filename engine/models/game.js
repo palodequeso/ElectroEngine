@@ -3,6 +3,13 @@
 var Model = require('../../lib/model.js');
 var Map = require('./map.js');
 
+var Maps = require('./maps.js');
+var Entities = require('./entities.js');
+var ParticleSystems = require('./particle_systems.js');
+var MapInstances = require('./map_instances.js');
+var EntityInstances = require('./entity_instances.js');
+var ParticleSystemInstances = require('./particle_system_instances.js');
+
 class Game extends Model {
     get defaults() {
         return {
@@ -20,6 +27,32 @@ class Game extends Model {
     }
     constructor(data) {
         super(data);
+
+        if (this.maps === null) {
+            this.maps = [];
+        }
+        if (this.entities === null) {
+            this.entities = [];
+        }
+        if (this.particle_systems === null) {
+            this.particle_systems = [];
+        }
+        if (this.map_instances === null) {
+            this.map_instances = [];
+        }
+        if (this.entity_instances === null) {
+            this.entity_instances = [];
+        }
+        if (this.particle_system_instances === null) {
+            this.particle_system_instances = [];
+        }
+
+        this.maps = new Maps(this.maps);
+        this.entities = new Entities(this.entities);
+        this.particle_systems = new ParticleSystems(this.particle_systems);
+        this.map_instances = new MapInstances(this.map_instances);
+        this.entity_instances = new EntityInstances(this.entity_instances);
+        this.particle_system_instances = new ParticleSystemInstances(this.particle_system_instances);
     }
     game_logic() {
         // Override Me

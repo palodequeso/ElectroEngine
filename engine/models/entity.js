@@ -1,6 +1,7 @@
 'use strict';
 
 var Model = require('../../lib/model.js');
+var Sprite = require('./sprite.js');
 
 class Entity extends Model {
     get defaults() {
@@ -15,6 +16,11 @@ class Entity extends Model {
     }
     constructor(data) {
         super(data);
+
+        if (this.sprite === null) {
+            this.sprite = {};
+        }
+        this.sprite = new Sprite(this.sprite);
     }
 }
 

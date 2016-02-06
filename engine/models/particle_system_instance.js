@@ -1,19 +1,25 @@
 'use strict';
 
 var Model = require('../../lib/model.js');
+var ParticleSystem = require("./particle_system.js");
+var Particle = require('./particle.js');
 
 class ParticleSystemInstance {
     get defaults() {
         return {
             name: '',
             position: [0, 0],
-            particles: null,
-            particle_system_id: null,
+            particles: [],
             particle_system: null
         };
     }
     constructor(data) {
         super(data);
+
+        if (this.particle_system === null) {
+            this.particle_system = {};
+        }
+        this.particle_system = new ParticleSystem(this.particle_system);
     }
     update(time_delta) {
         var to_remove = [];

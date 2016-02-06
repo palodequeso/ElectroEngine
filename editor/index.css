@@ -12,3 +12,11 @@
 #game_edit_buttons button {
     margin-top: 10px;
 }
+
+#map_editor_tiles {
+    width: calc(100vw - 200px);
+}
+
+#map_editor_tools {
+    width: 200px;
+}

@@ -6,6 +6,7 @@ var Map = require('./map.js');
 class Game extends Model {
     get defaults() {
         return {
+            path: '',
             name: '',
             description: '',
             version: 0,

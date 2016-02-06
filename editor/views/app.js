@@ -45,7 +45,8 @@ class App extends View {
         console.log("Create Map");
         var model = new Map();
         var view = new MapEditor({
-            model: model
+            model: model,
+            game: this.game_model
         });
 
         this.$element.find(".content").empty();

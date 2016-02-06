@@ -14,9 +14,22 @@
 }
 
 #map_editor_tiles {
-    width: calc(100vw - 200px);
+    min-height: 10px;
+    width: calc(100% - 285px);
+    display: inline-block;
+    vertical-align: top;
 }
 
 #map_editor_tools {
-    width: 200px;
+    width: 250px;
+    display: inline-block;
+}
+
+#sprite_sheet_tabs .hx-tab {
+    font-size: 9px;
+}
+
+.btn-sm {
+    font-size: 11px;
+    padding: 3px;
 }

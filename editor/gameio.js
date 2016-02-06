@@ -12,6 +12,7 @@ function load(folder_path) {
     var game_data = JSON.parse(fs.readFileSync(path.normalize(folder_path + '/game.json')));
     var game = new Game(game_data);
 
+    game.path = folder_path;
     game.maps = new Maps();
     game.entities = new Entities();
     game.particle_systems = new ParticleSystems();

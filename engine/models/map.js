@@ -8,7 +8,8 @@ class Map extends Model {
             name: '',
             layers: null,
             collision_layer: null,
-            entity_layer: null
+            entity_layer: null,
+            sprite_sheets: null
         };
     }
     constructor(data) {

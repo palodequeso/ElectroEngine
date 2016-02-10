@@ -4,7 +4,7 @@ var Model = require('../../lib/model.js');
 var ParticleSystem = require("./particle_system.js");
 var Particle = require('./particle.js');
 
-class ParticleSystemInstance {
+class ParticleSystemInstance extends Model {
     get defaults() {
         return {
             name: '',

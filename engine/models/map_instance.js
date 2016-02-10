@@ -5,10 +5,10 @@ var Map = require('./map.js');
 var EntityInstances = require('./entity_instances.js');
 var MapLayerInstances = require('./map_layer_instances.js');
 
-class MapInstance {
+class MapInstance extends Model {
     get defaults() {
         return {
-            name: ''.
+            name: '',
             map: null,
             position: [0, 0],
             warps: {},

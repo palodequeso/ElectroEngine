@@ -2,7 +2,7 @@
 
 var Model = require('../../lib/model.js');
 
-class Sprite {
+class Sprite extends Model {
     get defaults() {
         return {
             image: null,

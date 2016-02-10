@@ -1,12 +1,12 @@
 'use strict';
 
 var Model = require('../../lib/model.js');
+var Sprite = require('./sprite.js');
 
 class SpriteInstance {
     get defaults() {
         return {
             position: [0, 0],
-            sprite_id: null,
             current_animation: '',
             frame_time: 0.0,
             layer: null,
@@ -17,6 +17,12 @@ class SpriteInstance {
     }
     constructor(data) {
         super(data);
+
+        if (this.sprite === null) {
+            this.sprite = {};
+        }
+
+        this.sprite = new Sprite(this.sprite);
     }
     update(time_delta) {
         var animations = this.sprite.animations;

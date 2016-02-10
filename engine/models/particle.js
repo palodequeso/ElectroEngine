@@ -2,7 +2,7 @@
 
 var Model = require('../../lib/model.js');
 
-class Particle {
+class Particle extends Model {
     get defaults() {
         return {
             position: [0, 0],

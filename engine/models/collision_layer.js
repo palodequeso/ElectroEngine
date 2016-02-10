@@ -1,6 +1,6 @@
 'use strict';
 
-var EasyStar = require('easystar');
+var EasyStar = require('easystarjs');
 var Model = require('../../lib/model.js');
 
 class CollisionLayer extends Model {

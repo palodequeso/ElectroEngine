@@ -1,6 +1,7 @@
 'use strict';
 
 var Model = require('../../lib/model.js');
+var Sprites = require('./sprites.js');
 
 class SpriteSheet extends Model {
     get defaults() {
@@ -16,6 +17,12 @@ class SpriteSheet extends Model {
     }
     constructor(data) {
         super(data);
+
+        if (this.sprites === null) {
+            this.sprites = [];
+        }
+
+        this.sprites = new Sprites(this.sprites);
     }
 }
 

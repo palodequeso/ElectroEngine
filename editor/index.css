@@ -15,7 +15,7 @@
 
 #map_editor_tiles {
     min-height: 10px;
-    width: calc(100% - 285px);
+    width: calc(100% - 255px);
     height: calc(100vh - 50px);
     overflow-x: auto;
     overflow-y: auto;
@@ -29,6 +29,7 @@
     height: calc(100vh - 50px);
     overflow-x: auto;
     overflow-y: auto;
+    margin-right: -10px;
 }
 
 #sprite_sheet_tabs .hx-tab {
@@ -38,4 +39,30 @@
 .btn-sm {
     font-size: 11px;
     padding: 3px;
+}
+
+.content {
+    margin: 0;
+    padding: 0;
+}
+
+/* Let's get this party started */
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+    -webkit-border-radius: 0px;
+    border-radius: 0px;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+    -webkit-border-radius: 8px;
+    border-radius: 0px;
+    background: rgba(64,64,64,1);
+}
+::-webkit-scrollbar-thumb:window-inactive {
+    background: rgba(48,48,48,1);
 }

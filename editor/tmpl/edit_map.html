@@ -43,6 +43,8 @@
                     <div class="hx-tabs-content">
                         {{#each sprite_sheets}}
                             <div id="sprite_sheet_{{id}}_content" class="hx-tab-content">
+                                <label>Tile Width</label><input class="sprite_sheet_tile_width" data-id="{{id}}" type="number" value="{{width}}" /><br>
+                                <label>Tile Height</label><input class="sprite_sheet_tile_height" data-id="{{id}}" type="number" value="{{height}}" /><br>
                                 <img src="{{modified_path}}"/>
                             </div>
                         {{/each}}

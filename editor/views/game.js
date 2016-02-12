@@ -30,6 +30,7 @@ class CreateGameView extends View {
         var result = dialog.showOpenDialog({properties: ['openDirectory']});
         if (result !== undefined) {
             fs.writeFileSync(path.normalize(result + '/game.json'), JSON.stringify(data));
+            fs.mkdirSync(path.normalize(result + '/sprite_sheets'));
         }
         this.emit('created');
         console.log("Do Create Game");

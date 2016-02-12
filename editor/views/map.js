@@ -13,6 +13,7 @@ var edit_map_tmpl = fs.readFileSync(__dirname + '/../tmpl/edit_map.html', 'utf8'
 
 var SpriteSheet = require('../../engine/models/sprite_sheet.js');
 var SpriteSheets = require('../../engine/models/sprite_sheets.js');
+var image_manager = require('../../engine/util/image_manager.js');
 
 class MapEditor extends View {
     constructor(options) {
@@ -26,6 +27,14 @@ class MapEditor extends View {
         }
 
         this.$element.on('click', '#add_sprite_sheet_button', this.add_sprite_sheet.bind(this));
+        this.$element.on('change', '.sprite_sheet_tile_width', this.tile_size_change.bind(this));
+        this.$element.on('change', '.sprite_sheet_tile_height', this.tile_size_change.bind(this));
+    }
+    tile_size_change(event) {
+        var $elem = $(event.currentTarget);
+        var id = $elem.data('id');
+        var value = $elem.val();
+        console.log("Tile Size Change: ", id, value);
     }
     add_sprite_sheet(event) {
         console.log("Add Sprite Sheet");
@@ -49,11 +58,16 @@ class MapEditor extends View {
     }
     render() {
         var map_data = this.model.serialize();
+        var sprite_sheet_paths = [];
         map_data.sprite_sheets.forEach((sheet) => {
             var sprite_sheets_path = path.normalize(this.game.path + '/sprite_sheets/' + sheet.path);
             sheet.modified_path = path.relative(path.normalize(__dirname + '/../'), sprite_sheets_path);
             sheet.modified_path = sheet.modified_path.replace(/\\/gmi, '/');
+            sprite_sheet_paths.push(sheet.modified_path);
         });
+
+        //
+
         console.log("Map Data: ", map_data);
         var html = this.template(map_data);
         console.log(html);

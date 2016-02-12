@@ -22,9 +22,21 @@ class App extends View {
         super(options);
         this.game_model = null;
 
+        this.$element.on('click', '#edit_game_button', this.edit_game.bind(this));
+        this.$element.on('click', '#save_game_button', this.save_game.bind(this));
+        this.$element.on('click', '#build_game_button', this.build_game.bind(this));
         this.$element.on('click', '#create_game_button', this.create_game.bind(this));
         this.$element.on('click', '#load_game_button', this.load_game.bind(this));
         this.$element.on('click', '#create_map_button', this.create_map.bind(this));
+    }
+    edit_game() {
+        //
+    }
+    save_game() {
+        gameio.save(this.game_model);
+    }
+    build_game() {
+        //
     }
     create_game() {
         var gv = new game_views.CreateGameView({
@@ -48,6 +60,8 @@ class App extends View {
             model: model,
             game: this.game_model
         });
+
+        this.game_model.maps.add(model);
 
         this.$element.find(".content").empty();
         this.$element.find(".content").append(view.$element);

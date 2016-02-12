@@ -21,7 +21,7 @@ function load(folder_path) {
 }
 
 function save(game_model) {
-    //
+    console.log("Save Game: ", game_model);
 }
 
 module.exports = {

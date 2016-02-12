@@ -5,6 +5,7 @@ var dialog = remote.require('dialog');
 
 var fs = require('fs');
 var path = require('path');
+var sizeOf = require('image-size');
 
 var $ = require('jquery');
 var Handlebars = require('handlebars');
@@ -41,36 +42,40 @@ class MapEditor extends View {
         var choice = dialog.showOpenDialog({properties: ['openFile'], filters: [
             {name: 'Images', extensions: ['png']}
         ]});
+        if (choice === undefined) {
+            return;
+        }
+
         choice = choice[0];
 
         console.log(this.game.path);
         var sprite_sheets_path = path.normalize(this.game.path + '/sprite_sheets/' + path.basename(choice));
-        console.log(choice, sprite_sheets_path);
+        var dimensions = sizeOf(sprite_sheets_path);
+        console.log(choice, sprite_sheets_path, dimensions);
         fs.createReadStream(choice).pipe(fs.createWriteStream(sprite_sheets_path));
 
         var sprite_sheet = new SpriteSheet({
             id: path.basename(choice).replace('.', ''),
             name: path.basename(choice),
-            path: path.basename(choice)
+            path: path.basename(choice),
+            width: dimensions.width,
+            height: dimensions.height
         });
         this.model.sprite_sheets.add(sprite_sheet);
         this.render();
     }
     render() {
         var map_data = this.model.serialize();
-        var sprite_sheet_paths = [];
         map_data.sprite_sheets.forEach((sheet) => {
             var sprite_sheets_path = path.normalize(this.game.path + '/sprite_sheets/' + sheet.path);
             sheet.modified_path = path.relative(path.normalize(__dirname + '/../'), sprite_sheets_path);
             sheet.modified_path = sheet.modified_path.replace(/\\/gmi, '/');
-            sprite_sheet_paths.push(sheet.modified_path);
+            sheet.tiles_x = sheet.width / sheet.tile_width;
+            sheet.tiles_y = sheet.height / sheet.tile_height;
         });
-
-        //
 
         console.log("Map Data: ", map_data);
         var html = this.template(map_data);
-        console.log(html);
 
         setTimeout(() => {
             this.$element.html(html);
@@ -84,6 +89,26 @@ class MapEditor extends View {
             }
 
             new hx.Collapsible('#map_properties');
+
+            map_data.sprite_sheets.forEach((sheet) => {
+                var tile_div = $(this.$element.find("#sprite_sheet_" + sheet.id + "_content").find(".sprite_selector_tiles"));
+                console.log(tile_div);
+                tile_div.css({
+                    width: sheet.width,
+                    height: sheet.height
+                });
+                var i = 0;
+                var j = 0;
+                for (j = 0; j < (sheet.height / sheet.tile_height); j += 1) {
+                    for (i = 0; i < (sheet.width / sheet.tile_width); i += 1) {
+                        var div = $('<div>').addClass('sprite_sheet_tile_selector').css({
+                            width: sheet.tile_width,
+                            height: sheet.tile_height
+                        });
+                        tile_div.append(div);
+                    }
+                }
+            });
         }, 100);
     }
 }

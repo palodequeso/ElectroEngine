@@ -14,8 +14,9 @@ class ImageManager extends EventEmitter {
                 resolve(this.images[path]);
             } else {
                 var image = new Image();
-                image.onload = () => {
-                    this.images[path] = image;
+                var t = this;
+                image.onload = function() {
+                    t.images[path] = image;
                     resolve(image);
                 };
                 image.src = path;
@@ -23,6 +24,7 @@ class ImageManager extends EventEmitter {
         });
     }
     get_multiple(paths) {
+        console.log(paths);
         var promises = [];
 
         paths.forEach((path) => {

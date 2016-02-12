@@ -46,6 +46,36 @@
     padding: 0;
 }
 
+.sprite_selector {
+    position: relative;
+    overflow: auto;
+}
+
+.sprite_selector_tiles {
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+.sprite_sheet_tile_selector {
+    /*display: inline-block;*/
+    float: left;
+    font-size: 0px;
+}
+
+.sprite_sheet_tile_selector:hover {
+    background-color: rgba(128, 255, 128, 0.5);
+}
+
+.sprite_sheet_content label {
+    font-size: 10px;
+}
+
+.sprite_sheet_content input {
+    font-size: 10px;
+    width: 50px;
+}
+
 /* Let's get this party started */
 ::-webkit-scrollbar {
     width: 8px;

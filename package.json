@@ -15,6 +15,7 @@
     "gl-matrix": "^2.3.1",
     "handlebars": "^4.0.5",
     "hexagon-js": "^1.0.4",
+    "image-size": "^0.4.0",
     "jquery": "^2.2.0"
   }
 }

@@ -104,9 +104,10 @@ class MapEditor extends View {
                     width: sheet.width,
                     height: sheet.height
                 });
-                var tile_index = 0;
+
                 var i = 0;
                 var j = 0;
+                var tile_index = 0;
                 for (j = 0; j < (sheet.height / sheet.tile_height); j += 1) {
                     for (i = 0; i < (sheet.width / sheet.tile_width); i += 1) {
                         var div = $('<div>').addClass('sprite_sheet_tile_selector').css({
@@ -118,6 +119,31 @@ class MapEditor extends View {
                     }
                 }
             });
+
+            var tiles = this.$element.find('#map_editor_tiles');
+            tiles.empty();
+            var editor_div = $("<div>");
+
+            var i = 0;
+            var j = 0;
+            var tile_index = 0;
+            for (j = 0; j < this.model.height; j += 1) {
+                for (i = 0; i < this.model.width; i += 1) {
+                    var div = $('<div>').addClass('map_tile').data('tile_index', tile_index);
+                    div.css({
+                        width: this.model.tile_width,
+                        height: this.model.tile_height
+                    });
+                    editor_div.append(div);
+                    tile_index += 1;
+                }
+            }
+
+            editor_div.css({
+                width: this.model.tile_width * this.model.width,
+                height: this.model.tile_height * this.model.height
+            });
+            tiles.append(editor_div);
         }, 100);
     }
 }

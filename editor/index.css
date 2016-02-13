@@ -76,6 +76,15 @@
     width: 50px;
 }
 
+.map_tile {
+    background-color: black;
+    float: left;
+}
+
+.map_tile:hover {
+    background-color: rgba(128, 255, 128, 0.5);
+}
+
 /* Let's get this party started */
 ::-webkit-scrollbar {
     width: 8px;

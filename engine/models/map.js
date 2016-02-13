@@ -10,8 +10,10 @@ class Map extends Model {
     get defaults() {
         return {
             name: '',
-            width: 0,
-            height: 0,
+            width: 16,
+            height: 16,
+            tile_width: 32,
+            tile_height: 32,
             layers: null,
             collision_layer: null,
             entities: null,

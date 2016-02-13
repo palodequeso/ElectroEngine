@@ -30,6 +30,7 @@ class MapEditor extends View {
         this.$element.on('click', '#add_sprite_sheet_button', this.add_sprite_sheet.bind(this));
         this.$element.on('change', '.sprite_sheet_tile_width', this.tile_size_change.bind(this));
         this.$element.on('change', '.sprite_sheet_tile_height', this.tile_size_change.bind(this));
+        this.$element.on('click', '.sprite_sheet_tile_selector', this.select_tile.bind(this));
     }
     tile_size_change(event) {
         var $elem = $(event.currentTarget);
@@ -64,6 +65,12 @@ class MapEditor extends View {
         this.model.sprite_sheets.add(sprite_sheet);
         this.render();
     }
+    select_tile(event) {
+        var $elem = $(event.currentTarget);
+        var tile_index = parseInt($elem.data('tile_index'), 10);
+        var sprite_sheet_id = $elem.data('sprite_sheet_id');
+        console.log("Select Tile: ", tile_index, sprite_sheet_id);
+    }
     render() {
         var map_data = this.model.serialize();
         map_data.sprite_sheets.forEach((sheet) => {
@@ -97,6 +104,7 @@ class MapEditor extends View {
                     width: sheet.width,
                     height: sheet.height
                 });
+                var tile_index = 0;
                 var i = 0;
                 var j = 0;
                 for (j = 0; j < (sheet.height / sheet.tile_height); j += 1) {
@@ -104,8 +112,9 @@ class MapEditor extends View {
                         var div = $('<div>').addClass('sprite_sheet_tile_selector').css({
                             width: sheet.tile_width,
                             height: sheet.tile_height
-                        });
+                        }).data('tile_index', tile_index).data('sprite_sheet_id', sheet.id);
                         tile_div.append(div);
+                        tile_index += 1;
                     }
                 }
             });

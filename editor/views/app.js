@@ -16,6 +16,7 @@ var gameio = require('../gameio.js');
 var Map = require('../../engine/models/map.js');
 var Maps = require('../../engine/models/maps.js');
 var MapEditor = require('./map.js');
+var util = require('./util.js');
 
 class App extends View {
     constructor(options) {

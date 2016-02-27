@@ -1,0 +1,54 @@
+<div class="hx-well">
+    <div id="map_properties">
+        <div class="hx-collapsible-heading">Properties</div>
+        <div class="hx-collapsible-content">
+            <label>Name</label><input type="text" value="{{name}}" /><br>
+            <label>Width</label><input type="number" value="{{width}}" /><br>
+            <label>Height</label><input type="number" value="{{height}}" /><br>
+        </div>
+    </div>
+</div>
+<div class="hx-well">
+    <div id="layer_selector">
+        <div class="hx-collapsible-heading">Layers</div>
+        <div class="hx-collapsible-content" id="layer_selector_draggable_container">
+            <div data-name="entities" data-type="entities" class="hx-drag-element">
+                <a href="#"><i class="fa fa-street-view"></i> Entities</a>
+            </div>
+            <div data-name="collisions" data-type="collisions" class="hx-drag-element">
+                <a href="#"><i class="fa fa-ban"></i> Collisions</a>
+            </div>
+            <div data-name="ground" data-type="tiles" class="hx-drag-element">
+                <a href="#"><i class="fa fa-fort-awesome"></i> Ground</a>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="hx-well">
+    <div id="sprite_selector">
+        <div class="hx-collapsible-heading">
+            Sprite Sheets
+            <button class="hx-btn hx-positive btn-sm" id="add_sprite_sheet_button">Add...</button>
+        </div>
+        <div class="hx-collapsible-content hx-tabs" id="sprite_sheet_tabs">
+            {{#each sprite_sheets}}
+                <div id="sprite_sheet_{{id}}" class="hx-tab hx-positive" data-content="sprite_sheet_{{id}}_content">
+                    <a href="#"><i class="fa fa-trash"></i></a>
+                    {{name}}
+                </div>
+            {{/each}}
+            <div class="hx-tabs-content">
+                {{#each sprite_sheets}}
+                    <div id="sprite_sheet_{{id}}_content" class="hx-tab-content sprite_sheet_content">
+                        <label>Tile Width</label><input class="sprite_sheet_tile_width" data-id="{{id}}" type="number" value="{{tile_width}}" />
+                        <label>Tile Height</label><input class="sprite_sheet_tile_height" data-id="{{id}}" type="number" value="{{tile_height}}" /><br>
+                        <div class="sprite_selector">
+                            <img src="{{modified_path}}"/>
+                            <div class="sprite_selector_tiles"></div>
+                        </div>
+                    </div>
+                {{/each}}
+            </div>
+        </div>
+    </div>
+</div>

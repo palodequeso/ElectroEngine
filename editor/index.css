@@ -24,12 +24,12 @@
 }
 
 #map_editor_tools {
-    width: 250px;
+    /*width: 250px;
     display: inline-block;
     height: calc(100vh - 50px);
     overflow-x: auto;
     overflow-y: auto;
-    margin-right: -10px;
+    margin-right: -10px;*/
 }
 
 #sprite_sheet_tabs .hx-tab {
@@ -83,6 +83,50 @@
 
 .map_tile:hover {
     background-color: rgba(128, 255, 128, 0.5);
+}
+
+.side_toolbar {
+    width: 250px;
+    overflow-x: auto;
+    overflow-y: auto;
+    position: fixed;
+    top: 50px;
+    right: 0px;
+    bottom: 0px;
+    -webkit-user-drag: none;
+    -khtml-user-drag: none;
+    -moz-user-drag: none;
+    -o-user-drag: none;
+    user-drag: none;
+}
+
+.side_toolbar .sidebar_handle {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    width: 6px;
+    height: 100%;
+    background-color: #666666;
+    cursor: ew-resize;
+    -webkit-user-drag: none;
+    -khtml-user-drag: none;
+    -moz-user-drag: none;
+    -o-user-drag: none;
+    user-drag: none;
+}
+
+.side_toolbar .sidebar_content {
+    position: absolute;
+    top: 0px;
+    right: 0px;
+    left: 6px;
+    height: 100%;
+    /*background-color: blue;*/
+    -webkit-user-drag: none;
+    -khtml-user-drag: none;
+    -moz-user-drag: none;
+    -o-user-drag: none;
+    user-drag: none;
 }
 
 /* Let's get this party started */

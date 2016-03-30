@@ -93,7 +93,9 @@ class App extends View {
         this.$element.find("#game_edit_buttons").show();
 
         if (this.game_model.maps !== null) {
+            console.log("Game Model Maps: ", this.game_model.maps);
             this.game_model.maps.models.forEach((map) => {
+                console.log("DAT MAP: ", map);
                 this.$element.find("#map_selector").append('<div class="hx-sidebar-section">' + map.name + '</div>');
             });
         }

@@ -88,9 +88,6 @@ class Game extends Model {
 
         this.game_logic();
     }
-    render() {
-        //
-    }
 }
 
 module.exports = Game;

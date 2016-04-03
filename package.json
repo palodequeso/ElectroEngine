@@ -13,7 +13,7 @@
     "easystarjs": "^0.2.3",
     "electron": "^0.4.1",
     "font-awesome": "^4.5.0",
-    "gl-matrix": "^2.3.1",
+    "gl-matrix": "^2.3.2",
     "handlebars": "^4.0.5",
     "hexagon-js": "^1.0.4",
     "image-size": "^0.4.0",

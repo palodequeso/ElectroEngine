@@ -8,6 +8,8 @@ require('crash-reporter').start();
 // be closed automatically when the JavaScript object is garbage collected.
 var mainWindow = null;
 
+console.log(process.argv);
+
 // Quit when all windows are closed.
 app.on('window-all-closed', function() {
     // On OS X it is common for applications and their menu bar
@@ -28,7 +30,11 @@ app.on('ready', function() {
     mainWindow.maximize();
 
     // and load the index.html of the app.
-    mainWindow.loadUrl('file://' + __dirname + '/editor/index.html');
+    if (process.argv[2] === '--test_game') {
+        mainWindow.loadUrl('file://' + __dirname + '/test_game/index.html');
+    } else {
+        mainWindow.loadUrl('file://' + __dirname + '/editor/index.html');
+    }
 
     // Open the DevTools.
     mainWindow.webContents.openDevTools();

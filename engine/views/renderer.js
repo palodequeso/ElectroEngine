@@ -1,7 +1,7 @@
 "use strict";
 
 var View = require('../../lib/view.js');
-var glmatrix = require("glmatrix");
+var glmatrix = require("gl-matrix");
 var View = require('../../lib/view.js');
 
 var textured_quad_shader_vert_source = '' +
@@ -38,13 +38,13 @@ var textured_quad_shader_frag_source = '' +
 
 
 class Renderer extends View {
-    constructor: function(options) {
+    constructor(options) {
         super(options);
 
         this.canvas = document.createElement('canvas');
         this.canvas.setAttribute("width", "650px");
         this.canvas.setAttribute("height", "500px");
-        this.$element.append(canvas);
+        this.$element.append(this.canvas);
         this.gl = this.canvas.getContext('webgl');
         this.max_texture_size = this.gl.getParameter(this.gl.MAX_TEXTURE_SIZE);
 
@@ -74,8 +74,8 @@ class Renderer extends View {
         this.gl.disable(this.gl.DEPTH_TEST);
         this.gl.enable(this.gl.BLEND);
         this.gl.blendFunc(this.gl.SRC_ALPHA, this.gl.ONE_MINUS_SRC_ALPHA);
-    },
-    load_texture: function(image_src, callback) {
+    }
+    load_texture(image_src, callback) {
         console.log(image_src);
         var texture = this.gl.createTexture();
         texture.image = new Image();
@@ -97,17 +97,17 @@ class Renderer extends View {
         };
 
         texture.image.src = image_src;
-    },
-    load_sprite_images: function() {
+    }
+    load_sprite_images() {
         var t = this;
         var images_loaded_statuses = {};
 
-        this.model.get("map_instances").each(function(map_instance) {
-            var map = map_instance.get("map");
-            map.get("layers").each(function(layer) {
-                layer.get("sprite_instances").each(function(sprite_instance) {
-                    var sprite = sprite_instance.get("sprite");
-                    var image_src = sprite.get("image");
+        this.model.map_instances.models.forEach(function(map_instance) {
+            var map = map_instance.map;
+            map.layers.each(function(layer) {
+                layer.sprite_instances.models.forEach(function(sprite_instance) {
+                    var sprite = sprite_instance.sprite;
+                    var image_src = sprite.image;
                     if (!images_loaded_statuses.hasOwnProperty(image_src)) {
                         images_loaded_statuses[image_src] = false;
                         t.load_texture(image_src, function(texture) {
@@ -119,9 +119,9 @@ class Renderer extends View {
             });
         });
 
-        this.model.get("entity_instances").each(function(entity_instance) {
-            var sprite = entity_instance.get("entity").get("sprite");
-            var image_src = sprite.get("image");
+        this.model.entity_instances.models.forEach(function(entity_instance) {
+            var sprite = entity_instance.entity.sprite;
+            var image_src = sprite.image;
             if (!images_loaded_statuses.hasOwnProperty(image_src)) {
                 images_loaded_statuses[image_src] = false;
                 t.load_texture(image_src, function(texture) {
@@ -131,9 +131,9 @@ class Renderer extends View {
             }
         });
 
-        this.model.get("particle_system_instances").each(function(particle_system_instance) {
-            var particle_system = particle_system_instance.get("particle_system");
-            var image_src = particle_system.get("image");
+        this.model.particle_system_instances.models.forEach(function(particle_system_instance) {
+            var particle_system = particle_system_instance.particle_system;
+            var image_src = particle_system.image;
             if (!images_loaded_statuses.hasOwnProperty(image_src)) {
                 images_loaded_statuses[image_src] = false;
                 t.load_texture(image_src, function(texture) {
@@ -147,8 +147,8 @@ class Renderer extends View {
             t.textures_preloaded = true;
             console.log("Done Preloading Textuers");
         });
-    },
-    create_quad: function() {
+    }
+    create_quad() {
         var vertices = [
             0.0, 0.0, 0.0, 1.0,
             1.0, 0.0, 0.0, 1.0,
@@ -201,8 +201,8 @@ class Renderer extends View {
             this.gl.bindBuffer(this.gl.ELEMENT_ARRAY_BUFFER, this.quad_indices_buffer);
             this.gl.bufferData(this.gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(indices), this.gl.STATIC_DRAW);
         }
-    },
-    create_shader: function(type, source) {
+    }
+    create_shader(type, source) {
         var shader;
         if (type == "frag") {
             shader = this.gl.createShader(this.gl.FRAGMENT_SHADER);
@@ -221,8 +221,8 @@ class Renderer extends View {
         }
 
         return shader;
-    },
-    create_shaders: function() {
+    }
+    create_shaders() {
         this.shaders.textured_quad = {
             shader: null,
             vertex_position_attribute: 0,
@@ -259,8 +259,8 @@ class Renderer extends View {
         this.shaders.textured_quad.texture_location = this.gl.getUniformLocation(this.shaders.textured_quad.shader, "texture");
         this.shaders.textured_quad.color_location = this.gl.getUniformLocation(this.shaders.textured_quad.shader, "color");
         console.log(this.shaders.textured_quad);
-    },
-    draw_quad: function(position, dimensions, sprite_texcoord, color, texture, shader) {
+    }
+    draw_quad(position, dimensions, sprite_texcoord, color, texture, shader) {
         var model_matrix = glmatrix.mat4.create();
         glmatrix.mat4.translate(model_matrix, model_matrix, [position[0], this.canvas.height - position[1], 1.0]);
         glmatrix.mat4.scale(model_matrix, model_matrix, [dimensions[0], dimensions[1], 1.0]);
@@ -289,8 +289,8 @@ class Renderer extends View {
             this.gl.bindBuffer(this.gl.ELEMENT_ARRAY_BUFFER, this.quad_indices_buffer);
             this.gl.drawElements(this.gl.TRIANGLES, 6, this.gl.UNSIGNED_SHORT, 0);
         }
-    },
-    render: function() {
+    }
+    render() {
         if (!this.textures_preloaded) {
             return;
         }
@@ -379,6 +379,6 @@ class Renderer extends View {
             });
         });
     }
-});
+}
 
 module.exports = Renderer

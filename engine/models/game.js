@@ -64,24 +64,24 @@ class Game extends Model {
         // Override Me
     }
     update(time_delta) {
-        var map_instances = this.get("map_instances");
-        var entity_instances = this.get("entity_instances");
-        var particle_system_instances = this.get("particle_system_instances");
+        var map_instances = this.map_instances;
+        var entity_instances = this.entity_instances;
+        var particle_system_instances = this.particle_system_instances;
 
         if (this.map_instances !== undefined) {
-            this.map_instances.forEach((map_instance) => {
+            this.map_instances.models.forEach((map_instance) => {
                 map_instance.update(time_delta);
             });
         }
 
         if (this.entity_instances !== undefined) {
-            this.entity_instances.forEach((entity_instance) => {
+            this.entity_instances.models.forEach((entity_instance) => {
                 entity_instance.update(time_delta);
             });
         }
 
         if (this.map_instances !== undefined) {
-            this.map_instances.forEach((map_instance) => {
+            this.map_instances.models.forEach((map_instance) => {
                 map_instance.update(time_delta);
             });
         }

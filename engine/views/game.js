@@ -1,10 +1,9 @@
 "use strict";
 
 var $ = require("jquery");
-var View = require('../../lib/view.js');
 var glmatrix = require("gl-matrix");
 var View = require('../../lib/view.js');
-
+var Timer = require('../../lib/timer.js');
 var Renderer = require('./renderer.js');
 
 class Game extends View {
@@ -19,13 +18,14 @@ class Game extends View {
         this.previous_time = 0.0;
         this.timer = new Timer();
         this.timer.start();
+        this.running = true;
     }
     run() {
         var current_time = this.timer.milliseconds();
         var frame_time = current_time - this.previous_time;
         this.previous_time = current_time;
         if (this.running) {
-            requestAnimationFrame(this.run);
+            requestAnimationFrame(this.run.bind(this));
         }
         this.model.update(frame_time);
         this.render();
@@ -35,4 +35,4 @@ class Game extends View {
     }
 }
 
-module.exports = Renderer;
+module.exports = Game;

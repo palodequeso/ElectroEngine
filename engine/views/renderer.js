@@ -3,6 +3,7 @@
 var View = require('../../lib/view.js');
 var glmatrix = require("gl-matrix");
 var View = require('../../lib/view.js');
+var util = require('../util/util.js');
 
 var textured_quad_shader_vert_source = '' +
     'attribute vec4 vertex_position;' +
@@ -302,69 +303,65 @@ class Renderer extends View {
         this.gl.uniformMatrix4fv(this.shaders.textured_quad.view_matrix_location, false, this.view_matrix);
 
         var t = this;
-        if (!_.isNull(this.model.get("current_map_id"))) {
-            var map = this.model.get("maps").get(this.model.get("current_map_id"));
-            var entity_layer = map.get("entity_layer");
-            map.get("layers").each(function(layer, layer_index) {
-                layer.get("sprite_instances").each(function(sprite_instance, sprite_instance_index) {
-                    var position = sprite_instance.get("position");
-                    t.draw_quad(
-                        [position[0], position[1] + sprite_instance.get("sprite").get("height")],
-                        [
-                            sprite_instance.get("sprite").get("width"),
-                            sprite_instance.get("sprite").get("height")
-                        ],
-                        [
-                            sprite_instance.get("tile").css_offset_x,
-                            sprite_instance.get("tile").css_offset_y,
-                            sprite_instance.get("tile").css_offset_x + sprite_instance.get("sprite").get("width"),
-                            sprite_instance.get("tile").css_offset_y + sprite_instance.get("sprite").get("height")
-                        ],
-                        [1, 1, 1, 1],
-                        t.textures[sprite_instance.get("sprite").get("image")],
-                        t.shaders.textured_quad
-                    );
-                });
-                if (layer_index === (entity_layer - 1)) {
-                    t.model.get("entity_instances").each(function(entity_instance) {
-                        var sprite_instance = entity_instance.get("sprite_instance");
-                        var position = sprite_instance.get("position");
+        if (this.model.current_map_id !== null) {
+            var map = this.model.maps[this.model.current_map_id];
+            if (map) {
+                var entity_layer = map.entity_layer;
+                map.layers.models.forEach(function(layer, layer_index) {
+                    layer.sprite_instances.models.forEach(function(sprite_instance, sprite_instance_index) {
+                        var position = sprite_instance.position;
                         t.draw_quad(
-                            [position[0], position[1] + sprite_instance.get("sprite").get("height")],
+                            [position[0], position[1] + sprite_instance.sprite.height],
+                            [sprite_instance.sprite.width, sprite_instance.sprite.height],
                             [
-                                sprite_instance.get("sprite").get("width"),
-                                sprite_instance.get("sprite").get("height")
-                            ],
-                            [
-                                sprite_instance.get("tile").css_offset_x,
-                                sprite_instance.get("tile").css_offset_y,
-                                sprite_instance.get("tile").css_offset_x + sprite_instance.get("sprite").get("width"),
-                                sprite_instance.get("tile").css_offset_y + sprite_instance.get("sprite").get("height")
+                                sprite_instance.tile.css_offset_x,
+                                sprite_instance.tile.css_offset_y,
+                                sprite_instance.tile.css_offset_x + sprite_instance.sprite.width,
+                                sprite_instance.tile.css_offset_y + sprite_instance.sprite.height
                             ],
                             [1, 1, 1, 1],
-                            t.textures[sprite_instance.get("sprite").get("image")],
+                            t.textures[sprite_instance.sprite.image],
                             t.shaders.textured_quad
                         );
                     });
-                }
-            });
+                    if (layer_index === (entity_layer - 1)) {
+                        t.model.entity_instances.models.forEach(function(entity_instance) {
+                            var sprite_instance = entity_instance.sprite_instance;
+                            var position = sprite_instance.position;
+                            t.draw_quad(
+                                [position[0], position[1] + sprite_instance.sprite.height],
+                                [sprite_instance.sprite.width, sprite_instance.sprite.height],
+                                [
+                                    sprite_instance.tile.css_offset_x,
+                                    sprite_instance.tile.css_offset_y,
+                                    sprite_instance.tile.css_offset_x + sprite_instance.sprite.width,
+                                    sprite_instance.tile.css_offset_y + sprite_instance.sprite.height
+                                ],
+                                [1, 1, 1, 1],
+                                t.textures[sprite_instance.sprite.image],
+                                t.shaders.textured_quad
+                            );
+                        });
+                    }
+                });
+            }
         }
 
-        this.model.get("particle_system_instances").each(function(particle_system_instance) {
-            var particle_system = particle_system_instance.get("particle_system");
-            var system_position = particle_system_instance.get("position");
-            var image = particle_system.get("image");
+        this.model.particle_system_instances.models.forEach(function(particle_system_instance) {
+            var particle_system = particle_system_instance.particle_system;
+            var system_position = particle_system_instance.position;
+            var image = particle_system.image;
             var texture = t.textures[image];
             var shader = t.shaders.textured_quad;
 
-            var modifier = particle_system.get("modifier");
-            if (_.isUndefined(modifier)) {
+            var modifier = particle_system.modifier;
+            if (modifier === undefined) {
                 modifier = function(particle_data) {
                     return particle_data;
                 };
             }
 
-            particle_system_instance.get("particles").each(function(particle) {
+            particle_system_instance.particles.models.forEach(function(particle) {
                 var data = particle.clone_data();
                 data.alpha = ((data.life < data.fade) ? data.life / data.fade : 1.0) / 2.0;
                 data = modifier(data);

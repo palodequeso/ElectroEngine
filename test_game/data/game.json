@@ -1,0 +1,14 @@
+{
+    "name": "Test",
+    "description": "Test game",
+    "version": "0.1",
+    "maps": [
+        {
+            "name": "Test Map",
+            "width": 16,
+            "height": 16,
+            "tile_width": 32,
+            "tile_height": 32
+        }
+    ]
+}

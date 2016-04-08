@@ -1,7 +1,7 @@
 'use strict';
 
 var Collection = require('../../lib/collection.js');
-var Map = require('./sprite.js');
+var Sprite = require('./sprite.js');
 
 class Sprites extends Collection {
     get model() {

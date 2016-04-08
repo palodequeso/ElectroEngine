@@ -22,7 +22,9 @@ class SpriteSheet extends Model {
             this.sprites = [];
         }
 
+        console.log("Sprites: ", this.sprites);
         this.sprites = new Sprites(this.sprites);
+        console.log("After Sprites: ", this.sprites);
     }
 }
 

@@ -30,7 +30,7 @@ class Map extends Model {
             this.collision_layer = {};
         }
         if (this.entities === null) {
-            this.entities = {};
+            this.entities = [];
         }
         if (this.sprite_sheets === null) {
             this.sprite_sheets = [];

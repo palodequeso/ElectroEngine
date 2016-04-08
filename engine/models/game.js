@@ -28,13 +28,9 @@ class Game extends Model {
     constructor(data) {
         super(data);
 
-        console.log("Before: ", this.maps);
-
         if (this.maps === null) {
             this.maps = [];
         }
-
-        console.log("After: ", this.maps);
 
         if (this.entities === null) {
             this.entities = [];

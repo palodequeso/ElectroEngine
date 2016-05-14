@@ -98,51 +98,51 @@ class Renderer extends View {
     load_sprite_images() {
         var t = this;
         var images_loaded_statuses = {};
+        var image_loaded_promises = [];
 
-        this.model.map_instances.models.forEach(function(map_instance) {
-            console.log("Map Instance: ", map_instance);
-            var map = map_instance.map;
-            map.layers.models.forEach(function(layer) {
-                layer.sprite_instances.models.forEach(function(sprite_instance) {
-                    var sprite = sprite_instance.sprite;
-                    var image_src = sprite.image;
-                    if (!images_loaded_statuses.hasOwnProperty(image_src)) {
-                        images_loaded_statuses[image_src] = false;
-                        t.load_texture(image_src, function(texture) {
-                            t.textures[image_src] = texture;
-                            images_loaded_statuses[image_src] = true;
+        this.model.map_instances.models.forEach((map_instance) => {
+            map_instance.map.sprite_sheets.models.forEach((sprite_sheet) => {
+                var image_src = sprite_sheet.path;
+                if (!images_loaded_statuses.hasOwnProperty(image_src)) {
+                    image_loaded_promises.push(new Promise((resolve, reject) => {
+                        this.load_texture('data/sprite_sheets/' + image_src, (texture) => {
+                            resolve({texture: texture, image_src: image_src});
                         });
-                    }
-                });
+                    }));
+                    images_loaded_statuses[image_src] = true;
+                }
             });
         });
 
-        this.model.entity_instances.models.forEach(function(entity_instance) {
-            var sprite = entity_instance.entity.sprite;
-            var image_src = sprite.image;
-            if (!images_loaded_statuses.hasOwnProperty(image_src)) {
-                images_loaded_statuses[image_src] = false;
-                t.load_texture(image_src, function(texture) {
-                    t.textures[image_src] = texture;
-                    images_loaded_statuses[image_src] = true;
-                });
-            }
-        });
+        // this.model.entity_instances.models.forEach(function(entity_instance) {
+        //     var sprite = entity_instance.entity.sprite;
+        //     var image_src = sprite.image;
+        //     if (!images_loaded_statuses.hasOwnProperty(image_src)) {
+        //         images_loaded_statuses[image_src] = false;
+        //         t.load_texture(image_src, function(texture) {
+        //             t.textures[image_src] = texture;
+        //             images_loaded_statuses[image_src] = true;
+        //         });
+        //     }
+        // });
+        //
+        // this.model.particle_system_instances.models.forEach(function(particle_system_instance) {
+        //     var particle_system = particle_system_instance.particle_system;
+        //     var image_src = particle_system.image;
+        //     if (!images_loaded_statuses.hasOwnProperty(image_src)) {
+        //         images_loaded_statuses[image_src] = false;
+        //         t.load_texture(image_src, function(texture) {
+        //             t.textures[image_src] = texture;
+        //             images_loaded_statuses[image_src] = true;
+        //         });
+        //     }
+        // });
 
-        this.model.particle_system_instances.models.forEach(function(particle_system_instance) {
-            var particle_system = particle_system_instance.particle_system;
-            var image_src = particle_system.image;
-            if (!images_loaded_statuses.hasOwnProperty(image_src)) {
-                images_loaded_statuses[image_src] = false;
-                t.load_texture(image_src, function(texture) {
-                    t.textures[image_src] = texture;
-                    images_loaded_statuses[image_src] = true;
-                });
-            }
-        });
-
-        util.wait(images_loaded_statuses, function() {
-            t.textures_preloaded = true;
+        Promise.all(image_loaded_promises).then((textures) => {
+            textures.forEach((texture) => {
+                this.textures[texture.image_src] = texture.texture;
+                this.textures_preloaded = true;
+            });
         });
     }
     create_quad() {

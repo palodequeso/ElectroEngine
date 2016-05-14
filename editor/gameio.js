@@ -46,8 +46,8 @@ function load(folder_path) {
                     var layer_width = layer_instance.map_layer.width;
                     var layer_height = layer_instance.map_layer.height;
                     layer_instance.map_layer.tiles.forEach((tile_id) => {
-                        var x = tile_index % layer_width;
-                        var y = Math.floor(tile_index / layer_width);
+                        var x = (tile_index % layer_width) * map.tile_width;
+                        var y = (Math.floor(tile_index / layer_width)) * map.tile_height;
                         var sprite = layer_instance.map_layer.sprite_sheet.sprites.get(tile_id);
                         layer_instance.sprite_instances.add({
                             position: [x, y],

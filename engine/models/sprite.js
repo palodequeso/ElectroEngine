@@ -7,6 +7,7 @@ class Sprite extends Model {
         return {
             animations: null,
             tiles: null,
+            sprite_sheet: null,
             width: 0,
             height: 0
         };

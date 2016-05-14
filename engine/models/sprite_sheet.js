@@ -22,6 +22,11 @@ class SpriteSheet extends Model {
             this.sprites = [];
         }
 
+        this.sprites.forEach((sprite) => {
+            sprite.sprite_path = this.path;
+            sprite.sprite_sheet_id = this.sprite_sheet_id;
+        });
+
         this.sprites = new Sprites(this.sprites);
     }
 }

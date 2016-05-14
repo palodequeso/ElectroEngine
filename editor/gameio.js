@@ -56,7 +56,7 @@ function load(folder_path) {
                             layer: layer_index,
                             opacity: 1.0,
                             sprite: sprite,
-                            tile: null
+                            tile: sprite.tiles[0]
                         });
                         tile_index += 1;
                     });

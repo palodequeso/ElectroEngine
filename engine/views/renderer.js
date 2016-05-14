@@ -297,6 +297,27 @@ class Renderer extends View {
         this.gl.uniformMatrix4fv(this.shaders.textured_quad.projection_matrix_location, false, this.projection_matrix);
         this.gl.uniformMatrix4fv(this.shaders.textured_quad.view_matrix_location, false, this.view_matrix);
 
+        this.model.map_instances.models.forEach((map_instance) => {
+            map_instance.layer_instances.models.forEach((layer_instance) => {
+                layer_instance.sprite_instances.models.forEach((sprite_instance) => {
+                    var position = sprite_instance.position;
+                    this.draw_quad(
+                        [position[0], position[1] + sprite_instance.sprite.height],
+                        [sprite_instance.sprite.width, sprite_instance.sprite.height],
+                        [
+                            sprite_instance.tile.css_offset_x,
+                            sprite_instance.tile.css_offset_y,
+                            sprite_instance.tile.css_offset_x + sprite_instance.sprite.width,
+                            sprite_instance.tile.css_offset_y + sprite_instance.sprite.height
+                        ],
+                        [1, 1, 1, 1],
+                        this.textures[sprite_instance.sprite.sprite_path],
+                        this.shaders.textured_quad
+                    );
+                });
+            });
+        });
+
         var t = this;
         if (this.model.current_map_id !== null) {
             var map = this.model.maps[this.model.current_map_id];

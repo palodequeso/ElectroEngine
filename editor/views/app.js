@@ -1,7 +1,6 @@
 'use strict';
 
-var remote = require('remote');
-var dialog = remote.require('dialog');
+const {dialog} = require('electron').remote;
 
 var fs = require('fs');
 

@@ -6,8 +6,8 @@
         {
             "id": "test_map",
             "name": "Test Map",
-            "width": 16,
-            "height": 16,
+            "width": 4,
+            "height": 4,
             "tile_width": 32,
             "tile_height": 32,
             "sprite_sheets": [
@@ -23,15 +23,148 @@
                         {
                             "id": 0,
                             "animations": [],
-                            "tiles": [],
+                            "tiles": [{"css_offset_x": 0, "css_offset_y": 0}],
+                            "width": 32,
+                            "height": 32
+                        },
+                        {
+                            "id": 1,
+                            "animations": [],
+                            "tiles": [{"css_offset_x": 32, "css_offset_y": 0}],
+                            "width": 32,
+                            "height": 32
+                        },
+                        {
+                            "id": 2,
+                            "animations": [],
+                            "tiles": [{"css_offset_x": 64, "css_offset_y": 0}],
+                            "width": 32,
+                            "height": 32
+                        },
+                        {
+                            "id": 3,
+                            "animations": [],
+                            "tiles": [{"css_offset_x": 96, "css_offset_y": 0}],
+                            "width": 32,
+                            "height": 32
+                        },
+                        {
+                            "id": 4,
+                            "animations": [],
+                            "tiles": [{"css_offset_x": 0, "css_offset_y": 32}],
+                            "width": 32,
+                            "height": 32
+                        },
+                        {
+                            "id": 5,
+                            "animations": [],
+                            "tiles": [{"css_offset_x": 32, "css_offset_y": 32}],
+                            "width": 32,
+                            "height": 32
+                        },
+                        {
+                            "id": 6,
+                            "animations": [],
+                            "tiles": [{"css_offset_x": 64, "css_offset_y": 32}],
+                            "width": 32,
+                            "height": 32
+                        },
+                        {
+                            "id": 7,
+                            "animations": [],
+                            "tiles": [{"css_offset_x": 96, "css_offset_y": 32}],
+                            "width": 32,
+                            "height": 32
+                        },
+                        {
+                            "id": 8,
+                            "animations": [],
+                            "tiles": [{"css_offset_x": 0, "css_offset_y": 64}],
+                            "width": 32,
+                            "height": 32
+                        },
+                        {
+                            "id": 9,
+                            "animations": [],
+                            "tiles": [{"css_offset_x": 32, "css_offset_y": 64}],
+                            "width": 32,
+                            "height": 32
+                        },
+                        {
+                            "id": 10,
+                            "animations": [],
+                            "tiles": [{"css_offset_x": 64, "css_offset_y": 64}],
+                            "width": 32,
+                            "height": 32
+                        },
+                        {
+                            "id": 11,
+                            "animations": [],
+                            "tiles": [{"css_offset_x": 96, "css_offset_y": 64}],
+                            "width": 32,
+                            "height": 32
+                        },
+                        {
+                            "id": 12,
+                            "animations": [],
+                            "tiles": [{"css_offset_x": 0, "css_offset_y": 96}],
+                            "width": 32,
+                            "height": 32
+                        },
+                        {
+                            "id": 13,
+                            "animations": [],
+                            "tiles": [{"css_offset_x": 32, "css_offset_y": 96}],
+                            "width": 32,
+                            "height": 32
+                        },
+                        {
+                            "id": 14,
+                            "animations": [],
+                            "tiles": [{"css_offset_x": 64, "css_offset_y": 96}],
+                            "width": 32,
+                            "height": 32
+                        },
+                        {
+                            "id": 15,
+                            "animations": [],
+                            "tiles": [{"css_offset_x": 96, "css_offset_y": 96}],
                             "width": 32,
                             "height": 32
                         }
                     ]
                 }
+            ],
+            "layers": [
+                {
+                    "id": "ground",
+                    "name": "ground",
+                    "tiles": [
+                        0, 0, 0, 0,
+                        0, 0, 0, 0,
+                        0, 0, 0, 0,
+                        0, 0, 0, 0
+                    ],
+                    "sprite_sheet_id": "map_sheet",
+                    "width": 4,
+                    "height": 4
+                }
             ]
         }
     ],
     "map_instances": [
+        {
+            "id": "test_area",
+            "map_id": "test_map",
+            "position": [0, 0],
+            "warps": {},
+            "entity_instances": [],
+            "layer_instances": [
+                {
+                    "id": "ground_instance",
+                    "map_layer_id": "ground"
+                }
+            ]
+        }
     ]
 }

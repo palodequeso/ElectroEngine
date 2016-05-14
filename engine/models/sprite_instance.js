@@ -3,7 +3,7 @@
 var Model = require('../../lib/model.js');
 var Sprite = require('./sprite.js');
 
-class SpriteInstance {
+class SpriteInstance extends Model {
     get defaults() {
         return {
             position: [0, 0],

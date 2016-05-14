@@ -35,7 +35,7 @@ class MapInstance extends Model {
 
     }
     update(time_delta) {
-        this.map.layers.forEach((layer) => {
+        this.map.layers.models.forEach((layer) => {
             layer.sprite_instances.forEach((sprite_instance) => {
                 sprite_instance.update(time_delta);
             });

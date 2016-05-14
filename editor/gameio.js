@@ -10,14 +10,65 @@ var ParticleSystems = require('../engine/models/particle_systems.js');
 
 function load(folder_path) {
     var game_data = JSON.parse(fs.readFileSync(path.normalize(folder_path + '/game.json')));
-    console.log("Loaded Game Data: ", game_data);
     var game = new Game(game_data);
 
     game.path = folder_path;
-    // game.maps = new Maps();
-    // game.entities = new Entities();
-    // game.particle_systems = new ParticleSystems();
-    console.log(game);
+    console.log("Game Model: ", game);
+
+    // Hook up sprite sheets to map layers
+    game.maps.models.forEach((map) => {
+        console.log("Map: ", map);
+        map.layers.models.forEach((layer) => {
+            layer.sprite_sheet = null;
+            console.log("Map Layer Sprite Sheet ID: ", layer.sprite_sheet_id);
+            map.sprite_sheets.models.forEach((sprite_sheet) => {
+                if (sprite_sheet.id === layer.sprite_sheet_id) {
+                    layer.sprite_sheet = sprite_sheet;
+                }
+            });
+        });
+    });
+
+    // Hook up maps to map instances, and map layers to map layer instances.
+    game.map_instances.models.forEach((map_instance) => {
+        game.maps.models.forEach((map) => {
+            if (map_instance.map_id === map.id) {
+                map_instance.map = map;
+                var layer_index = 0;
+                map_instance.layer_instances.models.forEach((layer_instance) => {
+                    map.layers.models.forEach((layer) => {
+                        if (layer_instance.map_layer_id === layer.id) {
+                            layer_instance.map_layer = layer;
+                        }
+                    });
+
+                    var tile_index = 0;
+                    var layer_width = layer_instance.map_layer.width;
+                    var layer_height = layer_instance.map_layer.height;
+                    layer_instance.map_layer.tiles.forEach((tile_id) => {
+                        var x = tile_index % layer_width;
+                        var y = Math.floor(tile_index / layer_width);
+                        var sprite = layer_instance.map_layer.sprite_sheet.sprites.get(tile_id);
+                        layer_instance.sprite_instances.add({
+                            position: [x, y],
+                            current_animation: '',
+                            frame_time: 0.0,
+                            layer: layer_index,
+                            opacity: 1.0,
+                            sprite: sprite,
+                            tile: null
+                        });
+                        tile_index += 1;
+                    });
+
+                    layer_index += 1;
+                });
+            }
+        });
+        console.log("Map Instance: ", map_instance);
+    });
+
+    console.log("Finalized: ", game.serialize());
 
     return game;
 }

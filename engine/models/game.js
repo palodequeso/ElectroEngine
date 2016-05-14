@@ -54,7 +54,6 @@ class Game extends Model {
         this.map_instances = new MapInstances(this.map_instances);
         this.entity_instances = new EntityInstances(this.entity_instances);
         this.particle_system_instances = new ParticleSystemInstances(this.particle_system_instances);
-        console.log("Maps: ", this.maps);
     }
     game_logic() {
         // Override Me

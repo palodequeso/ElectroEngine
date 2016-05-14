@@ -63,8 +63,6 @@ class Renderer extends View {
         this.view_matrix = glmatrix.mat4.create();
         glmatrix.mat4.ortho(this.projection_matrix, 0.0, 650.0, 0.0, 500.0, -1.0, 1.0);
         glmatrix.mat4.identity(this.view_matrix);
-        console.log(this.projection_matrix);
-        console.log(this.view_matrix);
 
         this.textures_preloaded = false;
         this.textures = {};
@@ -77,13 +75,11 @@ class Renderer extends View {
         this.gl.blendFunc(this.gl.SRC_ALPHA, this.gl.ONE_MINUS_SRC_ALPHA);
     }
     load_texture(image_src, callback) {
-        console.log(image_src);
         var texture = this.gl.createTexture();
         texture.image = new Image();
 
         var t = this;
         texture.image.onload = function() {
-            console.log("Loaded image_src");
             if (texture.image.width > t.max_texture_size || texture.image.height > t.max_texture_size) {
                 console.error("The image being loaded is larger than the current WebGL's context MAX_TEXTURE_SIZE of ", t.max_texture_size);
             }
@@ -104,8 +100,9 @@ class Renderer extends View {
         var images_loaded_statuses = {};
 
         this.model.map_instances.models.forEach(function(map_instance) {
+            console.log("Map Instance: ", map_instance);
             var map = map_instance.map;
-            map.layers.each(function(layer) {
+            map.layers.models.forEach(function(layer) {
                 layer.sprite_instances.models.forEach(function(sprite_instance) {
                     var sprite = sprite_instance.sprite;
                     var image_src = sprite.image;
@@ -146,7 +143,6 @@ class Renderer extends View {
 
         util.wait(images_loaded_statuses, function() {
             t.textures_preloaded = true;
-            console.log("Done Preloading Textuers");
         });
     }
     create_quad() {
@@ -259,7 +255,6 @@ class Renderer extends View {
         this.shaders.textured_quad.sprite_size_location = this.gl.getUniformLocation(this.shaders.textured_quad.shader, "sprite_size");
         this.shaders.textured_quad.texture_location = this.gl.getUniformLocation(this.shaders.textured_quad.shader, "texture");
         this.shaders.textured_quad.color_location = this.gl.getUniformLocation(this.shaders.textured_quad.shader, "color");
-        console.log(this.shaders.textured_quad);
     }
     draw_quad(position, dimensions, sprite_texcoord, color, texture, shader) {
         var model_matrix = glmatrix.mat4.create();

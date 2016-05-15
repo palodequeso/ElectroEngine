@@ -149,6 +149,19 @@
                     "sprite_sheet_id": "map_sheet",
                     "width": 4,
                     "height": 4
+                },
+                {
+                    "id": "water",
+                    "name": "water",
+                    "tiles": [
+                        -1, -1, -1, -1,
+                        -1, 2, 2, -1,
+                        -1, 2, 2, -1,
+                        -1, -1, -1, -1
+                    ],
+                    "sprite_sheet_id": "map_sheet",
+                    "width": 4,
+                    "height": 4
                 }
             ]
         }
@@ -164,6 +177,10 @@
                 {
                     "id": "ground_instance",
                     "map_layer_id": "ground"
+                },
+                {
+                    "id": "water_instance",
+                    "map_layer_id": "water"
                 }
             ]
         }

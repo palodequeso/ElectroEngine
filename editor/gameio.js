@@ -42,23 +42,27 @@ function load(folder_path) {
                         }
                     });
 
-                    var tile_index = 0;
+                    // var tile_index = 0;
                     var layer_width = layer_instance.map_layer.width;
                     var layer_height = layer_instance.map_layer.height;
-                    layer_instance.map_layer.tiles.forEach((tile_id) => {
+                    layer_instance.map_layer.tiles.forEach((tile_id, tile_index) => {
+                        if (tile_id === -1) {
+                            return;
+                        }
                         var x = (tile_index % layer_width) * map.tile_width;
                         var y = (Math.floor(tile_index / layer_width)) * map.tile_height;
                         var sprite = layer_instance.map_layer.sprite_sheet.sprites.get(tile_id);
+                        var opacity = 1.0;
                         layer_instance.sprite_instances.add({
                             position: [x, y],
                             current_animation: '',
                             frame_time: 0.0,
                             layer: layer_index,
-                            opacity: 1.0,
+                            opacity: opacity,
                             sprite: sprite,
-                            tile: sprite.tiles[0]
+                            tile: (!sprite) ? null: sprite.tiles[0]
                         });
-                        tile_index += 1;
+                        // tile_index += 1;
                     });
 
                     layer_index += 1;

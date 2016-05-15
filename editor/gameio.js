@@ -72,6 +72,14 @@ function load(folder_path) {
         console.log("Map Instance: ", map_instance);
     });
 
+    game.particle_system_instances.models.forEach((particle_system_instance) => {
+        game.particle_systems.models.forEach((particle_system) => {
+            if (particle_system_instance.particle_system_id === particle_system.id) {
+                particle_system_instance.particle_system = particle_system;
+            }
+        });
+    });
+
     console.log("Finalized: ", game.serialize());
 
     return game;

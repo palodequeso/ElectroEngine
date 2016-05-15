@@ -125,18 +125,19 @@ class Renderer extends View {
         //         });
         //     }
         // });
-        //
-        // this.model.particle_system_instances.models.forEach(function(particle_system_instance) {
-        //     var particle_system = particle_system_instance.particle_system;
-        //     var image_src = particle_system.image;
-        //     if (!images_loaded_statuses.hasOwnProperty(image_src)) {
-        //         images_loaded_statuses[image_src] = false;
-        //         t.load_texture(image_src, function(texture) {
-        //             t.textures[image_src] = texture;
-        //             images_loaded_statuses[image_src] = true;
-        //         });
-        //     }
-        // });
+
+        this.model.particle_system_instances.models.forEach((particle_system_instance) => {
+            var particle_system = particle_system_instance.particle_system;
+            var image_src = particle_system.image;
+            if (!images_loaded_statuses.hasOwnProperty(image_src)) {
+                image_loaded_promises.push(new Promise((resolve, reject) => {
+                    this.load_texture('data/particles/' + image_src, (texture) => {
+                        resolve({texture: texture, image_src: image_src});
+                    });
+                }));
+                images_loaded_statuses[image_src] = true;
+            }
+        });
 
         Promise.all(image_loaded_promises).then((textures) => {
             textures.forEach((texture) => {
@@ -318,31 +319,35 @@ class Renderer extends View {
                 });
 
                 if (layer_index === (entity_layer_index - 1)) {
-                    // Render entity instances
+                    map_instance.entity_instances.models.forEach((entity_instance) => {
+                        console.log("Entity Instance: ", entity_instance);
+                    });
                 }
             });
         });
 
-        this.model.particle_system_instances.models.forEach(function(particle_system_instance) {
+        this.model.particle_system_instances.models.forEach((particle_system_instance) => {
             var particle_system = particle_system_instance.particle_system;
             var system_position = particle_system_instance.position;
             var image = particle_system.image;
-            var texture = t.textures[image];
-            var shader = t.shaders.textured_quad;
+            var texture = this.textures[image];
+            var shader = this.shaders.textured_quad;
 
             var modifier = particle_system.modifier;
-            if (modifier === undefined) {
+            if (!modifier) {
                 modifier = function(particle_data) {
                     return particle_data;
                 };
             }
 
-            particle_system_instance.particles.models.forEach(function(particle) {
-                var data = particle.clone_data();
+            //particle_system_instance.particles.models.forEach((particle) => {
+            particle_system_instance.particles.forEach((particle) => {
+                //var data = particle.clone_data();
+                var data = JSON.parse(JSON.stringify(particle));
                 data.alpha = ((data.life < data.fade) ? data.life / data.fade : 1.0) / 2.0;
                 data = modifier(data);
 
-                t.draw_quad(
+                this.draw_quad(
                     [data.position[0] + system_position[0] + 250.0, data.position[1] + data.size[1] + system_position[1] + 250.0],
                     [data.size[0], data.size[1]],
                     [0.0, 0.0, texture.image.width, texture.image.height],

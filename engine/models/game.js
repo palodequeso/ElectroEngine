@@ -48,6 +48,9 @@ class Game extends Model {
             this.particle_system_instances = [];
         }
 
+        console.log("PS: ", this.particle_systems);
+        console.log("PSI: ", this.particle_system_instances);
+
         this.maps = new Maps(this.maps);
         this.entities = new Entities(this.entities);
         this.particle_systems = new ParticleSystems(this.particle_systems);
@@ -78,6 +81,12 @@ class Game extends Model {
         if (this.map_instances !== undefined) {
             this.map_instances.models.forEach((map_instance) => {
                 map_instance.update(time_delta);
+            });
+        }
+
+        if (this.particle_system_instances !== undefined) {
+            this.particle_system_instances.models.forEach((particle_system_instance) => {
+                particle_system_instance.update(time_delta);
             });
         }
 

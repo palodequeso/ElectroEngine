@@ -298,6 +298,7 @@ class Renderer extends View {
         this.gl.uniformMatrix4fv(this.shaders.textured_quad.view_matrix_location, false, this.view_matrix);
 
         this.model.map_instances.models.forEach((map_instance) => {
+            var entity_layer_index = map_instance.map.entity_layer_index;
             map_instance.layer_instances.models.forEach((layer_instance, layer_index) => {
                 layer_instance.sprite_instances.models.forEach((sprite_instance) => {
                     var position = sprite_instance.position;
@@ -315,53 +316,12 @@ class Renderer extends View {
                         this.shaders.textured_quad
                     );
                 });
+
+                if (layer_index === (entity_layer_index - 1)) {
+                    // Render entity instances
+                }
             });
         });
-
-        /*var t = this;
-        if (this.model.current_map_id !== null) {
-            var map = this.model.maps[this.model.current_map_id];
-            if (map) {
-                var entity_layer = map.entity_layer;
-                map.layers.models.forEach(function(layer, layer_index) {
-                    layer.sprite_instances.models.forEach(function(sprite_instance, sprite_instance_index) {
-                        var position = sprite_instance.position;
-                        t.draw_quad(
-                            [position[0], position[1] + sprite_instance.sprite.height],
-                            [sprite_instance.sprite.width, sprite_instance.sprite.height],
-                            [
-                                sprite_instance.tile.css_offset_x,
-                                sprite_instance.tile.css_offset_y,
-                                sprite_instance.tile.css_offset_x + sprite_instance.sprite.width,
-                                sprite_instance.tile.css_offset_y + sprite_instance.sprite.height
-                            ],
-                            [1, 1, 1, 1],
-                            t.textures[sprite_instance.sprite.image],
-                            t.shaders.textured_quad
-                        );
-                    });
-                    if (layer_index === (entity_layer - 1)) {
-                        t.model.entity_instances.models.forEach(function(entity_instance) {
-                            var sprite_instance = entity_instance.sprite_instance;
-                            var position = sprite_instance.position;
-                            t.draw_quad(
-                                [position[0], position[1] + sprite_instance.sprite.height],
-                                [sprite_instance.sprite.width, sprite_instance.sprite.height],
-                                [
-                                    sprite_instance.tile.css_offset_x,
-                                    sprite_instance.tile.css_offset_y,
-                                    sprite_instance.tile.css_offset_x + sprite_instance.sprite.width,
-                                    sprite_instance.tile.css_offset_y + sprite_instance.sprite.height
-                                ],
-                                [1, 1, 1, 1],
-                                t.textures[sprite_instance.sprite.image],
-                                t.shaders.textured_quad
-                            );
-                        });
-                    }
-                });
-            }
-        }*/
 
         this.model.particle_system_instances.models.forEach(function(particle_system_instance) {
             var particle_system = particle_system_instance.particle_system;

@@ -15,6 +15,7 @@ class Map extends Model {
             tile_width: 32,
             tile_height: 32,
             layers: null,
+            entity_layer_index: 0,
             collision_layer: null,
             entities: null,
             sprite_sheets: null

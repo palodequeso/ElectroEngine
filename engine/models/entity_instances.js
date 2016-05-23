@@ -5,7 +5,7 @@ var EntityInstance = require('./entity_instance.js');
 
 class EntityInstances extends Collection {
     get model() {
-        return EntiEntityInstance;
+        return EntityInstance;
     }
     constructor(data) {
         super(data);

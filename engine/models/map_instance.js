@@ -35,13 +35,13 @@ class MapInstance extends Model {
 
     }
     update(time_delta) {
-        this.layer_instances.models.forEach((layer_instance) => {
-            layer_instance.sprite_instances.models.forEach((sprite_instance) => {
+        this.layer_instances.each((layer_instance) => {
+            layer_instance.sprite_instances.each((sprite_instance) => {
                 sprite_instance.update(time_delta);
             });
         });
-        this.entity_instances.models.forEach((entity_instance) => {
-            // TODO: sprite_instance.update(time_delta);
+        this.entity_instances.each((entity_instance) => {
+            entity_instance.update(time_delta);
         });
     }
 }

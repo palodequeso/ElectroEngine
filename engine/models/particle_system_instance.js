@@ -1,8 +1,10 @@
 'use strict';
 
+var uuid = require('uuid');
 var Model = require('../../lib/model.js');
 var ParticleSystem = require("./particle_system.js");
 var Particle = require('./particle.js');
+var Particles = require('./particles.js');
 var util = require('../util/util.js');
 
 class ParticleSystemInstance extends Model {
@@ -21,6 +23,7 @@ class ParticleSystemInstance extends Model {
             this.particle_system = {};
         }
         this.particle_system = new ParticleSystem(this.particle_system);
+        this.particles = [];
     }
     update(time_delta) {
         var to_remove = [];
@@ -33,7 +36,6 @@ class ParticleSystemInstance extends Model {
 
         to_remove.reverse();
         to_remove.forEach((particle_index) => {
-            // TODO: This won't work since this is no longer a backbone collection.
             this.particles.splice(particle_index, 1);
         });
 

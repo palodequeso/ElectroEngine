@@ -23,112 +23,112 @@
                     "sprites": [
                         {
                             "id": 0,
-                            "animations": [],
+                            "animations": {},
                             "tiles": [{"css_offset_x": 0, "css_offset_y": 0}],
                             "width": 32,
                             "height": 32
                         },
                         {
                             "id": 1,
-                            "animations": [],
+                            "animations": {},
                             "tiles": [{"css_offset_x": 32, "css_offset_y": 0}],
                             "width": 32,
                             "height": 32
                         },
                         {
                             "id": 2,
-                            "animations": [],
+                            "animations": {},
                             "tiles": [{"css_offset_x": 64, "css_offset_y": 0}],
                             "width": 32,
                             "height": 32
                         },
                         {
                             "id": 3,
-                            "animations": [],
+                            "animations": {},
                             "tiles": [{"css_offset_x": 96, "css_offset_y": 0}],
                             "width": 32,
                             "height": 32
                         },
                         {
                             "id": 4,
-                            "animations": [],
+                            "animations": {},
                             "tiles": [{"css_offset_x": 0, "css_offset_y": 32}],
                             "width": 32,
                             "height": 32
                         },
                         {
                             "id": 5,
-                            "animations": [],
+                            "animations": {},
                             "tiles": [{"css_offset_x": 32, "css_offset_y": 32}],
                             "width": 32,
                             "height": 32
                         },
                         {
                             "id": 6,
-                            "animations": [],
+                            "animations": {},
                             "tiles": [{"css_offset_x": 64, "css_offset_y": 32}],
                             "width": 32,
                             "height": 32
                         },
                         {
                             "id": 7,
-                            "animations": [],
+                            "animations": {},
                             "tiles": [{"css_offset_x": 96, "css_offset_y": 32}],
                             "width": 32,
                             "height": 32
                         },
                         {
                             "id": 8,
-                            "animations": [],
+                            "animations": {},
                             "tiles": [{"css_offset_x": 0, "css_offset_y": 64}],
                             "width": 32,
                             "height": 32
                         },
                         {
                             "id": 9,
-                            "animations": [],
+                            "animations": {},
                             "tiles": [{"css_offset_x": 32, "css_offset_y": 64}],
                             "width": 32,
                             "height": 32
                         },
                         {
                             "id": 10,
-                            "animations": [],
+                            "animations": {},
                             "tiles": [{"css_offset_x": 64, "css_offset_y": 64}],
                             "width": 32,
                             "height": 32
                         },
                         {
                             "id": 11,
-                            "animations": [],
+                            "animations": {},
                             "tiles": [{"css_offset_x": 96, "css_offset_y": 64}],
                             "width": 32,
                             "height": 32
                         },
                         {
                             "id": 12,
-                            "animations": [],
+                            "animations": {},
                             "tiles": [{"css_offset_x": 0, "css_offset_y": 96}],
                             "width": 32,
                             "height": 32
                         },
                         {
                             "id": 13,
-                            "animations": [],
+                            "animations": {},
                             "tiles": [{"css_offset_x": 32, "css_offset_y": 96}],
                             "width": 32,
                             "height": 32
                         },
                         {
                             "id": 14,
-                            "animations": [],
+                            "animations": {},
                             "tiles": [{"css_offset_x": 64, "css_offset_y": 96}],
                             "width": 32,
                             "height": 32
                         },
                         {
                             "id": 15,
-                            "animations": [],
+                            "animations": {},
                             "tiles": [{"css_offset_x": 96, "css_offset_y": 96}],
                             "width": 32,
                             "height": 32
@@ -166,13 +166,74 @@
             ]
         }
     ],
+    "sprite_sheets": [
+        {
+            "id": "entity_sheet",
+            "name": "entity_sheet",
+            "path": "entity_sheet.png",
+            "width": 832,
+            "height": 1344,
+            "tile_width": 64,
+            "tile_height": 64,
+            "sprites": [
+                {
+                    "id": "entity_sprite",
+                    "animations": {
+                        "walk_up": [
+                            {"duration": "100", "index": 0},
+                            {"duration": "100", "index": 1},
+                            {"duration": "100", "index": 2},
+                            {"duration": "100", "index": 3},
+                            {"duration": "100", "index": 4},
+                            {"duration": "100", "index": 5},
+                            {"duration": "100", "index": 6},
+                            {"duration": "100", "index": 7}
+                        ]
+                    },
+                    "tiles": [
+                        {"css_offset_x": 0, "css_offset_y": 512},
+                        {"css_offset_x": 64, "css_offset_y": 512},
+                        {"css_offset_x": 128, "css_offset_y": 512},
+                        {"css_offset_x": 196, "css_offset_y": 512},
+                        {"css_offset_x": 256, "css_offset_y": 512},
+                        {"css_offset_x": 320, "css_offset_y": 512},
+                        {"css_offset_x": 384, "css_offset_y": 512},
+                        {"css_offset_x": 448, "css_offset_y": 512}
+                    ],
+                    "width": 64,
+                    "height": 64
+                }
+            ]
+        }
+    ],
+    "entities": [
+        {
+            "id": "test_entity",
+            "name": "test_entity",
+            "sprite_id": "entity_sprite",
+            "type": "player",
+            "position_offset": [8, 8],
+            "dimensions": [48, 48]
+        }
+    ],
     "map_instances": [
         {
             "id": "test_area",
             "map_id": "test_map",
             "position": [0, 0],
             "warps": {},
-            "entity_instances": [],
+            "entity_instances": [
+                {
+                    "id": "test_entity_instance1",
+                    "entity_id": "test_entity",
+                    "position": [192, 192]
+                },
+                {
+                    "id": "test_entity_instance2",
+                    "entity_id": "test_entity",
+                    "position": [64, 64]
+                }
+            ],
             "particle_system_instances": [],
             "layer_instances": [
                 {
@@ -198,12 +259,12 @@
             "decay_range": [0.1, 1.0],
             "image": "particle.png",
             "fade_range": [0, 0.25],
-            "width_range": [32, 32],
-            "height_range": [32, 32],
+            "width_range": [16, 16],
+            "height_range": [16, 16],
             "modifier": null,
             "particle_count": 100,
-            "start_color_range": [[1, 1, 1], [1, 1, 1]],
-            "end_color_range": [[1, 1, 1], [1, 1, 1]]
+            "start_color_range": [[1, 0, 0], [1, 0.25, 0]],
+            "end_color_range": [[0, 0, 1], [0, 1, 1]]
         }
     ],
     "particle_system_instances": [

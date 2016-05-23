@@ -29,7 +29,7 @@ class Particle extends Model {
         var life = this.life - (this.decay * time_delta_seconds);
         var start_color = this.start_color;
         var end_color = this.end_color;
-        var start_life = this.tart_life;
+        var start_life = this.start_life;
         var perc = life / start_life;
         var color = [
             (perc * start_color[0]) + ((1.0 - perc) * end_color[0]),

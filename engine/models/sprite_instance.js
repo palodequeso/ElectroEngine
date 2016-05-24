@@ -26,10 +26,8 @@ class SpriteInstance extends Model {
     }
     update(time_delta) {
         var animations = this.sprite.animations;
-        // TODO: Rework!
-        if (animations.length > 0) {
+        if (Object.keys(animations).length > 0) {
             var animation = animations[this.current_animation];
-            console.log(this.sprite, animations, this.current_animation);
 
             var frame_time = (this.frame_time + time_delta) % animation.time;
             this.frame_time = frame_time;

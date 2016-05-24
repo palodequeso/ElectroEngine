@@ -179,26 +179,31 @@
                 {
                     "id": "entity_sprite",
                     "animations": {
-                        "walk_up": [
-                            {"duration": "100", "index": 0},
-                            {"duration": "100", "index": 1},
-                            {"duration": "100", "index": 2},
-                            {"duration": "100", "index": 3},
-                            {"duration": "100", "index": 4},
-                            {"duration": "100", "index": 5},
-                            {"duration": "100", "index": 6},
-                            {"duration": "100", "index": 7}
-                        ]
+                        "walk_up": {
+                            "time": 900.0,
+                            "frames": [
+                                {"duration": 100.0, "index": 0},
+                                {"duration": 100.0, "index": 1},
+                                {"duration": 100.0, "index": 2},
+                                {"duration": 100.0, "index": 3},
+                                {"duration": 100.0, "index": 4},
+                                {"duration": 100.0, "index": 5},
+                                {"duration": 100.0, "index": 6},
+                                {"duration": 100.0, "index": 7},
+                                {"duration": 100.0, "index": 8}
+                            ]
+                        }
                     },
                     "tiles": [
                         {"css_offset_x": 0, "css_offset_y": 512},
                         {"css_offset_x": 64, "css_offset_y": 512},
                         {"css_offset_x": 128, "css_offset_y": 512},
-                        {"css_offset_x": 196, "css_offset_y": 512},
+                        {"css_offset_x": 192, "css_offset_y": 512},
                         {"css_offset_x": 256, "css_offset_y": 512},
                         {"css_offset_x": 320, "css_offset_y": 512},
                         {"css_offset_x": 384, "css_offset_y": 512},
-                        {"css_offset_x": 448, "css_offset_y": 512}
+                        {"css_offset_x": 448, "css_offset_y": 512},
+                        {"css_offset_x": 512, "css_offset_y": 512}
                     ],
                     "width": 64,
                     "height": 64

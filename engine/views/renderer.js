@@ -303,7 +303,6 @@ class Renderer extends View {
             map_instance.layer_instances.each((layer_instance, layer_id, layer_index) => {
                 layer_instance.sprite_instances.each((sprite_instance) => {
                     var position = sprite_instance.position;
-                    console.log(position);
                     this.draw_quad(
                         [position[0], position[1] + sprite_instance.sprite.height],
                         [sprite_instance.sprite.width, sprite_instance.sprite.height],
@@ -323,12 +322,6 @@ class Renderer extends View {
                     map_instance.entity_instances.each((entity_instance) => {
                         var sprite_instance = entity_instance.sprite_instance;
                         var position = sprite_instance.position;
-                        console.log("Entity Instance: ",
-                                    position,
-                                    sprite_instance.sprite.sprite_path,
-                                    sprite_instance.tile,
-                                    sprite_instance.sprite.width,
-                                    sprite_instance.sprite.height);
                         this.draw_quad(
                             [position[0], position[1] + sprite_instance.sprite.height],
                             [sprite_instance.sprite.width, sprite_instance.sprite.height],

@@ -11,6 +11,8 @@ var MapInstances = require('./map_instances.js');
 var EntityInstances = require('./entity_instances.js');
 var ParticleSystemInstances = require('./particle_system_instances.js');
 
+var input = require('./input.js');
+
 class Game extends Model {
     get defaults() {
         return {
@@ -52,9 +54,6 @@ class Game extends Model {
             this.particle_system_instances = [];
         }
 
-        console.log("PS: ", this.particle_systems);
-        console.log("PSI: ", this.particle_system_instances);
-
         this.maps = new Maps(this.maps);
         this.entities = new Entities(this.entities);
         this.sprite_sheets = new SpriteSheets(this.sprite_sheets);
@@ -92,6 +91,8 @@ class Game extends Model {
         }
 
         this.game_logic();
+
+        input.update();
     }
 }
 

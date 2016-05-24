@@ -9,9 +9,12 @@ var Entities = require('../engine/models/entities.js');
 var ParticleSystems = require('../engine/models/particle_systems.js');
 var SpriteInstance = require('../engine/models/sprite_instance.js');
 
-function load(folder_path) {
+function load(folder_path, game_model) {
+    if (game_model === undefined) {
+        game_model = Game;
+    }
     var game_data = JSON.parse(fs.readFileSync(path.normalize(folder_path + '/game.json')));
-    var game = new Game(game_data);
+    var game = new game_model(game_data);
 
     game.path = folder_path;
     console.log("Game Model: ", game);

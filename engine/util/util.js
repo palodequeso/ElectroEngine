@@ -39,8 +39,19 @@ var hex_to_rgb = function(hex) {
     ] : null;
 };
 
+// http://stackoverflow.com/questions/16493645/javascript-equivalent-of-jquerys-keyup-and-keydown
+// http://blog.garstasio.com/you-dont-need-jquery/events/
+var add_event = function(element, event_name, callback) {
+    if (element.addEventListener) {
+        element.addEventListener(event_name, callback, false);
+    } else if (element.attachEvent) {
+        element.attachEvent("on" + event_name, callback);
+    }
+}
+
 module.exports = {
     wait: wait,
     rand_range: rand_range,
-    hex_to_rgb: hex_to_rgb
+    hex_to_rgb: hex_to_rgb,
+    add_event: add_event
 };

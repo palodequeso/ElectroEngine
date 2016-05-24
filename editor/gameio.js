@@ -97,7 +97,7 @@ function load(folder_path) {
             entity_instance.sprite_instance = new SpriteInstance({
                 position: entity_instance.position,
                 sprite: entity_instance.entity.sprite,
-                current_animation: 'walk_up',// HACK
+                current_animation: entity_instance.starting_animation,
                 frame_time: 0.0,
                 layer: map_instance.map.entity_layer_index,
                 opacity: 1.0,
@@ -106,6 +106,7 @@ function load(folder_path) {
             });
             // delete position fron entity instance
             delete entity_instance.position;
+            delete entity_instance.starting_animation;
         });
         console.log("Map Instance: ", map_instance);
     });

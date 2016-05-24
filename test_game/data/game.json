@@ -231,12 +231,14 @@
                 {
                     "id": "test_entity_instance1",
                     "entity_id": "test_entity",
-                    "position": [192, 192]
+                    "position": [192, 192],
+                    "starting_animation": "walk_up"
                 },
                 {
                     "id": "test_entity_instance2",
                     "entity_id": "test_entity",
-                    "position": [64, 64]
+                    "position": [64, 64],
+                    "starting_animation": "walk_up"
                 }
             ],
             "particle_system_instances": [],

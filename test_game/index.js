@@ -19,21 +19,43 @@ class TestGame extends GameModel {
                     return;
                 }
 
+                var previous_velocity = entity_instance.previous_velocity;
+                var animation = entity_instance.sprite_instance.current_animation;
+
                 var velocity = [0.0, 0.0];
                 if (input.is_keydown(87)) {
                     velocity[1] -= 1.0;
+                    animation = "walk_up";
                 }
                 if (input.is_keydown(83)) {
                     velocity[1] += 1.0;
+                    animation = "walk_down";
                 }
                 if (input.is_keydown(68)) {
                     velocity[0] += 1.0;
+                    animation = "walk_right";
                 }
                 if (input.is_keydown(65)) {
                     velocity[0] -= 1.0;
+                    animation = "walk_left";
                 }
 
-                entity_instance.set_velocity_and_animation(velocity, 'walk_up');
+                if (velocity[0] === 0.0 && velocity[1] === 0.0) {
+                    if (previous_velocity[0] < 0) {
+                        animation = "idle_left";
+                    }
+                    if (previous_velocity[0] > 0) {
+                        animation = "idle_right";
+                    }
+                    if (previous_velocity[1] < 0) {
+                        animation = "idle_up";
+                    }
+                    if (previous_velocity[1] > 0) {
+                        animation = "idle_down";
+                    }
+                }
+
+                entity_instance.set_velocity_and_animation(velocity, animation);
             });
         });
     }

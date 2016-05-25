@@ -29,6 +29,11 @@ class SpriteInstance extends Model {
         if (Object.keys(animations).length > 0) {
             var animation = animations[this.current_animation];
 
+            if (animation.time <= 0.0) {
+                this.tile = this.sprite.tiles[animation.frames[0].index];
+                return;
+            }
+
             var frame_time = (this.frame_time + time_delta) % animation.time;
             this.frame_time = frame_time;
 

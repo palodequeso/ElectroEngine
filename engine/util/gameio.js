@@ -4,10 +4,32 @@ var fs = require('fs');
 var path = require('path');
 
 var Game = require('../models/game.js');
-var Maps = require('../models/maps.js');
-var Entities = require('../models/entities.js');
-var ParticleSystems = require('../models/particle_systems.js');
-var SpriteInstance = require('../models/sprite_instance.js');
+var Maps = require('../models/maps/maps.js');
+var Entities = require('../models/characters/entities.js');
+var ParticleSystems = require('../models/particle_systems/particle_systems.js');
+var SpriteInstance = require('../models/graphics/sprite_instance.js');
+
+class GameLoader {
+    constructor(folder_path, game_model) {
+        this.folder_path = folder_path;
+        this.game = new game_model();
+        this.load();
+    }
+    load() {
+        //
+    }
+}
+
+class GameSaver {
+    constructor(folder_path, game_model_instance) {
+        this.folder_path = folder_path;
+        this.game = game_model_instance;
+        this.save();
+    }
+    save() {
+        //
+    }
+}
 
 function load(folder_path, game_model) {
     if (game_model === undefined) {

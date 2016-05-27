@@ -2,6 +2,7 @@ var box2d = require('Box2dWeb');
 
 var Model = require('../../../lib/model.js');
 
+// TODO: Add simple top down collision detection as well without Box2d
 class Physics extends Model {
     get defaults() {
         return {

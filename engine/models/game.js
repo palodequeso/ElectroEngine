@@ -1,15 +1,15 @@
 'use strict';
 
 var Model = require('../../lib/model.js');
-var Map = require('./map.js');
+var Map = require('./maps/map.js');
 
-var Maps = require('./maps.js');
-var Entities = require('./entities.js');
-var SpriteSheets = require('./sprite_sheets.js');
-var ParticleSystems = require('./particle_systems.js');
-var MapInstances = require('./map_instances.js');
-var EntityInstances = require('./entity_instances.js');
-var ParticleSystemInstances = require('./particle_system_instances.js');
+var Maps = require('./maps/maps.js');
+var Entities = require('./characters/entities.js');
+var SpriteSheets = require('./graphics/sprite_sheets.js');
+var ParticleSystems = require('./particle_systems/particle_systems.js');
+var MapInstances = require('./maps/map_instances.js');
+var EntityInstances = require('./characters/entity_instances.js');
+var ParticleSystemInstances = require('./particle_systems/particle_system_instances.js');
 
 var input = require('./input.js');
 

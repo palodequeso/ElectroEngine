@@ -1,0 +1,23 @@
+- [ ] Add backgrounds for maps capabilities
+    - [ ] should be able to be mixed with tiles
+    - [ ] Should allow for parallax
+    - [ ] Tiles should allow for parallax too, so make this a feature of
+        the layers.
+- [ ] Collision systems, need 3.
+    - [ ] Top down AABB - mostly done
+    - [ ] Platformer AABB - not started
+    - [ ] Box2d - in progress
+- [ ] Build an ECS - maybe for next game, after first game.
+    - [ ] entities
+    - [ ] components
+        - [ ] entity instance?
+        - [ ] particle system instance
+        - [ ] physics information
+    - [ ] systems
+        - [ ] game logic
+        - [ ] AI
+        - [ ] physics
+        - [ ] audio
+        - [ ] graphics
+- [ ] Switch renderer to work on queues of rendering data, rather than reading
+    the game data itself.

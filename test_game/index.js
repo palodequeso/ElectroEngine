@@ -6,7 +6,7 @@ var input = require('../engine/models/input.js');
 var GameModel = require('../engine/models/game.js');
 var Renderer = require('../engine/views/renderer.js');
 var Game = require('../engine/views/game.js');
-var gameio = require('../editor/gameio.js');
+var gameio = require('../engine/util/gameio.js');
 
 class TestGame extends GameModel {
     constructor(data) {

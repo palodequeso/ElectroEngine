@@ -9,6 +9,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "box2dweb": "^2.1.0-b",
     "draggable": "^4.0.2",
     "easystarjs": "^0.2.3",
     "font-awesome": "^4.5.0",

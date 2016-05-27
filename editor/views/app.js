@@ -10,7 +10,7 @@ var View = require('../../lib/view.js');
 
 var game_model = require('../../engine/models/game.js');
 var game_views = require('./game.js');
-var gameio = require('../gameio.js');
+var gameio = require('../../engine/util/gameio.js');
 
 var Map = require('../../engine/models/map.js');
 var Maps = require('../../engine/models/maps.js');

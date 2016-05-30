@@ -2,11 +2,11 @@
 
 var Model = require('../../../lib/model.js');
 
-class EntityInstance extends Model {
+class CharacterInstance extends Model {
     get defaults() {
         return {
             name: '',
-            entity: null,
+            character: null,
             sprite_instance: null,
             velocity: [0, 0],
             previous_velocity: [0, 0]
@@ -35,4 +35,4 @@ class EntityInstance extends Model {
     }
 }
 
-module.exports = EntityInstance;
+module.exports = CharacterInstance;

@@ -1,15 +1,15 @@
 'use strict';
 
 var Collection = require('../../../lib/collection.js');
-var Entity = require('./entity.js');
+var Character = require('./character.js');
 
-class Entities extends Collection {
+class Characters extends Collection {
     get model() {
-        return Entity;
+        return Character;
     }
     constructor(data) {
         super(data);
     }
 }
 
-module.exports = Entities;
+module.exports = Characters;

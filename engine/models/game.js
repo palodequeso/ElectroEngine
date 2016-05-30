@@ -4,11 +4,11 @@ var Model = require('../../lib/model.js');
 var Map = require('./maps/map.js');
 
 var Maps = require('./maps/maps.js');
-var Entities = require('./characters/entities.js');
+var Characters = require('./characters/characters.js');
 var SpriteSheets = require('./graphics/sprite_sheets.js');
 var ParticleSystems = require('./particle_systems/particle_systems.js');
 var MapInstances = require('./maps/map_instances.js');
-var EntityInstances = require('./characters/entity_instances.js');
+var CharacterInstances = require('./characters/character_instances.js');
 var ParticleSystemInstances = require('./particle_systems/particle_system_instances.js');
 
 var input = require('./input.js');
@@ -21,11 +21,11 @@ class Game extends Model {
             description: '',
             version: 0,
             maps: null,
-            entities: null,
+            characters: null,
             sprite_sheets: null,
             particle_systems: null,
             map_instances: null,
-            entity_instances: null,
+            character_instances: null,
             particle_system_instances: null
         };
     }
@@ -35,8 +35,8 @@ class Game extends Model {
         if (this.maps === null) {
             this.maps = [];
         }
-        if (this.entities === null) {
-            this.entities = [];
+        if (this.characters === null) {
+            this.characters = [];
         }
         if (this.sprite_sheets === null) {
             this.sprite_sheets = [];
@@ -47,19 +47,19 @@ class Game extends Model {
         if (this.map_instances === null) {
             this.map_instances = [];
         }
-        if (this.entity_instances === null) {
-            this.entity_instances = [];
+        if (this.character_instances === null) {
+            this.character_instances = [];
         }
         if (this.particle_system_instances === null) {
             this.particle_system_instances = [];
         }
 
         this.maps = new Maps(this.maps);
-        this.entities = new Entities(this.entities);
+        this.characters = new Characters(this.characters);
         this.sprite_sheets = new SpriteSheets(this.sprite_sheets);
         this.particle_systems = new ParticleSystems(this.particle_systems);
         this.map_instances = new MapInstances(this.map_instances);
-        this.entity_instances = new EntityInstances(this.entity_instances);
+        this.character_instances = new CharacterInstances(this.character_instances);
         this.particle_system_instances = new ParticleSystemInstances(this.particle_system_instances);
     }
     game_logic() {
@@ -67,7 +67,7 @@ class Game extends Model {
     }
     update(time_delta) {
         var map_instances = this.map_instances;
-        var entity_instances = this.entity_instances;
+        var character_instances = this.character_instances;
         var particle_system_instances = this.particle_system_instances;
 
         if (this.map_instances !== undefined) {
@@ -77,9 +77,9 @@ class Game extends Model {
         }
 
         // No longer needed
-        if (this.entity_instances !== undefined) {
-            this.entity_instances.each((entity_instance) => {
-                entity_instance.update(time_delta);
+        if (this.character_instances !== undefined) {
+            this.character_instances.each((character_instance) => {
+                character_instances.update(time_delta);
             });
         }
 

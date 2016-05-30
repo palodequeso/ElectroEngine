@@ -3,7 +3,7 @@
 var Model = require('../../../lib/model.js');
 var CollisionLayer = require('./collision_layer.js');
 var MapLayers = require('./map_layers.js');
-var Entities = require('../characters/entities.js');
+var Characters = require('../characters/characters.js');
 var SpriteSheets = require('../graphics/sprite_sheets.js');
 
 class Map extends Model {
@@ -17,7 +17,7 @@ class Map extends Model {
             layers: null,
             entity_layer_index: 0,
             collision_layer: null,
-            entities: null,
+            characters: null,
             sprite_sheets: null
         };
     }
@@ -30,8 +30,8 @@ class Map extends Model {
         if (this.collision_layer === null) {
             this.collision_layer = {};
         }
-        if (this.entities === null) {
-            this.entities = [];
+        if (this.characters === null) {
+            this.characters = [];
         }
         if (this.sprite_sheets === null) {
             this.sprite_sheets = [];
@@ -39,7 +39,7 @@ class Map extends Model {
 
         this.layers = new MapLayers(this.layers);
         this.collision_layer = new CollisionLayer(this.collision_layer);
-        this.entities = new Entities(this.entities);
+        this.characters = new Characters(this.characters);
         this.sprite_sheets = new SpriteSheets(this.sprite_sheets);
     }
 }

@@ -5,7 +5,7 @@ var path = require('path');
 
 var Game = require('../models/game.js');
 var Maps = require('../models/maps/maps.js');
-var Entities = require('../models/characters/entities.js');
+var Characters = require('../models/characters/characters.js');
 var ParticleSystems = require('../models/particle_systems/particle_systems.js');
 var SpriteInstance = require('../models/graphics/sprite_instance.js');
 
@@ -102,36 +102,36 @@ function load(folder_path, game_model) {
             }
         });
 
-        map_instance.entity_instances.each((entity_instance) => {
-            game.entities.each((entity) => {
-                console.log(entity.id, entity_instance.entity_id);
-                if (entity.id === entity_instance.entity_id) {
-                    entity_instance.entity = entity;
+        map_instance.character_instances.each((character_instance) => {
+            game.characters.each((character) => {
+                console.log(character.id, character_instance.character_id);
+                if (character.id === character_instance.character_id) {
+                    character_instance.character = character;
                 }
             });
 
             game.sprite_sheets.each((sprite_sheet) => {
                 sprite_sheet.sprites.each((sprite) => {
-                    if (sprite.id === entity_instance.entity.sprite_id) {
-                        entity_instance.entity.sprite = sprite;
+                    if (sprite.id === character_instance.character.sprite_id) {
+                        character_instance.character.sprite = sprite;
                     }
                 });
             });
 
             // setup sprite instance
-            entity_instance.sprite_instance = new SpriteInstance({
-                position: entity_instance.position,
-                sprite: entity_instance.entity.sprite,
-                current_animation: entity_instance.starting_animation,
+            character_instance.sprite_instance = new SpriteInstance({
+                position: character_instance.position,
+                sprite: character_instance.character.sprite,
+                current_animation: character_instance.starting_animation,
                 frame_time: 0.0,
-                layer: map_instance.map.entity_layer_index,
+                layer: map_instance.map.character_layer_index,
                 opacity: 1.0,
-                sprite: entity_instance.entity.sprite,
-                tile: entity_instance.entity.sprite.tiles[0]
+                sprite: character_instance.character.sprite,
+                tile: character_instance.character.sprite.tiles[0]
             });
-            // delete position fron entity instance
-            delete entity_instance.position;
-            delete entity_instance.starting_animation;
+            // delete position fron character instance
+            delete character_instance.position;
+            delete character_instance.starting_animation;
         });
         console.log("Map Instance: ", map_instance);
     });

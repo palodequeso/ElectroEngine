@@ -10,7 +10,7 @@
             "height": 4,
             "tile_width": 32,
             "tile_height": 32,
-            "entity_layer_index": 1,
+            "character_layer_index": 1,
             "sprite_sheets": [
                 {
                     "id": "map_sheet",
@@ -168,16 +168,16 @@
     ],
     "sprite_sheets": [
         {
-            "id": "entity_sheet",
-            "name": "entity_sheet",
-            "path": "entity_sheet.png",
+            "id": "character_sheet",
+            "name": "character_sheet",
+            "path": "character_sheet.png",
             "width": 832,
             "height": 1344,
             "tile_width": 64,
             "tile_height": 64,
             "sprites": [
                 {
-                    "id": "entity_sprite",
+                    "id": "character_sprite",
                     "animations": {
                         "walk_up": {
                             "time": 900.0,
@@ -307,11 +307,11 @@
             ]
         }
     ],
-    "entities": [
+    "characters": [
         {
-            "id": "test_entity",
-            "name": "test_entity",
-            "sprite_id": "entity_sprite",
+            "id": "test_character",
+            "name": "test_character",
+            "sprite_id": "character_sprite",
             "type": "player",
             "position_offset": [8, 8],
             "dimensions": [48, 48]
@@ -323,16 +323,16 @@
             "map_id": "test_map",
             "position": [0, 0],
             "warps": {},
-            "entity_instances": [
+            "character_instances": [
                 {
-                    "id": "test_entity_instance1",
-                    "entity_id": "test_entity",
+                    "id": "test_character_instance1",
+                    "character_id": "test_character",
                     "position": [192, 192],
                     "starting_animation": "walk_up"
                 },
                 {
-                    "id": "test_entity_instance2",
-                    "entity_id": "test_entity",
+                    "id": "test_character_instance2",
+                    "character_id": "test_character",
                     "position": [64, 64],
                     "starting_animation": "walk_up"
                 }

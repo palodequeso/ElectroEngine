@@ -6,7 +6,7 @@ class Character extends Component {
     get defaults() {
         return {
             type: 'character',
-            entity_instance: null
+            character_instance: null
         };
     }
     constructor(data) {

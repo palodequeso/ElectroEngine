@@ -49,17 +49,6 @@ class Physics extends Model {
         this.collision_groups[collision_group_a].push(collision_group_b);
         this.collision_groups[collision_group_b].push(collision_group_a);
     }
-    setup_debug_draw(context) {
-        // this.debug_drawing_enabled = true;
-        // this.debug_draw = new box2d.Dynamics.b2DebugDraw();
-        // this.debug_draw.SetSprite(context);
-        // this.debug_draw.SetDrawScale(this.scale_factor);
-        // this.debug_draw.SetFillAlpha(0.5);
-        // this.debug_draw.SetLineThickness(1.0);
-        // this.debug_draw.SetFlags(box2d.Dynamics.b2DebugDraw.e_shapeBit |
-        //                         box2d.Dynamics.b2DebugDraw.e_jointBit);
-        // this.world.SetDebugDraw(this.debug_draw);
-    }
     set_map(map_id) {
         // var map = this.get("maps").get(map_id);
         // var geometry = map.get("geometry");

@@ -299,7 +299,7 @@ class Renderer extends View {
         this.gl.uniformMatrix4fv(this.shaders.textured_quad.view_matrix_location, false, this.view_matrix);
 
         this.model.map_instances.each((map_instance) => {
-            var entity_layer_index = map_instance.map.entity_layer_index;
+            var character_layer_index = map_instance.map.character_layer_index;
             map_instance.layer_instances.each((layer_instance, layer_id, layer_index) => {
                 layer_instance.sprite_instances.each((sprite_instance) => {
                     var position = sprite_instance.position;
@@ -318,9 +318,9 @@ class Renderer extends View {
                     );
                 });
 
-                if (layer_index === (entity_layer_index - 1)) {
-                    map_instance.entity_instances.each((entity_instance) => {
-                        var sprite_instance = entity_instance.sprite_instance;
+                if (layer_index === (character_layer_index - 1)) {
+                    map_instance.character_instances.each((character_instance) => {
+                        var sprite_instance = character_instance.sprite_instance;
                         var position = sprite_instance.position;
                         this.draw_quad(
                             [position[0], position[1] + sprite_instance.sprite.height],

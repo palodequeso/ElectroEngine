@@ -1,7 +1,7 @@
 'use strict';
 
 var Model = require('../../../lib/model.js');
-var EntityInstances = require('../characters/entity_instances.js');
+var CharacterInstances = require('../characters/character_instances.js');
 var Map = require('./map.js');
 var MapLayerInstances = require('./map_layer_instances.js');
 
@@ -12,7 +12,7 @@ class MapInstance extends Model {
             map: null,
             position: [0, 0],
             warps: {},
-            entity_instances: null,
+            character_instances: null,
             layer_instances: null
         };
     }
@@ -22,15 +22,15 @@ class MapInstance extends Model {
         if (this.map === null) {
             this.map = {};
         }
-        if (this.entity_instances === null) {
-            this.entity_instances = [];
+        if (this.character_instances === null) {
+            this.character_instances = [];
         }
         if (this.layer_instances === null) {
             this.layer_instances = [];
         }
 
         this.map = new Map(this.map);
-        this.entity_instances = new EntityInstances(this.entity_instances);
+        this.character_instances = new CharacterInstances(this.character_instances);
         this.layer_instances = new MapLayerInstances(this.layer_instances);
 
     }
@@ -40,8 +40,8 @@ class MapInstance extends Model {
                 sprite_instance.update(time_delta);
             });
         });
-        this.entity_instances.each((entity_instance) => {
-            entity_instance.update(time_delta);
+        this.character_instances.each((character_instances) => {
+            character_instances.update(time_delta);
         });
     }
 }

@@ -3,7 +3,7 @@
 var Model = require('../../../lib/model.js');
 var Sprite = require('../graphics/sprite.js');
 
-class Entity extends Model {
+class Character extends Model {
     get defaults() {
         return {
             name: '',
@@ -23,4 +23,4 @@ class Entity extends Model {
     }
 }
 
-module.exports = Entity;
+module.exports = Character;

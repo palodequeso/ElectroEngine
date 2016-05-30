@@ -14,13 +14,13 @@ class TestGame extends GameModel {
     }
     game_logic() {
         this.map_instances.each((map_instance) => {
-            map_instance.entity_instances.each((entity_instance) => {
-                if (entity_instance.id !== 'test_entity_instance1') {
+            map_instance.character_instances.each((character_instance) => {
+                if (character_instance.id !== 'test_character_instance1') {
                     return;
                 }
 
-                var previous_velocity = entity_instance.previous_velocity;
-                var animation = entity_instance.sprite_instance.current_animation;
+                var previous_velocity = character_instance.previous_velocity;
+                var animation = character_instance.sprite_instance.current_animation;
 
                 var velocity = [0.0, 0.0];
                 if (input.is_keydown(87)) {
@@ -55,7 +55,7 @@ class TestGame extends GameModel {
                     }
                 }
 
-                entity_instance.set_velocity_and_animation(velocity, animation);
+                character_instance.set_velocity_and_animation(velocity, animation);
             });
         });
     }

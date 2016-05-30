@@ -1,0 +1,8 @@
+{
+    "id": "test_character",
+    "name": "test_character",
+    "sprite_id": "character_sprite",
+    "type": "player",
+    "position_offset": [8, 8],
+    "dimensions": [48, 48]
+}

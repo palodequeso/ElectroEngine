@@ -1,0 +1,130 @@
+[
+    {
+        "id": 0,
+        "sprite_sheet_id": "map_sheet",
+        "animations": {},
+        "tiles": [{"css_offset_x": 0, "css_offset_y": 0}],
+        "width": 32,
+        "height": 32
+    },
+    {
+        "id": 1,
+        "sprite_sheet_id": "map_sheet",
+        "animations": {},
+        "tiles": [{"css_offset_x": 32, "css_offset_y": 0}],
+        "width": 32,
+        "height": 32
+    },
+    {
+        "id": 2,
+        "sprite_sheet_id": "map_sheet",
+        "animations": {},
+        "tiles": [{"css_offset_x": 64, "css_offset_y": 0}],
+        "width": 32,
+        "height": 32
+    },
+    {
+        "id": 3,
+        "sprite_sheet_id": "map_sheet",
+        "animations": {},
+        "tiles": [{"css_offset_x": 96, "css_offset_y": 0}],
+        "width": 32,
+        "height": 32
+    },
+    {
+        "id": 4,
+        "sprite_sheet_id": "map_sheet",
+        "animations": {},
+        "tiles": [{"css_offset_x": 0, "css_offset_y": 32}],
+        "width": 32,
+        "height": 32
+    },
+    {
+        "id": 5,
+        "sprite_sheet_id": "map_sheet",
+        "animations": {},
+        "tiles": [{"css_offset_x": 32, "css_offset_y": 32}],
+        "width": 32,
+        "height": 32
+    },
+    {
+        "id": 6,
+        "sprite_sheet_id": "map_sheet",
+        "animations": {},
+        "tiles": [{"css_offset_x": 64, "css_offset_y": 32}],
+        "width": 32,
+        "height": 32
+    },
+    {
+        "id": 7,
+        "sprite_sheet_id": "map_sheet",
+        "animations": {},
+        "tiles": [{"css_offset_x": 96, "css_offset_y": 32}],
+        "width": 32,
+        "height": 32
+    },
+    {
+        "id": 8,
+        "sprite_sheet_id": "map_sheet",
+        "animations": {},
+        "tiles": [{"css_offset_x": 0, "css_offset_y": 64}],
+        "width": 32,
+        "height": 32
+    },
+    {
+        "id": 9,
+        "sprite_sheet_id": "map_sheet",
+        "animations": {},
+        "tiles": [{"css_offset_x": 32, "css_offset_y": 64}],
+        "width": 32,
+        "height": 32
+    },
+    {
+        "id": 10,
+        "sprite_sheet_id": "map_sheet",
+        "animations": {},
+        "tiles": [{"css_offset_x": 64, "css_offset_y": 64}],
+        "width": 32,
+        "height": 32
+    },
+    {
+        "id": 11,
+        "sprite_sheet_id": "map_sheet",
+        "animations": {},
+        "tiles": [{"css_offset_x": 96, "css_offset_y": 64}],
+        "width": 32,
+        "height": 32
+    },
+    {
+        "id": 12,
+        "sprite_sheet_id": "map_sheet",
+        "animations": {},
+        "tiles": [{"css_offset_x": 0, "css_offset_y": 96}],
+        "width": 32,
+        "height": 32
+    },
+    {
+        "id": 13,
+        "sprite_sheet_id": "map_sheet",
+        "animations": {},
+        "tiles": [{"css_offset_x": 32, "css_offset_y": 96}],
+        "width": 32,
+        "height": 32
+    },
+    {
+        "id": 14,
+        "sprite_sheet_id": "map_sheet",
+        "animations": {},
+        "tiles": [{"css_offset_x": 64, "css_offset_y": 96}],
+        "width": 32,
+        "height": 32
+    },
+    {
+        "id": 15,
+        "sprite_sheet_id": "map_sheet",
+        "animations": {},
+        "tiles": [{"css_offset_x": 96, "css_offset_y": 96}],
+        "width": 32,
+        "height": 32
+    }
+]

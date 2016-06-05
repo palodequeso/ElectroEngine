@@ -1,6 +1,6 @@
 {
     "id": "character_sprite",
-    "sprite_sheet_id" "character_sheet",
+    "sprite_sheet_id": "character_sheet",
     "animations": {
         "walk_up": {
             "time": 900.0,

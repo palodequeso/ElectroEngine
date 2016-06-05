@@ -8,6 +8,10 @@ var Maps = require('../models/maps/maps.js');
 var Characters = require('../models/characters/characters.js');
 var ParticleSystems = require('../models/particle_systems/particle_systems.js');
 var SpriteInstance = require('../models/graphics/sprite_instance.js');
+var SpriteSheet = require('../models/graphics/sprite_sheet.js');
+var SpriteSheets = require('../models/graphics/sprite_sheets.js');
+var Sprite = require('../models/graphics/sprite.js');
+var Sprites = require('../models/graphics/sprites.js');
 
 class GameLoader {
     constructor(folder_path, game_model) {
@@ -15,8 +19,75 @@ class GameLoader {
         this.game = new game_model();
         this.load();
     }
-    load() {
+    create_sprite(sprite_data) {
+        var sprite = new Sprite(sprite_data);
+        this.game.sprite_sheets.each((sprite_sheet) => {
+            if (sprite.sprite_sheet_id === sprite_sheet.id) {
+                sprite.sprite_sheet = sprite_sheet;
+            }
+        });
+        this.game.sprites.add(sprite);
+    }
+    load_sprite_sheets() {
+        var sprite_sheet_filenames = fs.readdirSync(path.normalize(this.folder_path + '/sprite_sheets/'));
+        sprite_sheet_filenames.forEach((sprite_sheet_filename) => {
+            var sprite_sheet = new SpriteSheet(JSON.parse(fs.readFileSync(
+                path.normalize(this.folder_path + '/sprite_sheets/' +
+                               sprite_sheet_filename))));
+            this.game.sprite_sheets.add(sprite_sheet);
+        });
+    }
+    load_sprites() {
+        var sprite_filenames = fs.readdirSync(path.normalize(this.folder_path + '/sprites/'));
+        sprite_filenames.forEach((sprite_filename) => {
+            var sprite_data = JSON.parse(fs.readFileSync(path.normalize(
+                this.folder_path + '/sprites/' + sprite_filename)));
+            if (Array.isArray(sprite_data)) {
+                sprite_data.forEach((entry) => {
+                    this.create_sprite(entry);
+                });
+            } else {
+                this.create_sprite(sprite_data);
+            }
+        });
+    }
+    load_characters() {
+        var characters_filenames = fs.readdirSync(path.normalize(this.folder_path + '/characters/'));
+        characters_filenames.forEach((characters_filename) => {
+            var character = new Character(JSON.parse(fs.readFileSync(
+                path.normalize(this.folder_path + '/characters/' +
+                               characters_filename))));
+            this.game.sprites.each((sprite) => {
+                if (character.sprite_id === sprite.id) {
+                    character.sprite = sprite;
+                }
+            });
+            this.game.characters.add(character);
+        });
+    }
+    load_maps() {
+        var map_filenames = fs.readdirSync(path.normalize(this.folder_path + '/maps/'));
+        map_filenames.forEach((map_filename) => {
+            var map = new Map(JSON.parse(fs.readFileSync(
+                path.normalize(this.folder_path + '/maps/' + map_filename))));
+            this.game.sprites.each((sprite) => {
+                if (map.sprite_id === sprite.id) {
+                    map.sprite = sprite;
+                }
+            });
+            this.game.maps.add(character);
+        });
+    }
+    load_particle_systems() {
         //
+    }
+    load() {
+        this.load_sprite_sheets();
+        this.load_sprites();
+        this.load_characters();
+        this.load_maps();
+        this.load_particle_systems();
+        console.log(this.game);
     }
 }
 
@@ -157,5 +228,7 @@ function save(game_model) {
 
 module.exports = {
     load: load,
-    save: save
+    save: save,
+    GameLoader: GameLoader,
+    GameSaver: GameSaver
 };

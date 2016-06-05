@@ -7,6 +7,9 @@ class Components extends Collection {
     get model() {
         return Component;
     }
+    get indexes() {
+        return ['type'];
+    }
     constructor(data) {
         super(data);
     }

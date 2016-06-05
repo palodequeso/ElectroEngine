@@ -62,11 +62,13 @@ class TestGame extends GameModel {
 }
 
 document.addEventListener("DOMContentLoaded", () => {
-    // var game_model = new GameModel({});
-    var game_model = gameio.load(path.normalize("test_game/data"), TestGame);
-    var game = new Game({
-        model: game_model
-    });
+    var game_loader = new gameio.GameLoader(path.normalize("test_game/data"), TestGame);
 
-    game.run();
+    // var game_model = new GameModel({});
+    // var game_model = gameio.load();
+    // var game = new Game({
+        // model: game_model
+    // });
+
+    // game.run();
 });

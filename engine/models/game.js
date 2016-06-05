@@ -5,6 +5,7 @@ var Map = require('./maps/map.js');
 
 var Maps = require('./maps/maps.js');
 var Characters = require('./characters/characters.js');
+var Sprites = require('./graphics/sprites.js');
 var SpriteSheets = require('./graphics/sprite_sheets.js');
 var ParticleSystems = require('./particle_systems/particle_systems.js');
 var MapInstances = require('./maps/map_instances.js');
@@ -22,6 +23,7 @@ class Game extends Model {
             version: 0,
             maps: null,
             characters: null,
+            sprites: null,
             sprite_sheets: null,
             particle_systems: null,
             map_instances: null,
@@ -34,6 +36,9 @@ class Game extends Model {
 
         if (this.maps === null) {
             this.maps = [];
+        }
+        if (this.sprites === null) {
+            this.sprites = [];
         }
         if (this.characters === null) {
             this.characters = [];
@@ -55,6 +60,7 @@ class Game extends Model {
         }
 
         this.maps = new Maps(this.maps);
+        this.sprites = new Sprites(this.sprites);
         this.characters = new Characters(this.characters);
         this.sprite_sheets = new SpriteSheets(this.sprite_sheets);
         this.particle_systems = new ParticleSystems(this.particle_systems);

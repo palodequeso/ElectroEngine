@@ -7,7 +7,7 @@ class CharacterInstance extends Model {
         return {
             name: '',
             character: null,
-            sprite_instance: null,
+            sprite_instance: null, // TODO: This is no longer needed because of the ECS
             velocity: [0, 0],
             previous_velocity: [0, 0]
         };

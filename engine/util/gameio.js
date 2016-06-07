@@ -79,7 +79,17 @@ class GameLoader {
         });
     }
     load_particle_systems() {
-        //
+        var map_filenames = fs.readdirSync(path.normalize(this.folder_path + '/maps/'));
+        map_filenames.forEach((map_filename) => {
+            var map = new Map(JSON.parse(fs.readFileSync(
+                path.normalize(this.folder_path + '/maps/' + map_filename))));
+            this.game.sprites.each((sprite) => {
+                if (map.sprite_id === sprite.id) {
+                    map.sprite = sprite;
+                }
+            });
+            this.game.maps.add(character);
+        });
     }
     load() {
         this.load_sprite_sheets();

@@ -6,18 +6,17 @@ class Graphics extends System {
     get defaults() {
         return {
             name: 'Graphics',
-            order_index: 0,
-            renderer: null
+            order_index: 0
         };
     }
     constructor(data) {
         super(data);
     }
     update(time_delta, entities) {
-        entities.forEach((entity) => {
+        entities.each((entity) => {
             var components = entity.components.get_by_index('type', 'Sprite');
-            components.forEach((component) => {
-                component.sprite_instance.update(time_delta);
+            components.each((component) => {
+                component.update(time_delta);
             });
         });
     }

@@ -13,7 +13,7 @@ class ParticleSystem extends Component {
         super(data);
     }
     update(time_delta) {
-        //
+        this.particle_system_instance.update(time_delta);
     }
 }
 

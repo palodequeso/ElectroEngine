@@ -13,7 +13,7 @@ class Sprite extends Component {
         super(data);
     }
     update(time_delta) {
-        //
+        this.sprite_instance.update(time_delta);
     }
 }
 

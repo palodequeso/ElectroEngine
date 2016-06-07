@@ -100,8 +100,8 @@ class Renderer extends View {
         var images_loaded_statuses = {};
         var image_loaded_promises = [];
 
-        this.model.map_instances.each((map_instance) => {
-            map_instance.map.sprite_sheets.each((sprite_sheet) => {
+        this.model.maps.each((map) => {
+            map.sprite_sheets.each((sprite_sheet) => {
                 var image_src = sprite_sheet.path;
                 if (!images_loaded_statuses.hasOwnProperty(image_src)) {
                     image_loaded_promises.push(new Promise((resolve, reject) => {
@@ -298,45 +298,26 @@ class Renderer extends View {
         this.gl.uniformMatrix4fv(this.shaders.textured_quad.projection_matrix_location, false, this.projection_matrix);
         this.gl.uniformMatrix4fv(this.shaders.textured_quad.view_matrix_location, false, this.view_matrix);
 
-        this.model.map_instances.each((map_instance) => {
-            var character_layer_index = map_instance.map.character_layer_index;
-            map_instance.layer_instances.each((layer_instance, layer_id, layer_index) => {
-                layer_instance.sprite_instances.each((sprite_instance) => {
-                    var position = sprite_instance.position;
-                    this.draw_quad(
-                        [position[0], position[1] + sprite_instance.sprite.height],
-                        [sprite_instance.sprite.width, sprite_instance.sprite.height],
-                        [
-                            sprite_instance.tile.css_offset_x,
-                            sprite_instance.tile.css_offset_y,
-                            sprite_instance.tile.css_offset_x + sprite_instance.sprite.width,
-                            sprite_instance.tile.css_offset_y + sprite_instance.sprite.height
-                        ],
-                        [1, 1, 1, sprite_instance.opacity],
-                        this.textures[sprite_instance.sprite.sprite_path],
-                        this.shaders.textured_quad
-                    );
+        var renderables = [];
+        this.model.entities.each((entity) => {
+            var components = entity.components.get_by_index('type', 'Sprite');
+            components.each((component) => {
+                var sprite_instance = component.sprite_instance;
+                var position = sprite_instance.position;
+                renderables.push({
+                    layer: sprite_instance.layer,
+                    position: [position[0], position[1] + sprite_instance.sprite.height],
+                    size: [sprite_instance.sprite.width, sprite_instance.sprite.height],
+                    texcoords: [
+                        sprite_instance.tile.css_offset_x,
+                        sprite_instance.tile.css_offset_y,
+                        sprite_instance.tile.css_offset_x + sprite_instance.sprite.width,
+                        sprite_instance.tile.css_offset_y + sprite_instance.sprite.height
+                    ],
+                    color: [1, 1, 1, sprite_instance.opacity],
+                    texture: this.textures[sprite_instance.sprite.sprite_path],
+                    shader: this.shaders.textured_quad
                 });
-
-                if (layer_index === (character_layer_index - 1)) {
-                    map_instance.character_instances.each((character_instance) => {
-                        var sprite_instance = character_instance.sprite_instance;
-                        var position = sprite_instance.position;
-                        this.draw_quad(
-                            [position[0], position[1] + sprite_instance.sprite.height],
-                            [sprite_instance.sprite.width, sprite_instance.sprite.height],
-                            [
-                                sprite_instance.tile.css_offset_x,
-                                sprite_instance.tile.css_offset_y,
-                                sprite_instance.tile.css_offset_x + sprite_instance.sprite.width,
-                                sprite_instance.tile.css_offset_y + sprite_instance.sprite.height
-                            ],
-                            [1, 1, 1, sprite_instance.opacity],
-                            this.textures[sprite_instance.sprite.sprite_path],
-                            this.shaders.textured_quad
-                        );
-                    });
-                }
             });
         });
 
@@ -361,14 +342,26 @@ class Renderer extends View {
                 data.alpha = ((data.life < data.fade) ? data.life / data.fade : 1.0) / 2.0;
                 // data = modifier(data);
 
-                this.draw_quad(
-                    [data.position[0] + system_position[0] + 250.0, data.position[1] + data.size[1] + system_position[1] + 250.0],
-                    [data.size[0], data.size[1]],
-                    [0.0, 0.0, texture.image.width, texture.image.height],
-                    [data.color[0], data.color[1], data.color[2], data.alpha],
-                    texture, shader
-                );
+                renderables.push({
+                    layer: 10, // This needs to be a parameter.
+                    position: [data.position[0] + system_position[0] + 250.0, data.position[1] + data.size[1] + system_position[1] + 250.0],
+                    size: [data.size[0], data.size[1]],
+                    texcoords: [0.0, 0.0, texture.image.width, texture.image.height],
+                    color: [data.color[0], data.color[1], data.color[2], data.alpha],
+                    texture: texture,
+                    shader: shader
+                });
             });
+        });
+
+        renderables.sort((left, right) => {
+            return left.layer - right.layer;
+        });
+
+        renderables.forEach((renderable) => {
+            var position = renderable.position;
+            this.draw_quad(renderable.position, renderable.size, renderable.texcoords,
+                           renderable.color, renderable.texture, renderable.shader);
         });
     }
 }

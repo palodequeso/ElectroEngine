@@ -10,6 +10,8 @@ var ParticleSystemComponent = require('../models/components/particle_system.js')
 var Map = require('../models/maps/map.js');
 var Maps = require('../models/maps/maps.js');
 var Character = require('../models/characters/character.js');
+var CharacterComponent = require('../models/components/character.js');
+var CharacterInstance = require('../models/characters/character_instance.js');
 var Characters = require('../models/characters/characters.js');
 var ParticleSystems = require('../models/particle_systems/particle_systems.js');
 var ParticleSystem = require('../models/particle_systems/particle_system.js');
@@ -148,42 +150,98 @@ class GameLoader {
                 }
             });
 
-            // map_instance.character_instances.each((character_instance) => {
-            //     this.game.characters.each((character) => {
-            //         console.log(character.id, character_instance.character_id);
-            //         if (character.id === character_instance.character_id) {
-            //             character_instance.character = character;
-            //         }
-            //     });
-            //
-            //     this.game.sprite_sheets.each((sprite_sheet) => {
-            //         sprite_sheet.sprites.each((sprite) => {
-            //             if (sprite.id === character_instance.character.sprite_id) {
-            //                 character_instance.character.sprite = sprite;
-            //             }
-            //         });
-            //     });
-            //
-            //     // setup sprite instance
-            //     character_instance.sprite_instance = new SpriteInstance({
-            //         position: character_instance.position,
-            //         sprite: character_instance.character.sprite,
-            //         current_animation: character_instance.starting_animation,
-            //         frame_time: 0.0,
-            //         layer: map_instance.map.character_layer_index,
-            //         opacity: 1.0,
-            //         sprite: character_instance.character.sprite,
-            //         tile: character_instance.character.sprite.tiles[0]
-            //     });
-            //     // delete position fron character instance
-            //     delete character_instance.position;
-            //     delete character_instance.starting_animation;
-            // });
-            // console.log("Map Instance: ", map_instance);
+            map_instance.character_instances.forEach((character_instance) => {
+                this.game.characters.each((character) => {
+                    if (character.id === character_instance.character_id) {
+                        character_instance.character = character;
+                    }
+                });
+
+                this.game.sprite_sheets.each((sprite_sheet) => {
+                    sprite_sheet.sprites.each((sprite) => {
+                        if (sprite.id === character_instance.character.sprite_id) {
+                            character_instance.character.sprite = sprite;
+                        }
+                    });
+                });
+
+                // setup sprite instance
+                //character_instance.sprite_instance = new SpriteInstance({
+                var sprite_instance = new SpriteInstance({
+                    position: character_instance.position,
+                    sprite: character_instance.character.sprite,
+                    current_animation: character_instance.starting_animation,
+                    frame_time: 0.0,
+                    layer: map_instance.map.character_layer_index,
+                    opacity: 1.0,
+                    sprite: character_instance.character.sprite,
+                    tile: character_instance.character.sprite.tiles[0]
+                });
+                // delete position fron character instance
+                delete character_instance.position;
+                delete character_instance.starting_animation;
+
+                var new_character_instance = new CharacterInstance(character_instance);
+                new_character_instance.sprite_instance = sprite_instance;
+
+                var entity = new Entity();
+                entity.components.add(new SpriteComponent({
+                    sprite_instance: sprite_instance
+                }));
+                entity.components.add(new CharacterComponent({
+                    character_instance: new_character_instance
+                }));
+                this.game.entities.add(entity);
+            });
+            console.log("Map Instance: ", map_instance);
         });
     }
     load_character_instances() {
-        //
+        this.game_data.character_instances.forEach((character_instance) => {
+            console.log("Character Instance: ", character_instance);
+            this.game.characters.each((character) => {
+                if (character.id === character_instance.character_id) {
+                    character_instance.character = character;
+                }
+            });
+
+            this.game.sprite_sheets.each((sprite_sheet) => {
+                sprite_sheet.sprites.each((sprite) => {
+                    if (sprite.id === character_instance.character.sprite_id) {
+                        character_instance.character.sprite = sprite;
+                    }
+                });
+            });
+
+            // setup sprite instance
+            //character_instance.sprite_instance = new SpriteInstance({
+            var sprite_instance = new SpriteInstance({
+                position: character_instance.position,
+                sprite: character_instance.character.sprite,
+                current_animation: character_instance.starting_animation,
+                frame_time: 0.0,
+                // TODO: This should be set when a map instance is loaded.
+                layer: 10,//map_instance.map.character_layer_index,
+                opacity: 1.0,
+                sprite: character_instance.character.sprite,
+                tile: character_instance.character.sprite.tiles[0]
+            });
+            // delete position fron character instance
+            delete character_instance.position;
+            delete character_instance.starting_animation;
+
+            var new_character_instance = new CharacterInstance(character_instance);
+            new_character_instance.sprite_instance = sprite_instance;
+
+            var entity = new Entity();
+            entity.components.add(new SpriteComponent({
+                sprite_instance: sprite_instance
+            }));
+            entity.components.add(new CharacterComponent({
+                character_instance: new_character_instance
+            }));
+            this.game.entities.add(entity);
+        });
     }
     load_particle_system_instances() {
         this.game_data.particle_system_instances.forEach((particle_system_instance) => {

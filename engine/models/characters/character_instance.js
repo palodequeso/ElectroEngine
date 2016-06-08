@@ -21,7 +21,6 @@ class CharacterInstance extends Model {
         position[0] += velocity[0];
         position[1] += velocity[1];
         this.sprite_instance.position = position;
-        this.sprite_instance.update(time_delta);
     }
     set_velocity_and_animation(velocity, animation) {
         var previous_velocity = this.previous_velocity;

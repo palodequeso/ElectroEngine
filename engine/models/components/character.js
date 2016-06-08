@@ -13,8 +13,8 @@ class Character extends Component {
         super(data);
     }
     update(time_delta) {
-        //
+        this.character_instance.update(time_delta);
     }
 }
 
-module.exports = Audio;
+module.exports = Character;

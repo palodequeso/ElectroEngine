@@ -1,6 +1,6 @@
 'use strict';
 
-var System = require('../ecs/component.js');
+var Component = require('../ecs/component.js');
 
 class Sprite extends Component {
     get defaults() {

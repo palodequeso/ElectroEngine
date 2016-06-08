@@ -2,8 +2,13 @@
 
 var Model = require('../../lib/model.js');
 
-var Entities = require('../ecs/entities.js');
-var Systems = requirE('../ecs/systems.js');
+var Entities = require('./ecs/entities.js');
+var Systems = require('./ecs/systems.js');
+
+var AudioSystem = require('./systems/audio.js');
+var GameplaySystem = require('./systems/gameplay.js');
+var GraphicsSystem = require('./systems/graphics.js');
+var PhysicsSystem = require('./systems/physics.js');
 
 var Map = require('./maps/map.js');
 var Maps = require('./maps/maps.js');
@@ -52,7 +57,12 @@ class Game extends Model {
             this.entities = [];
         }
         if (this.systems === null) {
-            this.systems = [];
+            this.systems = [
+                new AudioSystem(),
+                new GameplaySystem(),
+                new GraphicsSystem(),
+                new PhysicsSystem()
+            ];
         }
 
         this.maps = new Maps(this.maps);

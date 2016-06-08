@@ -4,7 +4,11 @@ var fs = require('fs');
 var path = require('path');
 
 var Game = require('../models/game.js');
+var Entity = require('../models/ecs/entity.js');
+var SpriteComponent = require('../models/components/sprite.js');
+var Map = require('../models/maps/map.js');
 var Maps = require('../models/maps/maps.js');
+var Character = require('../models/characters/character.js');
 var Characters = require('../models/characters/characters.js');
 var ParticleSystems = require('../models/particle_systems/particle_systems.js');
 var SpriteInstance = require('../models/graphics/sprite_instance.js');
@@ -12,11 +16,13 @@ var SpriteSheet = require('../models/graphics/sprite_sheet.js');
 var SpriteSheets = require('../models/graphics/sprite_sheets.js');
 var Sprite = require('../models/graphics/sprite.js');
 var Sprites = require('../models/graphics/sprites.js');
+var Character = require('../models/characters/character.js');
 
 class GameLoader {
     constructor(folder_path, game_model) {
         this.folder_path = folder_path;
         this.game = new game_model();
+        this.game_data = null;
         this.load();
     }
     create_sprite(sprite_data) {
@@ -33,7 +39,7 @@ class GameLoader {
         sprite_sheet_filenames.forEach((sprite_sheet_filename) => {
             var sprite_sheet = new SpriteSheet(JSON.parse(fs.readFileSync(
                 path.normalize(this.folder_path + '/sprite_sheets/' +
-                               sprite_sheet_filename))));
+                               sprite_sheet_filename, 'utf-8'))));
             this.game.sprite_sheets.add(sprite_sheet);
         });
     }
@@ -41,7 +47,7 @@ class GameLoader {
         var sprite_filenames = fs.readdirSync(path.normalize(this.folder_path + '/sprites/'));
         sprite_filenames.forEach((sprite_filename) => {
             var sprite_data = JSON.parse(fs.readFileSync(path.normalize(
-                this.folder_path + '/sprites/' + sprite_filename)));
+                this.folder_path + '/sprites/' + sprite_filename), 'utf-8'));
             if (Array.isArray(sprite_data)) {
                 sprite_data.forEach((entry) => {
                     this.create_sprite(entry);
@@ -56,7 +62,7 @@ class GameLoader {
         characters_filenames.forEach((characters_filename) => {
             var character = new Character(JSON.parse(fs.readFileSync(
                 path.normalize(this.folder_path + '/characters/' +
-                               characters_filename))));
+                               characters_filename), 'utf-8')));
             this.game.sprites.each((sprite) => {
                 if (character.sprite_id === sprite.id) {
                     character.sprite = sprite;
@@ -67,29 +73,141 @@ class GameLoader {
     }
     load_maps() {
         var map_filenames = fs.readdirSync(path.normalize(this.folder_path + '/maps/'));
+        console.log("Map Filenames: ", map_filenames);
         map_filenames.forEach((map_filename) => {
-            var map = new Map(JSON.parse(fs.readFileSync(
-                path.normalize(this.folder_path + '/maps/' + map_filename))));
-            this.game.sprites.each((sprite) => {
-                if (map.sprite_id === sprite.id) {
-                    map.sprite = sprite;
-                }
-            });
-            this.game.maps.add(character);
+            var map_json_path = path.normalize(this.folder_path + '/maps/' + map_filename);
+            var map_json = fs.readFileSync(map_json_path);
+            var map_data = JSON.parse(map_json);
+            var map = new Map(map_data);
+
+            // console.log("Map: ", map);
+            // map.layers.each((layer) => {
+            //     layer.sprite_sheet = null;
+            //     console.log("Map Layer Sprite Sheet ID: ", layer.sprite_sheet_id);
+            //     map.sprite_sheets.each((sprite_sheet) => {
+            //         if (sprite_sheet.id === layer.sprite_sheet_id) {
+            //             layer.sprite_sheet = sprite_sheet;
+            //         }
+            //     });
+            // });
+
+            this.game.maps.add(map);
         });
     }
     load_particle_systems() {
-        var map_filenames = fs.readdirSync(path.normalize(this.folder_path + '/maps/'));
-        map_filenames.forEach((map_filename) => {
-            var map = new Map(JSON.parse(fs.readFileSync(
-                path.normalize(this.folder_path + '/maps/' + map_filename))));
-            this.game.sprites.each((sprite) => {
-                if (map.sprite_id === sprite.id) {
-                    map.sprite = sprite;
+        // var map_filenames = fs.readdirSync(path.normalize(this.folder_path + '/maps/'));
+        // map_filenames.forEach((map_filename) => {
+        //     var map = new Map(JSON.parse(fs.readFileSync(
+        //         path.normalize(this.folder_path + '/maps/' + map_filename))));
+        //     this.game.sprites.each((sprite) => {
+        //         if (map.sprite_id === sprite.id) {
+        //             map.sprite = sprite;
+        //         }
+        //     });
+        //     this.game.maps.add(character);
+        // });
+    }
+    load_game_data() {
+        var game_json = fs.readFileSync(path.normalize(this.folder_path + '/game.json'), 'utf-8');
+        this.game_data = JSON.parse(game_json);
+    }
+    load_map_instances() {
+        console.log("Game Data: ", this.game_data);
+        this.game_data.map_instances.forEach((map_instance) => {
+            this.game.maps.each((map) => {
+                if (map_instance.map_id === map.id) {
+                    map_instance.map = map;
+                    var layer_index = 0;
+                    map_instance.layer_instances.forEach((layer_instance, layer_index) => {
+                        map.layers.each((layer) => {
+                            if (layer_instance.map_layer_id === layer.id) {
+                                layer_instance.map_layer = layer;
+                            }
+                        });
+
+                        // var tile_index = 0;
+                        var layer_width = layer_instance.map_layer.width;
+                        var layer_height = layer_instance.map_layer.height;
+                        layer_instance.map_layer.tiles.forEach((tile_id, tile_index) => {
+                            if (tile_id === -1) {
+                                return;
+                            }
+
+                            var entity_data = {};
+                            var x = (tile_index % layer_width) * map.tile_width;
+                            var y = (Math.floor(tile_index / layer_width)) * map.tile_height;
+                            layer_instance.map_layer.sprite_sheet = this.game.sprite_sheets.get(layer_instance.map_layer.sprite_sheet_id);
+                            var sprite = this.game.sprites.get(tile_id);
+                            var opacity = 1.0;
+
+                            var sprite_instance = new SpriteInstance({
+                                position: [x, y],
+                                current_animation: '',
+                                frame_time: 0.0,
+                                layer: layer_index,
+                                opacity: opacity,
+                                sprite: sprite,
+                                tile: (!sprite) ? null: sprite.tiles[0]
+                            });
+
+                            var entity = new Entity();
+                            entity.components.add(new SpriteComponent({
+                                sprite_instance: sprite_instance
+                            }));
+                            this.game.entities.add(entity);
+                            // tile_index += 1;
+                        });
+
+                        layer_index += 1;
+                    });
                 }
             });
-            this.game.maps.add(character);
+
+            // map_instance.character_instances.each((character_instance) => {
+            //     this.game.characters.each((character) => {
+            //         console.log(character.id, character_instance.character_id);
+            //         if (character.id === character_instance.character_id) {
+            //             character_instance.character = character;
+            //         }
+            //     });
+            //
+            //     this.game.sprite_sheets.each((sprite_sheet) => {
+            //         sprite_sheet.sprites.each((sprite) => {
+            //             if (sprite.id === character_instance.character.sprite_id) {
+            //                 character_instance.character.sprite = sprite;
+            //             }
+            //         });
+            //     });
+            //
+            //     // setup sprite instance
+            //     character_instance.sprite_instance = new SpriteInstance({
+            //         position: character_instance.position,
+            //         sprite: character_instance.character.sprite,
+            //         current_animation: character_instance.starting_animation,
+            //         frame_time: 0.0,
+            //         layer: map_instance.map.character_layer_index,
+            //         opacity: 1.0,
+            //         sprite: character_instance.character.sprite,
+            //         tile: character_instance.character.sprite.tiles[0]
+            //     });
+            //     // delete position fron character instance
+            //     delete character_instance.position;
+            //     delete character_instance.starting_animation;
+            // });
+            // console.log("Map Instance: ", map_instance);
         });
+    }
+    load_character_instances() {
+        //
+    }
+    load_particle_system_instances() {
+        // game.particle_system_instances.each((particle_system_instance) => {
+        //     game.particle_systems.each((particle_system) => {
+        //         if (particle_system_instance.particle_system_id === particle_system.id) {
+        //             particle_system_instance.particle_system = particle_system;
+        //         }
+        //     });
+        // });
     }
     load() {
         this.load_sprite_sheets();
@@ -97,6 +215,10 @@ class GameLoader {
         this.load_characters();
         this.load_maps();
         this.load_particle_systems();
+        this.load_game_data();
+        this.load_map_instances();
+        this.load_character_instances();
+        this.load_particle_system_instances();
         console.log(this.game);
     }
 }

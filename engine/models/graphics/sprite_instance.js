@@ -29,7 +29,7 @@ class SpriteInstance extends Model {
     }
     update(time_delta) {
         var animations = this.sprite.animations;
-        if (Object.keys(animations).length > 0) {
+        if (animations && Object.keys(animations).length > 0) {
             var animation = animations[this.current_animation];
 
             if (animation.time <= 0.0) {
@@ -50,6 +50,8 @@ class SpriteInstance extends Model {
                     found = true;
                 }
             });
+        } else {
+            this.tile = this.sprite.tiles[0];
         }
     }
 }

@@ -13,9 +13,9 @@ class Graphics extends System {
         super(data);
     }
     update(time_delta, entities) {
-        entities.each((entity) => {
-            var components = entity.components.get_by_index('type', 'Sprite');
-            components.each((component) => {
+        entities.each((entity, index) => {
+            var components = entity.components.get_by_index('type', 'sprite');
+            components.forEach((component) => {
                 component.update(time_delta);
             });
         });

@@ -6,11 +6,14 @@ var path = require('path');
 var Game = require('../models/game.js');
 var Entity = require('../models/ecs/entity.js');
 var SpriteComponent = require('../models/components/sprite.js');
+var ParticleSystemComponent = require('../models/components/particle_system.js');
 var Map = require('../models/maps/map.js');
 var Maps = require('../models/maps/maps.js');
 var Character = require('../models/characters/character.js');
 var Characters = require('../models/characters/characters.js');
 var ParticleSystems = require('../models/particle_systems/particle_systems.js');
+var ParticleSystem = require('../models/particle_systems/particle_system.js');
+var ParticleSystemInstance = require('../models/particle_systems/particle_system_instance.js');
 var SpriteInstance = require('../models/graphics/sprite_instance.js');
 var SpriteSheet = require('../models/graphics/sprite_sheet.js');
 var SpriteSheets = require('../models/graphics/sprite_sheets.js');
@@ -73,46 +76,28 @@ class GameLoader {
     }
     load_maps() {
         var map_filenames = fs.readdirSync(path.normalize(this.folder_path + '/maps/'));
-        console.log("Map Filenames: ", map_filenames);
         map_filenames.forEach((map_filename) => {
             var map_json_path = path.normalize(this.folder_path + '/maps/' + map_filename);
             var map_json = fs.readFileSync(map_json_path);
             var map_data = JSON.parse(map_json);
             var map = new Map(map_data);
-
-            // console.log("Map: ", map);
-            // map.layers.each((layer) => {
-            //     layer.sprite_sheet = null;
-            //     console.log("Map Layer Sprite Sheet ID: ", layer.sprite_sheet_id);
-            //     map.sprite_sheets.each((sprite_sheet) => {
-            //         if (sprite_sheet.id === layer.sprite_sheet_id) {
-            //             layer.sprite_sheet = sprite_sheet;
-            //         }
-            //     });
-            // });
-
             this.game.maps.add(map);
         });
     }
     load_particle_systems() {
-        // var map_filenames = fs.readdirSync(path.normalize(this.folder_path + '/maps/'));
-        // map_filenames.forEach((map_filename) => {
-        //     var map = new Map(JSON.parse(fs.readFileSync(
-        //         path.normalize(this.folder_path + '/maps/' + map_filename))));
-        //     this.game.sprites.each((sprite) => {
-        //         if (map.sprite_id === sprite.id) {
-        //             map.sprite = sprite;
-        //         }
-        //     });
-        //     this.game.maps.add(character);
-        // });
+        var particle_system_filenames = fs.readdirSync(path.normalize(this.folder_path + '/particle_systems/'));
+        particle_system_filenames.forEach((particle_system_filename) => {
+            var particle_system = new ParticleSystem(JSON.parse(fs.readFileSync(
+                path.normalize(this.folder_path + '/particle_systems/' +
+                particle_system_filename))));
+            this.game.particle_systems.add(particle_system);
+        });
     }
     load_game_data() {
         var game_json = fs.readFileSync(path.normalize(this.folder_path + '/game.json'), 'utf-8');
         this.game_data = JSON.parse(game_json);
     }
     load_map_instances() {
-        console.log("Game Data: ", this.game_data);
         this.game_data.map_instances.forEach((map_instance) => {
             this.game.maps.each((map) => {
                 if (map_instance.map_id === map.id) {
@@ -201,13 +186,22 @@ class GameLoader {
         //
     }
     load_particle_system_instances() {
-        // game.particle_system_instances.each((particle_system_instance) => {
-        //     game.particle_systems.each((particle_system) => {
-        //         if (particle_system_instance.particle_system_id === particle_system.id) {
-        //             particle_system_instance.particle_system = particle_system;
-        //         }
-        //     });
-        // });
+        this.game_data.particle_system_instances.forEach((particle_system_instance) => {
+            this.game.particle_systems.each((particle_system) => {
+                if (particle_system_instance.particle_system_id === particle_system.id) {
+                    particle_system_instance.particle_system = particle_system;
+                }
+            });
+
+            var new_particle_system_instance = new ParticleSystemInstance(
+                particle_system_instance);
+
+            var entity = new Entity();
+            entity.components.add(new ParticleSystemComponent({
+                particle_system_instance: new_particle_system_instance
+            }));
+            this.game.entities.add(entity);
+        });
     }
     load() {
         this.load_sprite_sheets();

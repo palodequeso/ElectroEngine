@@ -300,63 +300,66 @@ class Renderer extends View {
         var renderables = [];
         this.model.entities.each((entity) => {
             var components = entity.components.get_by_index('type', 'sprite');
-            if (!components) {
-                return;
+            if (components) {
+                components.forEach((component) => {
+                    var sprite_instance = component.sprite_instance;
+                    if (sprite_instance.tile) {
+                        var position = sprite_instance.position;
+                        renderables.push({
+                            layer: sprite_instance.layer,
+                            position: [position[0], position[1] + sprite_instance.sprite.height],
+                            size: [sprite_instance.sprite.width, sprite_instance.sprite.height],
+                            texcoords: [
+                                sprite_instance.tile.css_offset_x,
+                                sprite_instance.tile.css_offset_y,
+                                sprite_instance.tile.css_offset_x + sprite_instance.sprite.width,
+                                sprite_instance.tile.css_offset_y + sprite_instance.sprite.height
+                            ],
+                            color: [1, 1, 1, sprite_instance.opacity],
+                            texture: this.textures[sprite_instance.sprite.sprite_sheet.path],
+                            shader: this.shaders.textured_quad
+                        });
+                    }
+                });
             }
-            components.forEach((component) => {
-                var sprite_instance = component.sprite_instance;
-                if (sprite_instance.tile) {
-                    var position = sprite_instance.position;
-                    renderables.push({
-                        layer: sprite_instance.layer,
-                        position: [position[0], position[1] + sprite_instance.sprite.height],
-                        size: [sprite_instance.sprite.width, sprite_instance.sprite.height],
-                        texcoords: [
-                            sprite_instance.tile.css_offset_x,
-                            sprite_instance.tile.css_offset_y,
-                            sprite_instance.tile.css_offset_x + sprite_instance.sprite.width,
-                            sprite_instance.tile.css_offset_y + sprite_instance.sprite.height
-                        ],
-                        color: [1, 1, 1, sprite_instance.opacity],
-                        texture: this.textures[sprite_instance.sprite.sprite_sheet.path],
-                        shader: this.shaders.textured_quad
-                    });
-                }
-            });
-        });
 
-        // this.model.particle_system_instances.each((particle_system_instance) => {
-        //     var particle_system = particle_system_instance.particle_system;
-        //     var system_position = particle_system_instance.position;
-        //     var image = particle_system.image;
-        //     var texture = this.textures[image];
-        //     var shader = this.shaders.textured_quad;
-        //
-        //     var modifier = particle_system.modifier;
-        //     if (!modifier) {
-        //         modifier = function(particle_data) {
-        //             return particle_data;
-        //         };
-        //     }
-        //
-        //     particle_system_instance.particles.forEach((particle) => {
-        //         // var serialized = particle.serialize();
-        //         // var data = JSON.parse(serialized);
-        //         var data = particle;
-        //         data.alpha = ((data.life < data.fade) ? data.life / data.fade : 1.0) / 2.0;
-        //         // data = modifier(data);
-        //
-        //         renderables.push({
-        //             layer: 10, // This needs to be a parameter.
-        //             position: [data.position[0] + system_position[0] + 250.0, data.position[1] + data.size[1] + system_position[1] + 250.0],
-        //             size: [data.size[0], data.size[1]],
-        //             texcoords: [0.0, 0.0, texture.image.width, texture.image.height],
-        //             color: [data.color[0], data.color[1], data.color[2], data.alpha],
-        //             texture: texture,
-        //             shader: shader
-        //         });
-        //     });
-        // });
+            var components = entity.components.get_by_index('type', 'particle_system');
+            if (components) {
+                components.forEach((component) => {
+                    var particle_system_instance = component.particle_system_instance;
+                    var particle_system = particle_system_instance.particle_system;
+                    var system_position = particle_system_instance.position;
+                    var image = particle_system.image;
+                    var texture = this.textures[image];
+                    var shader = this.shaders.textured_quad;
+
+                    var modifier = particle_system.modifier;
+                    if (!modifier) {
+                        modifier = function(particle_data) {
+                            return particle_data;
+                        };
+                    }
+
+                    particle_system_instance.particles.forEach((particle) => {
+                        // var serialized = particle.serialize();
+                        // var data = JSON.parse(serialized);
+                        var data = particle;
+                        data.alpha = ((data.life < data.fade) ? data.life / data.fade : 1.0) / 2.0;
+                        // data = modifier(data);
+
+                        renderables.push({
+                            layer: 10, // This needs to be a parameter.
+                            position: [data.position[0] + system_position[0] + 250.0, data.position[1] + data.size[1] + system_position[1] + 250.0],
+                            size: [data.size[0], data.size[1]],
+                            texcoords: [0.0, 0.0, texture.image.width, texture.image.height],
+                            color: [data.color[0], data.color[1], data.color[2], data.alpha],
+                            texture: texture,
+                            shader: shader
+                        });
+                    });
+                });
+            }
+        });
 
         renderables.sort((left, right) => {
             return left.layer - right.layer;

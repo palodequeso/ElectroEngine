@@ -13,6 +13,8 @@ var GameplaySystem = require('../engine/models/systems/gameplay.js');
 var GraphicsSystem = require('../engine/models/systems/graphics.js');
 var PhysicsSystem = require('../engine/models/systems/physics.js');
 
+var Physics = require('../engine/models/physics/physics.js');
+
 class TestGameplaySystem extends GameplaySystem {
     update_player(character_instance) {
         var previous_velocity = character_instance.previous_velocity;
@@ -73,7 +75,7 @@ document.addEventListener("DOMContentLoaded", () => {
     game_loader.game.systems.add(new AudioSystem());
     game_loader.game.systems.add(new TestGameplaySystem());
     game_loader.game.systems.add(new GraphicsSystem());
-    game_loader.game.systems.add(new PhysicsSystem());
+    game_loader.game.systems.add(new PhysicsSystem({engine: new Physics()}));
 
     var game = new Game({
         model: game_loader.game

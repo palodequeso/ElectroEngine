@@ -4,5 +4,40 @@
     "sprite_id": "character_sprite",
     "type": "player",
     "position_offset": [8, 8],
-    "dimensions": [48, 48]
+    "dimensions": [48, 48],
+    "body": {
+        "mass": 10.0,
+        "is_dynamic": true,
+        "is_bullet": false,
+        "collision_group": "characters",
+        "shapes": [
+            {
+                "type": "box",
+                "top_left": [-20, 20],
+                "bottom_right": [20, -20],
+                "friction": 0.5,
+                "restitution": 0.2,
+                "density": 1.0,
+                "offset": [24, 28]
+            },
+            {
+                "type": "circle",
+                "friction": 0.5,
+                "restitution": 0.2,
+                "density": 1.0,
+                "offset": [-20, 4],
+                "radius": 4
+            },
+            {
+                "type": "circle",
+                "friction": 0.5,
+                "restitution": 0.2,
+                "density": 1.0,
+                "offset": [44, 4],
+                "radius": 4
+            }
+        ],
+        "position": [0, 0],
+        "collision_rect": [48, 48]
+    }
 }

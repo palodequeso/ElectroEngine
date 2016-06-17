@@ -10,6 +10,7 @@ var ParticleSystemComponent = require('../models/components/particle_system.js')
 var Map = require('../models/maps/map.js');
 var Maps = require('../models/maps/maps.js');
 var Character = require('../models/characters/character.js');
+var BodyComponent = require('../models/components/collision_body.js');
 var CharacterComponent = require('../models/components/character.js');
 var CharacterInstance = require('../models/characters/character_instance.js');
 var Characters = require('../models/characters/characters.js');
@@ -22,10 +23,17 @@ var SpriteSheets = require('../models/graphics/sprite_sheets.js');
 var Sprite = require('../models/graphics/sprite.js');
 var Sprites = require('../models/graphics/sprites.js');
 var Character = require('../models/characters/character.js');
+var Body = require('../models/physics/body.js');
+var ShapeBox = require('../models/physics/shape_box.js');
+var ShapeCircle = require('../models/physics/shape_circle.js');
+var ShapeEdge = require('../models/physics/shape_edge.js');
+var ShapePolygon = require('../models/physics/shape_polygon.js');
 
 class GameLoader {
     constructor(folder_path, game_model) {
         this.folder_path = folder_path;
+        this.character_body_data = {};
+        this.map_bodies = {};
         this.game = new game_model();
         this.game_data = null;
         this.load();
@@ -62,6 +70,36 @@ class GameLoader {
             }
         });
     }
+    create_body(body_data) {
+        if (!body_data) {
+            return null;
+        }
+
+        var shapes = [];
+        body_data.shapes.forEach((shape) => {
+            if (shape.type === 'box') {
+                var box_shape = new ShapeBox(shape);
+                shapes.push(box_shape);
+            } else if (shape.type === 'circle') {
+                var circle_shape = new ShapeCircle(shape);
+                shapes.push(circle_shape);
+            } else if (shape.type === 'edge') {
+                var edge_shape = new ShapeEdge(shape);
+                shapes.push(edge_shape);
+            } else if (shape.type === 'polygon') {
+                var polygon_shape = new ShapePolygon(shape);
+                shapes.push(polygon_shape);
+            }
+        });
+        var body = new Body({
+            shapes: shapes,
+            mass: body_data.body,
+            is_dynamic: body_data.is_dynamic,
+            is_bullet: body_data.is_bullet,
+            collision_group: body_data.collision_group
+        });
+        return body;
+    }
     load_characters() {
         var characters_filenames = fs.readdirSync(path.normalize(this.folder_path + '/characters/'));
         characters_filenames.forEach((characters_filename) => {
@@ -73,6 +111,12 @@ class GameLoader {
                     character.sprite = sprite;
                 }
             });
+
+            if (character.hasOwnProperty('body')) {
+                this.character_body_data[character.id] = character.body;
+                delete character.body;
+            }
+
             this.game.characters.add(character);
         });
     }
@@ -82,6 +126,12 @@ class GameLoader {
             var map_json_path = path.normalize(this.folder_path + '/maps/' + map_filename);
             var map_json = fs.readFileSync(map_json_path);
             var map_data = JSON.parse(map_json);
+            if (map_data.hasOwnProperty('bodies')) {
+                map_data.bodies.forEach((body_data) => {
+                    this.map_bodies[map_data.id] = map_data.bodies;
+                    delete map_data.bodies;
+                });
+            }
             var map = new Map(map_data);
             this.game.maps.add(map);
         });
@@ -104,6 +154,18 @@ class GameLoader {
             this.game.maps.each((map) => {
                 if (map_instance.map_id === map.id) {
                     map_instance.map = map;
+
+                    if (this.map_bodies.hasOwnProperty(map.id)) {
+                        this.map_bodies[map.id].forEach((map_body_data) => {
+                            var body = this.create_body(map_body_data);
+                            var entity = new Entity();
+                            entity.components.add(new BodyComponent({
+                                body: body
+                            }));
+                            this.game.entities.add(entity);
+                        });
+                    }
+
                     var layer_index = 0;
                     map_instance.layer_instances.forEach((layer_instance, layer_index) => {
                         map.layers.each((layer) => {
@@ -183,6 +245,7 @@ class GameLoader {
 
                 var new_character_instance = new CharacterInstance(character_instance);
                 new_character_instance.sprite_instance = sprite_instance;
+                var body = this.create_body(this.character_body_data[character_instance.character.id]);
 
                 var entity = new Entity();
                 entity.components.add(new SpriteComponent({
@@ -191,6 +254,11 @@ class GameLoader {
                 entity.components.add(new CharacterComponent({
                     character_instance: new_character_instance
                 }));
+                if (body) {
+                    entity.components.add(new BodyComponent({
+                        body: body
+                    }));
+                }
                 this.game.entities.add(entity);
             });
             console.log("Map Instance: ", map_instance);
@@ -233,6 +301,8 @@ class GameLoader {
             var new_character_instance = new CharacterInstance(character_instance);
             new_character_instance.sprite_instance = sprite_instance;
 
+            var body = this.create_body(this.character_body_data[character_instance.character.id]);
+
             var entity = new Entity();
             entity.components.add(new SpriteComponent({
                 sprite_instance: sprite_instance
@@ -240,6 +310,11 @@ class GameLoader {
             entity.components.add(new CharacterComponent({
                 character_instance: new_character_instance
             }));
+            if (body) {
+                entity.components.add(new BodyComponent({
+                    body: body
+                }));
+            }
             this.game.entities.add(entity);
         });
     }

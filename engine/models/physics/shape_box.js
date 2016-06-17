@@ -1,10 +1,8 @@
-var box2d = require('Box2dWeb');
-
-var Model = require('../../../lib/model.js');
+var Shape = require('./shape.js');
 
 class ShapeBox extends Shape {
     get defaults() {
-        var defaults = super();
+        var defaults = super.defaults;
         defaults.type = 'box';
         defaults.top_left = [0.0, 0.0];
         defaults.bottom_right = [1.0, 1.0];
@@ -13,6 +11,6 @@ class ShapeBox extends Shape {
     constructor(data) {
         super(data);
     }
-});
+}
 
 module.exports = ShapeBox;

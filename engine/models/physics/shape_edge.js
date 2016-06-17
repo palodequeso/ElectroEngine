@@ -1,10 +1,8 @@
-var box2d = require('Box2dWeb');
-
-var Model = require('../../../lib/model.js');
+var Shape = require('./shape.js');
 
 class ShapeEdge extends Shape {
     get defaults() {
-        var defaults = super();
+        var defaults = super.defaults;
         defaults.type = 'edge';
         defaults.begin = [0.0, 0.0];
         defaults.end = [1.0, 0.0];
@@ -13,6 +11,6 @@ class ShapeEdge extends Shape {
     constructor(data) {
         super(data);
     }
-});
+}
 
 module.exports = ShapeEdge;

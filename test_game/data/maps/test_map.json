@@ -42,13 +42,13 @@
             "collision_group": "maps",
             "shapes": [
                 {
-                    "type": "line",
-                    "length": 4000.0,
+                    "type": "edge",
+                    "length": 2000.0,
                     "angle": 0.0,
                     "offset": [0, 0]
                 }
             ],
-            "position": [0, 512]
+            "position": [256, 512]
         }
     ]
 }

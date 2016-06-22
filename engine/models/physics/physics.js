@@ -3,7 +3,7 @@ var Model = require('../../../lib/model.js');
 class Physics extends Model {
     get defaults() {
         return {
-            scale_factor: 100.0,
+            scale_factor: 10.0,
             collision_groups: {}
         };
     }

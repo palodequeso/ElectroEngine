@@ -1,4 +1,3 @@
-// var Matter = require('matter-js');
 var p2 = require('p2');
 var Physics = require('./physics.js');
 
@@ -52,12 +51,8 @@ class RigidBodyPhysics extends Physics {
                     });
                     body.addShape(circle_shape, shape.offset, shape.angle);
                 } else if (shape.type === 'edge') {
-                    var x1 = shape.start[0];
-                    var x2 = shape.end[0];
-                    var y1 = shape.start[1];
-                    var y2 = shape.end[1];
                     var line_shape = new p2.Line({
-                        length: length
+                        length: shape.length
                     });
                     body.addShape(line_shape, shape.offset, shape.angle);
                 } else if (shape.polygon === 'polygon') {
@@ -86,6 +81,8 @@ class RigidBodyPhysics extends Physics {
             var position = null;
             bodies.forEach((body_data) => {
                 position = body_data.body.position;
+                //position[0] *= this.scale_factor;
+                //position[1] *= this.scale_factor;
             });
 
             if (position !== null) {

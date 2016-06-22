@@ -36,23 +36,19 @@
     ],
     "bodies": [
         {
-            "mass": 1000.0,
+            "mass": 0.0,
             "is_dynamic": false,
             "is_bullet": false,
             "collision_group": "maps",
             "shapes": [
                 {
-                    "type": "edge",
-                    "begin": [-2000, 0],
-                    "end": [2000, 0],
-                    "friction": 0.5,
-                    "restitution": 0.2,
-                    "density": 1.0,
+                    "type": "line",
+                    "length": 4000.0,
+                    "angle": 0.0,
                     "offset": [0, 0]
                 }
             ],
-            "position": [0, 512],
-            "collision_rect": [4000, 2]
+            "position": [0, 512]
         }
     ]
 }

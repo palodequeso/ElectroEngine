@@ -25,7 +25,7 @@ class Physics extends System {
             this.entities_added = true;
         }
         if (this.engine) {
-            this.engine.update(time_delta);
+            this.engine.update(time_delta, entities);
         }
         // update graphics position
     }

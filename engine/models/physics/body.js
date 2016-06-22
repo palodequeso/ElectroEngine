@@ -10,8 +10,7 @@ class Body extends Model {
             collision_group: 'default',
             physics_engine_body: null,
             shapes: [],
-            position: [0, 0],
-            collision_rect: [32, 32]
+            position: [0, 0]
         };
     }
     constructor(data) {

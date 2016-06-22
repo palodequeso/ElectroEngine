@@ -93,7 +93,7 @@ class GameLoader {
         });
         var body = new Body({
             shapes: shapes,
-            mass: body_data.body,
+            mass: body_data.mass,
             is_dynamic: body_data.is_dynamic,
             is_bullet: body_data.is_bullet,
             collision_group: body_data.collision_group

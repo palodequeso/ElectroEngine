@@ -26,13 +26,10 @@ class RigidBodyPhysics extends Physics {
         }
 
         bodies.forEach((body_data) => {
-            var collision_rect = body_data.collision_rect;
-            var dynamic = body_data.is_dynamic;
-            var bullet = body_data.is_bullet;
             var position = body_data.position;
 
             var body = new p2.Body({
-                mass: (dynamic) ? body_data.mass : 0.0,
+                mass: (body_data.is_dynamic) ? body_data.mass : 0.0,
                 position: [position[0] / this.scale_factor,
                            position[1] / this.scale_factor],
                 angularVelocity: 0.0

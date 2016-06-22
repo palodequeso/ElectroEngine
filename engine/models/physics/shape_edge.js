@@ -4,8 +4,8 @@ class ShapeEdge extends Shape {
     get defaults() {
         var defaults = super.defaults;
         defaults.type = 'edge';
-        defaults.begin = [0.0, 0.0];
-        defaults.end = [1.0, 0.0];
+        defaults.length = 0.0;
+        defaults.angle = 0.0;
         return defaults;
     }
     constructor(data) {

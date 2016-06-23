@@ -13,7 +13,7 @@ class CollisionBody extends Component {
         super(data);
     }
     update(time_delta) {
-        //
+        // test
     }
 }
 

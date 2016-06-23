@@ -5,29 +5,20 @@
     "type": "player",
     "position_offset": [8, 8],
     "dimensions": [48, 48],
+    "is_jumping": false,
     "body": {
         "mass": 10.0,
         "is_dynamic": true,
-        "is_bullet": false,
         "collision_group": "characters",
         "shapes": [
             {
                 "type": "box",
-                "top_left": [-20, 20],
-                "bottom_right": [20, -20],
-                "offset": [24, 28]
-            },
-            {
-                "type": "circle",
-                "offset": [-20, 4],
-                "radius": 4
-            },
-            {
-                "type": "circle",
-                "offset": [44, 4],
-                "radius": 4
+                "top_left": [0, 48],
+                "bottom_right": [48, 0],
+                "offset": [0, 0],
+                "angle": 0
             }
         ],
-        "position": [0, 0]
+        "position": [0, -64]
     }
 }

@@ -9,6 +9,7 @@ class Body extends Model {
             entity: null, // An ECS entity
             collision_group: 'default',
             physics_engine_body: null,
+            fixed_rotation: true,
             shapes: [],
             position: [0, 0]
         };

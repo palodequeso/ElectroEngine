@@ -258,7 +258,7 @@ class Renderer extends View {
     }
     draw_quad(position, dimensions, sprite_texcoord, color, texture, shader) {
         var model_matrix = glmatrix.mat4.create();
-        glmatrix.mat4.translate(model_matrix, model_matrix, [position[0], this.canvas.height - position[1], 1.0]);
+        glmatrix.mat4.translate(model_matrix, model_matrix, [position[0], position[1], 1.0]);
         glmatrix.mat4.scale(model_matrix, model_matrix, [dimensions[0], dimensions[1], 1.0]);
         this.gl.uniformMatrix4fv(shader.model_matrix_location, false, model_matrix);//new FloatArray(model_matrix));
         this.gl.uniform1i(shader.texture_location, 0);
@@ -307,7 +307,7 @@ class Renderer extends View {
                         var position = sprite_instance.position;
                         renderables.push({
                             layer: sprite_instance.layer,
-                            position: [position[0], position[1] + sprite_instance.sprite.height],
+                            position: [position[0], position[1]],
                             size: [sprite_instance.sprite.width, sprite_instance.sprite.height],
                             texcoords: [
                                 sprite_instance.tile.css_offset_x,
@@ -349,7 +349,7 @@ class Renderer extends View {
 
                         renderables.push({
                             layer: 10, // This needs to be a parameter.
-                            position: [data.position[0] + system_position[0] + 250.0, data.position[1] + data.size[1] + system_position[1] + 250.0],
+                            position: [data.position[0] + system_position[0] + 250.0, data.position[1] + system_position[1] + 250.0],
                             size: [data.size[0], data.size[1]],
                             texcoords: [0.0, 0.0, texture.image.width, texture.image.height],
                             color: [data.color[0], data.color[1], data.color[2], data.alpha],
@@ -366,7 +366,6 @@ class Renderer extends View {
         });
 
         renderables.forEach((renderable) => {
-            var position = renderable.position;
             this.draw_quad(renderable.position, renderable.size, renderable.texcoords,
                            renderable.color, renderable.texture, renderable.shader);
         });

@@ -185,7 +185,7 @@ class GameLoader {
 
                             var entity_data = {};
                             var x = (tile_index % layer_width) * map.tile_width;
-                            var y = (Math.floor(tile_index / layer_width)) * map.tile_height;
+                            var y = (map.tile_height * layer_height) - ((Math.floor(tile_index / layer_width)) * map.tile_height) - map.tile_height;
                             layer_instance.map_layer.sprite_sheet = this.game.sprite_sheets.get(layer_instance.map_layer.sprite_sheet_id);
                             var sprite = this.game.sprites.get(tile_id);
                             var opacity = 1.0;

@@ -10,15 +10,17 @@
         "mass": 10.0,
         "is_dynamic": true,
         "collision_group": "characters",
+        "collision_rect": [24, 48],
+        "collision_offset": [12, 0],
         "shapes": [
             {
                 "type": "box",
-                "top_left": [0, 48],
-                "bottom_right": [48, 0],
+                "top_left": [12, 48],
+                "bottom_right": [36, 0],
                 "offset": [0, 0],
                 "angle": 0
             }
         ],
-        "position": [0, -64]
+        "position": [0, 0]
     }
 }

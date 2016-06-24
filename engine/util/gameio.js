@@ -96,7 +96,9 @@ class GameLoader {
             mass: body_data.mass,
             is_dynamic: body_data.is_dynamic,
             is_bullet: body_data.is_bullet,
-            collision_group: body_data.collision_group
+            collision_group: body_data.collision_group,
+            collision_rect: body_data.collision_rect,
+            collision_offset: body_data.collision_offset
         });
         return body;
     }
@@ -255,6 +257,8 @@ class GameLoader {
                     character_instance: new_character_instance
                 }));
                 if (body) {
+                    body.position[0] = sprite_instance.position[0];
+                    body.position[1] = sprite_instance.position[1];
                     entity.components.add(new BodyComponent({
                         body: body
                     }));

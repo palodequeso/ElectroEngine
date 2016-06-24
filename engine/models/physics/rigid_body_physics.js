@@ -5,7 +5,7 @@ class RigidBodyPhysics extends Physics {
     get defaults() {
         var defaults = super.defaults;
         defaults.world = null;
-        defaults.gravity = [0.0, -10.0];
+        defaults.gravity = [0.0, 0.0];
         return defaults;
     }
     constructor(data) {
@@ -20,6 +20,7 @@ class RigidBodyPhysics extends Physics {
         if (shape.type === 'box') {
             var top_left = shape.top_left;
             var bottom_right = shape.bottom_right;
+            console.log(top_left, bottom_right);
             var box_shape = new p2.Box({
                 width: (bottom_right[0] - top_left[0]) / this.scale_factor,
                 height: (top_left[1] - bottom_right[1]) / this.scale_factor
@@ -32,7 +33,7 @@ class RigidBodyPhysics extends Physics {
             return circle_shape;
         } else if (shape.type === 'edge') {
             var line_shape = new p2.Line({
-                length: shape.length
+                length: shape.length / this.scale_factor
             });
             return line_shape;
         } else if (shape.type === 'polygon') {
@@ -58,7 +59,11 @@ class RigidBodyPhysics extends Physics {
 
         body_data.shapes.forEach((shape_data) => {
             var shape = this.create_shape(shape_data);
-            body.addShape(shape, shape_data.offset, shape_data.angle);
+            var offset = [
+                shape_data.offset[0] / this.scale_factor,
+                shape_data.offset[1] / this.scale_factor
+            ]
+            body.addShape(shape, offset, shape_data.angle);
         });
 
         return body;

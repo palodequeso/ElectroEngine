@@ -40,8 +40,10 @@ class Physics extends System {
                 }
 
                 var position = null;
+                var collision_rect = [0, 0];
                 bodies.forEach((body_data) => {
                     position = body_data.body.position;
+                    collision_rect = body_data.collision_rect;
                     //position[0] *= this.scale_factor;
                     //position[1] *= this.scale_factor;
                 });
@@ -51,8 +53,8 @@ class Physics extends System {
                     if (components) {
                         components.forEach((component) => {
                             //component.sprite_instance.position = position;
-                            component.sprite_instance.position[0] = position[0] * this.engine.scale_factor;
-                            component.sprite_instance.position[1] = position[1] * this.engine.scale_factor;
+                            component.sprite_instance.position[0] = (position[0] * this.engine.scale_factor) - (collision_rect[0] / 2.0);
+                            component.sprite_instance.position[1] = (position[1] * this.engine.scale_factor) - (collision_rect[1] / 2.0);
                         });
                     }
                 }

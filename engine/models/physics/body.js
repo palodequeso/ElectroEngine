@@ -11,7 +11,9 @@ class Body extends Model {
             physics_engine_body: null,
             fixed_rotation: true,
             shapes: [],
-            position: [0, 0]
+            position: [0, 0],
+            collision_rect: [0, 0],
+            collision_offset: [0, 0]
         };
     }
     constructor(data) {

@@ -17,6 +17,11 @@ var PhysicsSystem = require('../engine/models/systems/physics.js');
 var RigidBodyPhysics = require('../engine/models/physics/rigid_body_physics.js');
 
 class TestPhysics extends RigidBodyPhysics {
+    get defaults() {
+        var defaults = super.defaults;
+        defaults.gravity = [0.0, -5.0];
+        return defaults;
+    }
     constructor(data) {
         super(data);
     }

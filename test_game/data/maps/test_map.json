@@ -39,6 +39,8 @@
             "mass": 0.0,
             "is_dynamic": false,
             "collision_group": "maps",
+            "collision_rect": [4000, 5],
+            "collision_offset": [0, 0],
             "shapes": [
                 {
                     "type": "box",

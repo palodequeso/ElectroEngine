@@ -63,9 +63,9 @@ class TestGameplaySystem extends GameplaySystem {
                 // collision results to determine this. So many reasons!
                 character_instance.is_jumping = false;
             }
-            body.body.velocity[0] = velocity[0] * 2.0;
+            body.body.velocity[0] = velocity[0] * 1.5;
             if (!character_instance.is_jumping && jump) {
-                body.body.applyImpulse([0, 150]);
+                body.body.applyImpulse([0, 100]);
                 character_instance.is_jumping = true;
             }
         }

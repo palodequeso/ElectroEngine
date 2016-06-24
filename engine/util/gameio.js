@@ -97,8 +97,7 @@ class GameLoader {
             is_dynamic: body_data.is_dynamic,
             is_bullet: body_data.is_bullet,
             collision_group: body_data.collision_group,
-            collision_rect: body_data.collision_rect,
-            collision_offset: body_data.collision_offset
+            collision_rect: body_data.collision_rect
         });
         return body;
     }

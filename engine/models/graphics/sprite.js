@@ -9,7 +9,10 @@ class Sprite extends Model {
             tiles: null,
             sprite_sheet: null,
             width: 0,
-            height: 0
+            height: 0,
+            // If these are set, perform parallax in realtion to width/height
+            render_width: null,
+            render_height: null
         };
     }
     constructor(data) {

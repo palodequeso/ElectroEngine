@@ -1,0 +1,55 @@
+<div id="sprite_sheet_editor_container">
+    <div class="hx-layout hx-group hx-horizontal">
+        <div class="hx-section">
+            <div>
+                {{#if original_path}}
+                    <img src="{{original_path}}" />
+                {{else}}
+                    <!-- <img src="file://{{game_path}}/images/sprite_sheets/{{path}}" /> -->
+                {{/if}}
+                <div id="sprite_sheet_grid"></div>
+            </div>
+        </div>
+        <div class="hx-section">
+            <form class="hx-form hx-margin">
+                <div>
+                    <label>ID</label>
+                    <input type="text" value="{{id}}" />
+                </div>
+                <div>
+                    <label>Path</label>
+                    <input type="text" value="{{path}}" />
+                </div>
+                <div>
+                    <label>Name</label>
+                    <input type="text" value="{{name}}" />
+                </div>
+                <div>
+                    <label>Width</label>
+                    <input type="number" value="{{width}}" />
+                </div>
+                <div>
+                    <label>Height</label>
+                    <input type="number" value="{{height}}" />
+                </div>
+                <div>
+                    <label>Tile Width</label>
+                    <input type="number" value="{{tile_width}}" />
+                </div>
+                <div>
+                    <label>Tile Height</label>
+                    <input type="number" value="{{tile_height}}" />
+                </div>
+                <div>
+                    <label>Show Grid</label>
+                    <input type="checkbox" checked="checked" id="sprite_sheet_grid_toggle" />
+                </div>
+                <div>
+                    <button class="hx-btn hx-positive" id="save_sprite_sheet_button">
+                        Save
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

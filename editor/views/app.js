@@ -12,9 +12,14 @@ var game_model = require('../../engine/models/game.js');
 var game_views = require('./game.js');
 var gameio = require('../../engine/util/gameio.js');
 
-var Map = require('../../engine/models/map.js');
-var Maps = require('../../engine/models/maps.js');
+var Map = require('../../engine/models/maps/map.js');
+var Maps = require('../../engine/models/maps/maps.js');
 var MapEditor = require('./map.js');
+
+var SpriteSheet = require('../../engine/models/graphics/sprite_sheet.js');
+var SpriteSheets = require('../../engine/models/graphics/sprite_sheets.js');
+var SpriteSheetEditor = require('./sprite_sheet.js');
+
 var util = require('./util.js');
 
 class App extends View {
@@ -28,6 +33,7 @@ class App extends View {
         this.$element.on('click', '#create_game_button', this.create_game.bind(this));
         this.$element.on('click', '#load_game_button', this.load_game.bind(this));
         this.$element.on('click', '#create_map_button', this.create_map.bind(this));
+        this.$element.on('click', '#create_sprite_sheet_button', this.create_sprite_sheet.bind(this));
     }
     edit_game() {
         //
@@ -68,16 +74,27 @@ class App extends View {
 
         view.render();
     }
+    create_sprite_sheet() {
+        var model = new SpriteSheet();
+        var view = new SpriteSheetEditor({
+            model: model,
+            game: this.game_model
+        });
+
+        this.game_model.sprite_sheets.add(model);
+
+        this.$element.find(".content").empty();
+        this.$element.find(".content").append(view.$element);
+
+        view.render();
+    }
     load_game() {
         var choice = dialog.showOpenDialog({properties: ['openDirectory']});
         console.log("Game Folder: ", choice);
-        var result = gameio.load(choice[0]);
-        if (result === null) {
-            console.error("Oopsies!");
-        } else {
-            this.game_model = result;
-            this.render();
-        }
+        var game_loader = new gameio.GameLoader(choice[0], game_model);
+        // var result = gameio.load(choice[0], game_model);
+        this.game_model = game_loader.game;
+        this.render();
     }
     render() {
         this.$element.find("#game_edit_buttons").hide();
@@ -92,24 +109,22 @@ class App extends View {
         this.$element.find("#game_edit_buttons").show();
 
         if (this.game_model.maps !== null) {
-            console.log("Game Model Maps: ", this.game_model.maps);
-            this.game_model.maps.models.forEach((map) => {
-                console.log("DAT MAP: ", map);
+            this.game_model.maps.each((map) => {
                 this.$element.find("#map_selector").append('<div class="hx-sidebar-section">' + map.name + '</div>');
             });
         }
 
-        if (this.game_model.entities !== null) {
-            this.game_model.entities.models.forEach((entity) => {
-                this.$element.find("#entity_selector").append('<div class="hx-sidebar-section">' + entity.name + '</div>');
-            });
-        }
-
-        if (this.game_model.particle_systems !== null) {
-            this.game_model.particle_systems.models.forEach((particle_system) => {
-                this.$element.find("#particle_system_selector").append('<div class="hx-sidebar-section">' + particle_system.name + '</div>');
-            });
-        }
+        // if (this.game_model.entities !== null) {
+        //     this.game_model.entities.each((entity) => {
+        //         this.$element.find("#entity_selector").append('<div class="hx-sidebar-section">' + entity.name + '</div>');
+        //     });
+        // }
+        //
+        // if (this.game_model.particle_systems !== null) {
+        //     this.game_model.particle_systems.models.forEach((particle_system) => {
+        //         this.$element.find("#particle_system_selector").append('<div class="hx-sidebar-section">' + particle_system.name + '</div>');
+        //     });
+        // }
     }
 }
 

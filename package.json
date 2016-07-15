@@ -17,6 +17,7 @@
     "hexagon-js": "^1.0.4",
     "image-size": "^0.4.0",
     "jquery": "^2.2.0",
+    "mkdirp": "^0.5.1",
     "node-timers": "0.0.1",
     "p2": "^0.7.1",
     "uuid": "^2.0.2"

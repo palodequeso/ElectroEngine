@@ -9,10 +9,10 @@
     "decay_range": [0.1, 1.0],
     "image": "particle.png",
     "fade_range": [0, 0.25],
-    "width_range": [16, 16],
-    "height_range": [16, 16],
+    "width_range": [64, 64],
+    "height_range": [64, 64],
     "modifier": null,
     "particle_count": 100,
-    "start_color_range": [[1, 0, 0], [1, 0.25, 0]],
+    "start_color_range": [[1, 1, 1], [1, 1.0, 1]],
     "end_color_range": [[0, 0, 1], [0, 1, 1]]
 }

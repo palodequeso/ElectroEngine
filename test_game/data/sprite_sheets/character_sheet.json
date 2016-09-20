@@ -1,0 +1,9 @@
+{
+    "id": "character_sheet",
+    "name": "character_sheet",
+    "path": "character_sheet.png",
+    "width": 832,
+    "height": 1344,
+    "tile_width": 64,
+    "tile_height": 64
+}

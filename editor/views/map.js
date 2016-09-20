@@ -12,8 +12,8 @@ var View = require('../../lib/view.js');
 var edit_map_tmpl = fs.readFileSync(__dirname + '/../tmpl/edit_map.html', 'utf8');
 var map_editor_tools_tmpl = fs.readFileSync(__dirname + '/../tmpl/map_editor_tools.html', 'utf8');
 
-var SpriteSheet = require('../../engine/models/sprite_sheet.js');
-var SpriteSheets = require('../../engine/models/sprite_sheets.js');
+var SpriteSheet = require('../../engine/models/graphics/sprite_sheet.js');
+var SpriteSheets = require('../../engine/models/graphics/sprite_sheets.js');
 var image_manager = require('../../engine/util/image_manager.js');
 
 var Sidebar = require('./util.js').Sidebar;
@@ -27,7 +27,9 @@ class MapEditorTools extends Sidebar {
     render_content(content) {
         var map_data = this.model.serialize();
         map_data.sprite_sheets.forEach((sheet) => {
-            var sprite_sheets_path = path.normalize(this.game.path + '/sprite_sheets/' + sheet.path);
+            var sprite_sheets_path = path.normalize(this.game.path + '/images/sprite_sheets/' + sheet.path);
+            console.log("Sprite Sheets Path: ", sprite_sheets_path);
+            sheet.modified_path = sprite_sheets_path;
             sheet.modified_path = path.relative(path.normalize(__dirname + '/../'), sprite_sheets_path);
             sheet.modified_path = sheet.modified_path.replace(/\\/gmi, '/');
             sheet.tiles_x = sheet.width / sheet.tile_width;

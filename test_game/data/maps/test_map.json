@@ -1,0 +1,55 @@
+{
+    "id": "test_map",
+    "name": "Test Map",
+    "width": 4,
+    "height": 4,
+    "tile_width": 32,
+    "tile_height": 32,
+    "character_layer_index": 1,
+    "layers": [
+        {
+            "id": "ground",
+            "name": "ground",
+            "tiles": [
+                0, 0, 0, 1,
+                0, 0, 0, 0,
+                0, 0, 0, 0,
+                0, 0, 0, 0
+            ],
+            "sprite_sheet_id": "map_sheet",
+            "width": 4,
+            "height": 4
+        },
+        {
+            "id": "water",
+            "name": "water",
+            "tiles": [
+                -1, -1, -1, -1,
+                -1, 2, 2, -1,
+                -1, 2, 2, -1,
+                -1, -1, -1, -1
+            ],
+            "sprite_sheet_id": "map_sheet",
+            "width": 4,
+            "height": 4
+        }
+    ],
+    "bodies": [
+        {
+            "mass": 0.0,
+            "is_dynamic": false,
+            "collision_group": "maps",
+            "collision_rect": [4000, 5],
+            "shapes": [
+                {
+                    "type": "box",
+                    "top_left": [-2000, 0],
+                    "bottom_right": [2000.0, -5],
+                    "angle": 0.0,
+                    "offset": [0, 0]
+                }
+            ],
+            "position": [0, 0]
+        }
+    ]
+}

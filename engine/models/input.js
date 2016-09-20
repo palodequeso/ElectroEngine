@@ -3,6 +3,7 @@
 var util = require('../util/util.js');
 var Model = require('../../lib/model.js');
 
+// TODO: Move to systems?
 class Input extends Model {
     get defaults() {
         return {

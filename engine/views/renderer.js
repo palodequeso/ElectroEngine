@@ -100,12 +100,12 @@ class Renderer extends View {
         var images_loaded_statuses = {};
         var image_loaded_promises = [];
 
-        this.model.map_instances.each((map_instance) => {
-            map_instance.map.sprite_sheets.each((sprite_sheet) => {
+        this.model.maps.each((map) => {
+            map.sprite_sheets.each((sprite_sheet) => {
                 var image_src = sprite_sheet.path;
                 if (!images_loaded_statuses.hasOwnProperty(image_src)) {
                     image_loaded_promises.push(new Promise((resolve, reject) => {
-                        this.load_texture('data/sprite_sheets/' + image_src, (texture) => {
+                        this.load_texture('data/images/sprite_sheets/' + image_src, (texture) => {
                             resolve({texture: texture, image_src: image_src});
                         });
                     }));
@@ -118,7 +118,7 @@ class Renderer extends View {
             var image_src = sprite_sheet.path;
             if (!images_loaded_statuses.hasOwnProperty(image_src)) {
                 image_loaded_promises.push(new Promise((resolve, reject) => {
-                    this.load_texture('data/sprite_sheets/' + image_src, (texture) => {
+                    this.load_texture('data/images/sprite_sheets/' + image_src, (texture) => {
                         resolve({texture: texture, image_src: image_src});
                     });
                 }));
@@ -126,12 +126,11 @@ class Renderer extends View {
             }
         });
 
-        this.model.particle_system_instances.each((particle_system_instance) => {
-            var particle_system = particle_system_instance.particle_system;
+        this.model.particle_systems.each((particle_system) => {
             var image_src = particle_system.image;
             if (!images_loaded_statuses.hasOwnProperty(image_src)) {
                 image_loaded_promises.push(new Promise((resolve, reject) => {
-                    this.load_texture('data/particles/' + image_src, (texture) => {
+                    this.load_texture('data/images/particles/' + image_src, (texture) => {
                         resolve({texture: texture, image_src: image_src});
                     });
                 }));
@@ -142,8 +141,8 @@ class Renderer extends View {
         Promise.all(image_loaded_promises).then((textures) => {
             textures.forEach((texture) => {
                 this.textures[texture.image_src] = texture.texture;
-                this.textures_preloaded = true;
             });
+            this.textures_preloaded = true;
         });
     }
     create_quad() {
@@ -259,7 +258,7 @@ class Renderer extends View {
     }
     draw_quad(position, dimensions, sprite_texcoord, color, texture, shader) {
         var model_matrix = glmatrix.mat4.create();
-        glmatrix.mat4.translate(model_matrix, model_matrix, [position[0], this.canvas.height - position[1], 1.0]);
+        glmatrix.mat4.translate(model_matrix, model_matrix, [position[0], position[1], 1.0]);
         glmatrix.mat4.scale(model_matrix, model_matrix, [dimensions[0], dimensions[1], 1.0]);
         this.gl.uniformMatrix4fv(shader.model_matrix_location, false, model_matrix);//new FloatArray(model_matrix));
         this.gl.uniform1i(shader.texture_location, 0);
@@ -298,77 +297,77 @@ class Renderer extends View {
         this.gl.uniformMatrix4fv(this.shaders.textured_quad.projection_matrix_location, false, this.projection_matrix);
         this.gl.uniformMatrix4fv(this.shaders.textured_quad.view_matrix_location, false, this.view_matrix);
 
-        this.model.map_instances.each((map_instance) => {
-            var entity_layer_index = map_instance.map.entity_layer_index;
-            map_instance.layer_instances.each((layer_instance, layer_id, layer_index) => {
-                layer_instance.sprite_instances.each((sprite_instance) => {
-                    var position = sprite_instance.position;
-                    this.draw_quad(
-                        [position[0], position[1] + sprite_instance.sprite.height],
-                        [sprite_instance.sprite.width, sprite_instance.sprite.height],
-                        [
-                            sprite_instance.tile.css_offset_x,
-                            sprite_instance.tile.css_offset_y,
-                            sprite_instance.tile.css_offset_x + sprite_instance.sprite.width,
-                            sprite_instance.tile.css_offset_y + sprite_instance.sprite.height
-                        ],
-                        [1, 1, 1, sprite_instance.opacity],
-                        this.textures[sprite_instance.sprite.sprite_path],
-                        this.shaders.textured_quad
-                    );
-                });
-
-                if (layer_index === (entity_layer_index - 1)) {
-                    map_instance.entity_instances.each((entity_instance) => {
-                        var sprite_instance = entity_instance.sprite_instance;
+        var renderables = [];
+        this.model.entities.each((entity) => {
+            var components = entity.components.get_by_index('type', 'sprite');
+            if (components) {
+                components.forEach((component) => {
+                    var sprite_instance = component.sprite_instance;
+                    if (sprite_instance.tile) {
                         var position = sprite_instance.position;
-                        this.draw_quad(
-                            [position[0], position[1] + sprite_instance.sprite.height],
-                            [sprite_instance.sprite.width, sprite_instance.sprite.height],
-                            [
+                        renderables.push({
+                            layer: sprite_instance.layer,
+                            position: [position[0], position[1]],
+                            size: [sprite_instance.sprite.width, sprite_instance.sprite.height],
+                            texcoords: [
                                 sprite_instance.tile.css_offset_x,
                                 sprite_instance.tile.css_offset_y,
                                 sprite_instance.tile.css_offset_x + sprite_instance.sprite.width,
                                 sprite_instance.tile.css_offset_y + sprite_instance.sprite.height
                             ],
-                            [1, 1, 1, sprite_instance.opacity],
-                            this.textures[sprite_instance.sprite.sprite_path],
-                            this.shaders.textured_quad
-                        );
-                    });
-                }
-            });
-        });
-
-        this.model.particle_system_instances.each((particle_system_instance) => {
-            var particle_system = particle_system_instance.particle_system;
-            var system_position = particle_system_instance.position;
-            var image = particle_system.image;
-            var texture = this.textures[image];
-            var shader = this.shaders.textured_quad;
-
-            var modifier = particle_system.modifier;
-            if (!modifier) {
-                modifier = function(particle_data) {
-                    return particle_data;
-                };
+                            color: [1, 1, 1, sprite_instance.opacity],
+                            texture: this.textures[sprite_instance.sprite.sprite_sheet.path],
+                            shader: this.shaders.textured_quad
+                        });
+                    }
+                });
             }
 
-            particle_system_instance.particles.forEach((particle) => {
-                // var serialized = particle.serialize();
-                // var data = JSON.parse(serialized);
-                var data = particle;
-                data.alpha = ((data.life < data.fade) ? data.life / data.fade : 1.0) / 2.0;
-                // data = modifier(data);
+            var components = entity.components.get_by_index('type', 'particle_system');
+            if (components) {
+                components.forEach((component) => {
+                    var particle_system_instance = component.particle_system_instance;
+                    var particle_system = particle_system_instance.particle_system;
+                    var system_position = particle_system_instance.position;
+                    var image = particle_system.image;
+                    var texture = this.textures[image];
+                    var shader = this.shaders.textured_quad;
 
-                this.draw_quad(
-                    [data.position[0] + system_position[0] + 250.0, data.position[1] + data.size[1] + system_position[1] + 250.0],
-                    [data.size[0], data.size[1]],
-                    [0.0, 0.0, texture.image.width, texture.image.height],
-                    [data.color[0], data.color[1], data.color[2], data.alpha],
-                    texture, shader
-                );
-            });
+                    var modifier = particle_system.modifier;
+                    if (!modifier) {
+                        modifier = function(particle_data) {
+                            return particle_data;
+                        };
+                    }
+
+                    particle_system_instance.particles.forEach((particle) => {
+                        // var serialized = particle.serialize();
+                        // var data = JSON.parse(serialized);
+                        var data = particle;
+                        data.alpha = ((data.life < data.fade) ? data.life / data.fade : 1.0) / 2.0;
+                        // data = modifier(data);
+
+                        renderables.push({
+                            layer: 10, // This needs to be a parameter.
+                            position: [data.position[0] + system_position[0] + 250.0, data.position[1] + system_position[1] + 250.0],
+                            size: [data.size[0], data.size[1]],
+                            texcoords: [0.0, 0.0, texture.image.width, texture.image.height],
+                            color: [data.color[0], data.color[1], data.color[2], data.alpha],
+                            texture: texture,
+                            shader: shader
+                        });
+                    });
+                });
+            }
+        });
+
+        renderables.sort((left, right) => {
+            return left.layer - right.layer;
+        });
+
+        renderables.forEach((renderable) => {
+            this.draw_quad(renderable.position, renderable.size, renderable.texcoords,
+                           renderable.color, renderable.texture, renderable.shader);
         });
     }
 }

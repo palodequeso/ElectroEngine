@@ -149,3 +149,18 @@
 ::-webkit-scrollbar-thumb:window-inactive {
     background: rgba(48,48,48,1);
 }
+
+#sprite_sheet_grid {
+    padding: 8px;
+    position: absolute;
+    top: 8px;
+}
+
+.grid_cell {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 30px;
+    height: 30px;
+    border: 1px dashed black;
+}

@@ -111,7 +111,7 @@ data.tilesets.forEach((tileset) => {
         var result = convert_index_to_coords(tile_index - 1, tileset.imagewidth,
             tileset.imageheight, tileset.tilewidth, tileset.tileheight);
         sprites.push({
-            id: tile_index,
+            id: tileset.name + '_' + tile_index,
             sprite_sheet_id: tileset.name,
             animations: {},
             tiles: [{css_offset_x: result[0], css_offset_y: result[1]}],
@@ -126,10 +126,14 @@ data.tilesets.forEach((tileset) => {
 
 data.layers.forEach((layer) => {
     if (layer.type === 'tilelayer') {
+        var new_tiles = [];
+        layer.tiles.forEach((tile_index) => {
+            new_tiles.push(tileset_id + '_' + tile_index);
+        })
         var layer_data = {
             id: layer.name,
             name: layer.name,
-            tiles: layer.tiles,
+            tiles: new_tiles,
             sprite_sheet_id: tileset_id, // NOTE: Only one is supported at the moment.
             width: layer.width,
             height: layer.height

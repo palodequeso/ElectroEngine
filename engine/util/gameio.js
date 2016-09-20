@@ -127,11 +127,13 @@ class GameLoader {
             var map_json_path = path.normalize(this.folder_path + '/maps/' + map_filename);
             var map_json = fs.readFileSync(map_json_path);
             var map_data = JSON.parse(map_json);
+            this.map_bodies[map_data.id] = [];
             if (map_data.hasOwnProperty('bodies')) {
                 map_data.bodies.forEach((body_data) => {
-                    this.map_bodies[map_data.id] = map_data.bodies;
-                    delete map_data.bodies;
+                    console.log("Body Data: ", body_data);
+                    this.map_bodies[map_data.id].push(body_data);
                 });
+                delete map_data.bodies;
             }
             var map = new Map(map_data);
             this.game.maps.add(map);
@@ -155,8 +157,10 @@ class GameLoader {
             this.game.maps.each((map) => {
                 if (map_instance.map_id === map.id) {
                     map_instance.map = map;
+                    console.log(this.game.maps);
 
                     if (this.map_bodies.hasOwnProperty(map.id)) {
+                        console.log('bodies', this.map_bodies);
                         this.map_bodies[map.id].forEach((map_body_data) => {
                             var body = this.create_body(map_body_data);
                             var entity = new Entity();

@@ -62,7 +62,7 @@ class Renderer extends View {
         this.projection_matrix = glmatrix.mat4.create();
         this.view_matrix = glmatrix.mat4.create();
         glmatrix.mat4.ortho(this.projection_matrix, 0.0, 650.0, 0.0, 500.0, -1.0, 1.0);
-        glmatrix.mat4.identity(this.view_matrix);
+        // glmatrix.mat4.identity(this.view_matrix);
 
         this.textures_preloaded = false;
         this.textures = {};
@@ -291,11 +291,13 @@ class Renderer extends View {
             return;
         }
 
+        this.model.camera.calculate_matrix();
+
         this.gl.clear(this.gl.COLOR_BUFFER_BIT | this.gl.DEPTH_BUFFER_BIT);
 
         this.gl.useProgram(this.shaders.textured_quad.shader);
         this.gl.uniformMatrix4fv(this.shaders.textured_quad.projection_matrix_location, false, this.projection_matrix);
-        this.gl.uniformMatrix4fv(this.shaders.textured_quad.view_matrix_location, false, this.view_matrix);
+        this.gl.uniformMatrix4fv(this.shaders.textured_quad.view_matrix_location, false, this.model.camera.view_matrix);
 
         var renderables = [];
         this.model.entities.each((entity) => {

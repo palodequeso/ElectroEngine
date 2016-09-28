@@ -70,7 +70,7 @@ class TestGameplaySystem extends GameplaySystem {
             }
         }
     }
-    update(frame_time, entities) {
+    update(frame_time, entities, camera) {
         // This logic should be moved to a custom system.
         entities.each((entity, index) => {
             var character_instance = null;
@@ -98,6 +98,9 @@ class TestGameplaySystem extends GameplaySystem {
                 }
             }
         });
+
+        camera.position[0] += -10 * (frame_time / 1000);
+        camera.calculate_matrix();
     }
 }
 

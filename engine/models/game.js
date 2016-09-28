@@ -11,6 +11,7 @@ var Characters = require('./characters/characters.js');
 var Sprites = require('./graphics/sprites.js');
 var SpriteSheets = require('./graphics/sprite_sheets.js');
 var ParticleSystems = require('./particle_systems/particle_systems.js');
+var Camera = require('./graphics/camera.js');
 
 var input = require('./input.js');
 
@@ -27,7 +28,8 @@ class Game extends Model {
             sprite_sheets: null,
             particle_systems: null,
             entities: null,
-            systems: null
+            systems: null,
+            camera: null
         };
     }
     constructor(data) {
@@ -54,6 +56,9 @@ class Game extends Model {
         if (this.systems === null) {
             this.systems = [];
         }
+        if (this.camera === null) {
+            this.camera = {};
+        }
 
         this.maps = new Maps(this.maps);
         this.sprites = new Sprites(this.sprites);
@@ -62,11 +67,12 @@ class Game extends Model {
         this.particle_systems = new ParticleSystems(this.particle_systems);
         this.entities = new Entities(this.entities);
         this.systems = new Systems(this.systems);
+        this.camera = new Camera(this.camera);
         this.systems.sort();
     }
     update(time_delta) {
         this.systems.each((system) => {
-            system.update(time_delta, this.entities);
+            system.update(time_delta, this.entities, this.camera);
         });
         input.update();
     }

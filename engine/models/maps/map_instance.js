@@ -11,7 +11,7 @@ class MapInstance extends Model {
             name: '',
             map: null,
             position: [0, 0],
-            warps: {},
+            warps: [],
             character_instances: null,
             layer_instances: null
         };

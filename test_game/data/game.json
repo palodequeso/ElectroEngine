@@ -15,7 +15,15 @@
             "id": "test_area",
             "map_id": "test_map",
             "position": [0, 0],
-            "warps": {},
+            "warps": [
+                {
+                    "name": "test_area_to_test_area_2",
+                    "position": [192, 0],
+                    "size": [32, 32],
+                    "target_map_instance_id": "test_area_2",
+                    "target_map_position": [0, 0]
+                }
+            ],
             "character_instances": [
                 {
                     "id": "test_npc",
@@ -24,6 +32,24 @@
                     "starting_animation": "walk_up"
                 }
             ],
+            "particle_system_instances": [],
+            "layer_instances": [
+                {
+                    "id": "ground_instance",
+                    "map_layer_id": "ground"
+                },
+                {
+                    "id": "water_instance",
+                    "map_layer_id": "water"
+                }
+            ]
+        },
+        {
+            "id": "test_area_2",
+            "map_id": "test_map",
+            "position": [256, 256],
+            "warps": {},
+            "character_instances": [],
             "particle_system_instances": [],
             "layer_instances": [
                 {

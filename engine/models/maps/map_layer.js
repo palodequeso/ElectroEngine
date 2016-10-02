@@ -14,7 +14,8 @@ class MapLayer extends Model {
             tiles: [],
             sprite_sheet: null,
             width: 0,
-            height: 0
+            height: 0,
+            type: 'tiles' // or 'background'
         };
     }
     constructor(data) {

@@ -29,7 +29,9 @@ class Game extends Model {
             particle_systems: null,
             entities: null,
             systems: null,
-            camera: null
+            camera: null,
+            current_map_instance: null,
+            map_transition_type: 'warp' // also increment 'render', ''
         };
     }
     constructor(data) {

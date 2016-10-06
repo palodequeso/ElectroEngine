@@ -1,6 +1,6 @@
 'use strict';
 
-var Collection = require('../../../lib/collection.js');
+var Collection = require('exo').Collection;
 var SpriteSheet = require('./sprite_sheet.js');
 
 class SpriteSheets extends Collection {

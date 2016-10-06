@@ -1,4 +1,6 @@
-var Model = require('../../../lib/model.js');
+'use strict';
+
+var Model = require('exo').Model;
 
 class Shape extends Model {
     get defaults() {

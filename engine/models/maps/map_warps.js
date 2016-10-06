@@ -1,6 +1,6 @@
 'use strict';
 
-var Collection = require('../../../lib/collection.js');
+var Collection = require('exo').Collection;
 var MapWarp = require('./map_warp.js');
 
 class MapWarps extends Collection {

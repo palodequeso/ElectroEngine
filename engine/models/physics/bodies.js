@@ -1,15 +1,15 @@
 'use strict';
 
 var Collection = require('exo').Collection;
-var Particle = require('./particle.js');
+var Body = require('./body.js');
 
-class Particles extends Collection {
+class Bodies extends Collection {
     get model() {
-        return Particle;
+        return Body;
     }
     constructor(data) {
         super(data);
     }
 }
 
-module.exports = Particles;
+module.exports = Bodies;

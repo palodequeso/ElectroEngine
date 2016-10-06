@@ -1,6 +1,6 @@
 'use strict';
 
-var Model = require('../../../lib/model.js');
+var Model = require('exo').Model;
 var CharacterInstances = require('../characters/character_instances.js');
 var Map = require('./map.js');
 var MapLayerInstances = require('./map_layer_instances.js');
@@ -9,30 +9,17 @@ class MapInstance extends Model {
     get defaults() {
         return {
             name: '',
+            activated: false, // when this is false, the instances have not been created from the base map yet.
             map: null,
             position: [0, 0],
             warps: [],
+            bodies: [],
             character_instances: null,
             layer_instances: null
         };
     }
     constructor(data) {
         super(data);
-
-        if (this.map === null) {
-            this.map = {};
-        }
-        if (this.character_instances === null) {
-            this.character_instances = [];
-        }
-        if (this.layer_instances === null) {
-            this.layer_instances = [];
-        }
-
-        this.map = new Map(this.map);
-        this.character_instances = new CharacterInstances(this.character_instances);
-        this.layer_instances = new MapLayerInstances(this.layer_instances);
-
     }
     update(time_delta) {
         this.layer_instances.each((layer_instance) => {

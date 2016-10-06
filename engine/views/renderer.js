@@ -1,8 +1,7 @@
 "use strict";
 
-var View = require('../../lib/view.js');
+var View = require('exo').View;
 var glmatrix = require("gl-matrix");
-var View = require('../../lib/view.js');
 var util = require('../util/util.js');
 
 var textured_quad_shader_vert_source = '' +
@@ -45,7 +44,7 @@ class Renderer extends View {
         this.canvas = document.createElement('canvas');
         this.canvas.setAttribute("width", "650px");
         this.canvas.setAttribute("height", "500px");
-        this.$element.append(this.canvas);
+        this.element.appendChild(this.canvas);
         this.gl = this.canvas.getContext('webgl');
         this.max_texture_size = this.gl.getParameter(this.gl.MAX_TEXTURE_SIZE);
 

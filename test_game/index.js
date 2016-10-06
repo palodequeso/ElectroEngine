@@ -1,7 +1,6 @@
 'use strict';
 
 var path = require("path");
-var $ = require("jquery");
 var input = require('../engine/models/input.js');
 var GameModel = require('../engine/models/game.js');
 var Renderer = require('../engine/views/renderer.js');
@@ -13,6 +12,7 @@ var AudioSystem = require('../engine/models/systems/audio.js');
 var GameplaySystem = require('../engine/models/systems/gameplay.js');
 var GraphicsSystem = require('../engine/models/systems/graphics.js');
 var PhysicsSystem = require('../engine/models/systems/physics.js');
+var Systems = require('../engine/models/ecs/systems.js');
 
 var RigidBodyPhysics = require('../engine/models/physics/rigid_body_physics.js');
 
@@ -105,11 +105,13 @@ class TestGameplaySystem extends GameplaySystem {
 }
 
 document.addEventListener("DOMContentLoaded", () => {
-    var game_loader = new gameio.GameLoader(path.normalize("test_game/data"), GameModel);
-    game_loader.game.systems.add(new AudioSystem());
-    game_loader.game.systems.add(new TestGameplaySystem());
-    game_loader.game.systems.add(new GraphicsSystem());
-    game_loader.game.systems.add(new PhysicsSystem({engine: new TestPhysics()}));
+    var game_systems = new Systems();
+    console.log(game_systems);
+    game_systems.add(new AudioSystem());
+    game_systems.add(new TestGameplaySystem());
+    game_systems.add(new GraphicsSystem());
+    game_systems.add(new PhysicsSystem({engine: new TestPhysics()}));
+    var game_loader = new gameio.GameLoader(path.normalize("test_game/data"), GameModel, game_systems);
 
     var game = new Game({
         model: game_loader.game

@@ -1,7 +1,7 @@
 'use strict';
 
 var EasyStar = require('easystarjs');
-var Model = require('../../../lib/model.js');
+var Model = require('exo').Model;
 
 class CollisionLayer extends Model {
     get defaults() {

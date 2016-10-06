@@ -1,6 +1,7 @@
 'use strict';
 
 var Component = require('../ecs/component.js');
+var CharacterInstance = require('../characters/character_instance.js');
 
 class Character extends Component {
     get defaults() {
@@ -8,6 +9,11 @@ class Character extends Component {
             type: 'character',
             character_instance: null
         };
+    }
+    get types() {
+        return {
+            character_instance: CharacterInstance
+        }
     }
     constructor(data) {
         super(data);

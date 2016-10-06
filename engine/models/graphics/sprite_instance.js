@@ -1,6 +1,6 @@
 'use strict';
 
-var Model = require('../../../lib/model.js');
+var Model = require('exo').Model;
 var Sprite = require('./sprite.js');
 
 class SpriteInstance extends Model {
@@ -20,12 +20,6 @@ class SpriteInstance extends Model {
     }
     constructor(data) {
         super(data);
-
-        if (this.sprite === null) {
-            this.sprite = {};
-        }
-
-        this.sprite = new Sprite(this.sprite);
     }
     update(time_delta) {
         var animations = this.sprite.animations;

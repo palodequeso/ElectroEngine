@@ -1,6 +1,6 @@
 'use strict';
 
-var Model = require('../../../lib/model.js');
+var Model = require('exo').Model;
 
 class MapWarp extends Model {
     get defaults() {

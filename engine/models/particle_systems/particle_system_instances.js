@@ -1,6 +1,6 @@
 'use strict';
 
-var Collection = require('../../../lib/collection.js');
+var Collection = require('exo').Collection;
 var ParticleSystemInstance = require('./particle_system_instance.js');
 
 class ParticleSystemInstances extends Collection {

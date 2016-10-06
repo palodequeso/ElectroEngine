@@ -1,6 +1,6 @@
 'use strict';
 
-var Model = require('../../../lib/model.js');
+var Model = require('exo').Model;
 var SpriteInstances = require('../graphics/sprite_instances.js');
 
 // NOTE: I think this might need an instance version as well since it has sprite_instances, and can be used in many
@@ -12,14 +12,14 @@ class MapLayerInstance extends Model {
             sprite_instances: null
         };
     }
+    get types() {
+        return {
+            map_layer: MapLayer,
+            sprite_instance: SpriteInstance
+        };
+    }
     constructor(data) {
         super(data);
-
-        if (this.sprite_instances === null) {
-            this.sprite_instances = [];
-        }
-
-        this.sprite_instances = new SpriteInstances(this.layers);
     }
 }
 

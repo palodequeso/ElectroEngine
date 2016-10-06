@@ -1,6 +1,6 @@
 'use strict';
 
-var Model = require('../../../lib/model.js');
+var Model = require('exo').Model;
 var CollisionLayer = require('./collision_layer.js');
 var MapLayers = require('./map_layers.js');
 var Characters = require('../characters/characters.js');
@@ -21,26 +21,16 @@ class Map extends Model {
             sprite_sheets: null
         };
     }
+    get types() {
+        return {
+            layers: MapLayers,
+            collision_layer: CollisionLayer,
+            characters: Characters,
+            sprite_sheets: SpriteSheets
+        };
+    }
     constructor(data) {
         super(data);
-
-        if (this.layers === null) {
-            this.layers = [];
-        }
-        if (this.collision_layer === null) {
-            this.collision_layer = {};
-        }
-        if (this.characters === null) {
-            this.characters = [];
-        }
-        if (this.sprite_sheets === null) {
-            this.sprite_sheets = [];
-        }
-
-        this.layers = new MapLayers(this.layers);
-        this.collision_layer = new CollisionLayer(this.collision_layer);
-        this.characters = new Characters(this.characters);
-        this.sprite_sheets = new SpriteSheets(this.sprite_sheets);
     }
 }
 

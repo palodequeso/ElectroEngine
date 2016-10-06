@@ -1,3 +1,5 @@
+'use strict';
+
 var p2 = require('p2');
 var Physics = require('./physics.js');
 

@@ -5,14 +5,23 @@ var path = require('path');
 
 var Game = require('../models/game.js');
 var Entity = require('../models/ecs/entity.js');
+var Entities = require('../models/ecs/entities.js');
+var Components = require('../models/ecs/components.js');
 var SpriteComponent = require('../models/components/sprite.js');
 var ParticleSystemComponent = require('../models/components/particle_system.js');
 var Map = require('../models/maps/map.js');
 var Maps = require('../models/maps/maps.js');
+var MapLayer = require('../models/maps/map_layer.js');
+var MapLayers = require('../models/maps/map_layers.js');
+var MapLayerInstance = require('../models/maps/map_layer_instance.js');
+var MapLayerInstances = require('../models/maps/map_layer_instances.js');
+var MapInstance = require('../models/maps/map_instance.js');
+var MapInstances = require('../models/maps/map_instances.js');
 var Character = require('../models/characters/character.js');
 var BodyComponent = require('../models/components/collision_body.js');
 var CharacterComponent = require('../models/components/character.js');
 var CharacterInstance = require('../models/characters/character_instance.js');
+var CharacterInstances = require('../models/characters/character_instances.js');
 var Characters = require('../models/characters/characters.js');
 var ParticleSystems = require('../models/particle_systems/particle_systems.js');
 var ParticleSystem = require('../models/particle_systems/particle_system.js');
@@ -24,17 +33,26 @@ var Sprite = require('../models/graphics/sprite.js');
 var Sprites = require('../models/graphics/sprites.js');
 var Character = require('../models/characters/character.js');
 var Body = require('../models/physics/body.js');
+var Bodies = require('../models/physics/bodies.js');
 var ShapeBox = require('../models/physics/shape_box.js');
 var ShapeCircle = require('../models/physics/shape_circle.js');
 var ShapeEdge = require('../models/physics/shape_edge.js');
 var ShapePolygon = require('../models/physics/shape_polygon.js');
 
 class GameLoader {
-    constructor(folder_path, game_model) {
+    constructor(folder_path, game_model, systems) {
         this.folder_path = folder_path;
         this.character_body_data = {};
         this.map_bodies = {};
-        this.game = new game_model();
+        this.game = new game_model({
+            systems: systems,
+            sprite_sheets: new SpriteSheets(),
+            sprites: new Sprites(),
+            characters: new Characters(),
+            maps: new Maps(),
+            particle_systems: new ParticleSystems(),
+            entities: new Entities()
+        });
         this.game_data = null;
         this.load();
     }
@@ -135,6 +153,19 @@ class GameLoader {
                 });
                 delete map_data.bodies;
             }
+            // MapLayers, Characters, SpriteSheets
+            var map_layers = new MapLayers();
+            map_data.layers.forEach((layer) => {
+                // attach sprite_sheet
+                this.game.sprite_sheets.each((sprite_sheet) => {
+                    if (layer.sprite_sheet_id === sprite_sheet.id) {
+                        layer.sprite_sheet = sprite_sheet;
+                    }
+                });
+                var map_layer = new MapLayer(layer);
+                map_layers.add(map_layer);
+            });
+            map_data.layers = map_layers;
             var map = new Map(map_data);
             this.game.maps.add(map);
         });
@@ -153,123 +184,143 @@ class GameLoader {
         this.game_data = JSON.parse(game_json);
     }
     load_map_instances() {
+        var map_instances = [];
         this.game_data.map_instances.forEach((map_instance) => {
             this.game.maps.each((map) => {
                 if (map_instance.map_id === map.id) {
                     map_instance.map = map;
-                    console.log(this.game.maps);
-
-                    if (this.map_bodies.hasOwnProperty(map.id)) {
-                        console.log('bodies', this.map_bodies);
-                        this.map_bodies[map.id].forEach((map_body_data) => {
-                            var body = this.create_body(map_body_data);
-                            var entity = new Entity();
-                            entity.components.add(new BodyComponent({
-                                body: body
-                            }));
-                            this.game.entities.add(entity);
-                        });
-                    }
-
-                    var layer_index = 0;
-                    map_instance.layer_instances.forEach((layer_instance, layer_index) => {
-                        map.layers.each((layer) => {
-                            if (layer_instance.map_layer_id === layer.id) {
-                                layer_instance.map_layer = layer;
-                            }
-                        });
-
-                        // var tile_index = 0;
-                        var layer_width = layer_instance.map_layer.width;
-                        var layer_height = layer_instance.map_layer.height;
-                        layer_instance.map_layer.tiles.forEach((tile_id, tile_index) => {
-                            if (tile_id === -1) {
-                                return;
-                            }
-
-                            var entity_data = {};
-                            var x = (tile_index % layer_width) * map.tile_width;
-                            var y = (map.tile_height * layer_height) - ((Math.floor(tile_index / layer_width)) * map.tile_height) - map.tile_height;
-                            layer_instance.map_layer.sprite_sheet = this.game.sprite_sheets.get(layer_instance.map_layer.sprite_sheet_id);
-                            var sprite = this.game.sprites.get(tile_id);
-                            var opacity = 1.0;
-
-                            var sprite_instance = new SpriteInstance({
-                                position: [x, y],
-                                current_animation: '',
-                                frame_time: 0.0,
-                                layer: layer_index,
-                                opacity: opacity,
-                                sprite: sprite,
-                                tile: (!sprite) ? null: sprite.tiles[0]
-                            });
-
-                            var entity = new Entity();
-                            entity.components.add(new SpriteComponent({
-                                sprite_instance: sprite_instance
-                            }));
-                            this.game.entities.add(entity);
-                            // tile_index += 1;
-                        });
-
-                        layer_index += 1;
-                    });
                 }
             });
 
-            map_instance.character_instances.forEach((character_instance) => {
-                this.game.characters.each((character) => {
-                    if (character.id === character_instance.character_id) {
-                        character_instance.character = character;
-                    }
+            // NOTE: this happens later.
+            // map_instance.map_layer_instances = [];//new MapLayerInstances();
+            // map_instance.map.layers.each((map_layer) => {
+            //     var map_layer_instance = new MapLayerInstance({
+            //         map_layer: map_layer
+            //     });
+            //     map_instance.map_layer_instances.add(map_layer_instance);
+            // });
+
+            if (this.map_bodies.hasOwnProperty(map_instance.map.id)) {
+                console.log('bodies', this.map_bodies);
+                var bodies = [];
+                this.map_bodies[map_instance.map.id].forEach((map_body_data) => {
+                    var body = this.create_body(map_body_data);
+                    bodies.push(body);
+                    // NOTE: This happens later.
+                    // var entity = new Entity();
+                    // entity.components.add(new BodyComponent({
+                    //     body: body
+                    // }));
+                    // this.game.entities.add(entity);
                 });
+                map_instance.bodies = new Bodies(bodies);
+            }
 
-                this.game.sprite_sheets.each((sprite_sheet) => {
-                    sprite_sheet.sprites.each((sprite) => {
-                        if (sprite.id === character_instance.character.sprite_id) {
-                            character_instance.character.sprite = sprite;
-                        }
-                    });
-                });
+            // NOTE: This happens later.
+            // var layer_index = 0;
+            // map_instance.layer_instances.forEach((layer_instance, layer_index) => {
+            //     map.layers.each((layer) => {
+            //         if (layer_instance.map_layer_id === layer.id) {
+            //             layer_instance.map_layer = layer;
+            //         }
+            //     });
+            //
+            //     // var tile_index = 0;
+            //     var layer_width = layer_instance.map_layer.width;
+            //     var layer_height = layer_instance.map_layer.height;
+            //     layer_instance.map_layer.tiles.forEach((tile_id, tile_index) => {
+            //         if (tile_id === -1) {
+            //             return;
+            //         }
+            //
+            //         var entity_data = {};
+            //         var x = (tile_index % layer_width) * map.tile_width;
+            //         var y = (map.tile_height * layer_height) - ((Math.floor(tile_index / layer_width)) * map.tile_height) - map.tile_height;
+            //         layer_instance.map_layer.sprite_sheet = this.game.sprite_sheets.get(layer_instance.map_layer.sprite_sheet_id);
+            //         var sprite = this.game.sprites.get(tile_id);
+            //         var opacity = 1.0;
+            //
+            //         var sprite_instance = new SpriteInstance({
+            //             position: [x, y],
+            //             current_animation: '',
+            //             frame_time: 0.0,
+            //             layer: layer_index,
+            //             opacity: opacity,
+            //             sprite: sprite,
+            //             tile: (!sprite) ? null: sprite.tiles[0]
+            //         });
+            //
+            //         var entity = new Entity();
+            //         entity.components.add(new SpriteComponent({
+            //             sprite_instance: sprite_instance
+            //         }));
+            //         this.game.entities.add(entity);
+            //         // tile_index += 1;
+            //     });
+            //
+            //     layer_index += 1;
+            // });
 
-                // setup sprite instance
-                //character_instance.sprite_instance = new SpriteInstance({
-                var sprite_instance = new SpriteInstance({
-                    position: character_instance.position,
-                    sprite: character_instance.character.sprite,
-                    current_animation: character_instance.starting_animation,
-                    frame_time: 0.0,
-                    layer: map_instance.map.character_layer_index,
-                    opacity: 1.0,
-                    sprite: character_instance.character.sprite,
-                    tile: character_instance.character.sprite.tiles[0]
-                });
-                // delete position fron character instance
-                delete character_instance.position;
-                delete character_instance.starting_animation;
-
-                var new_character_instance = new CharacterInstance(character_instance);
-                new_character_instance.sprite_instance = sprite_instance;
-                var body = this.create_body(this.character_body_data[character_instance.character.id]);
-
-                var entity = new Entity();
-                entity.components.add(new SpriteComponent({
-                    sprite_instance: sprite_instance
-                }));
-                entity.components.add(new CharacterComponent({
-                    character_instance: new_character_instance
-                }));
-                if (body) {
-                    body.position[0] = sprite_instance.position[0];
-                    body.position[1] = sprite_instance.position[1];
-                    entity.components.add(new BodyComponent({
-                        body: body
-                    }));
-                }
-                this.game.entities.add(entity);
-            });
-            console.log("Map Instance: ", map_instance);
+            // NOTE: This happens later.
+            // var character_instances = [];
+            // map_instance.character_instances.forEach((character_instance) => {
+            //     this.game.characters.each((character) => {
+            //         if (character.id === character_instance.character_id) {
+            //             character_instance.character = character;
+            //         }
+            //     });
+            //
+            //     this.game.sprite_sheets.each((sprite_sheet) => {
+            //         sprite_sheet.sprites.each((sprite) => {
+            //             if (sprite.id === character_instance.character.sprite_id) {
+            //                 character_instance.character.sprite = sprite;
+            //             }
+            //         });
+            //     });
+            //
+            //     // setup sprite instance
+            //     //character_instance.sprite_instance = new SpriteInstance({
+            //     var sprite_instance = new SpriteInstance({
+            //         position: character_instance.position,
+            //         sprite: character_instance.character.sprite,
+            //         current_animation: character_instance.starting_animation,
+            //         frame_time: 0.0,
+            //         layer: map_instance.map.character_layer_index,
+            //         opacity: 1.0,
+            //         sprite: character_instance.character.sprite,
+            //         tile: character_instance.character.sprite.tiles[0]
+            //     });
+            //     // delete position fron character instance
+            //     delete character_instance.position;
+            //     delete character_instance.starting_animation;
+            //
+            //     var new_character_instance = new CharacterInstance(character_instance);
+            //     new_character_instance.sprite_instance = sprite_instance;
+            //     var body = this.create_body(this.character_body_data[character_instance.character.id]);
+            //     character_instance.body = body;
+            //
+            //     // var entity = new Entity();
+            //     // entity.components.add(new SpriteComponent({
+            //     //     sprite_instance: sprite_instance
+            //     // }));
+            //     // entity.components.add(new CharacterComponent({
+            //     //     character_instance: new_character_instance
+            //     // }));
+            //     // if (body) {
+            //     //     body.position[0] = sprite_instance.position[0];
+            //     //     body.position[1] = sprite_instance.position[1];
+            //     //     entity.components.add(new BodyComponent({
+            //     //         body: body
+            //     //     }));
+            //     // }
+            //     // this.game.entities.add(entity);
+            // });
+            // map_instance.character_instances = new CharacterInstances(character_instances);
+            // console.log("Map Instance: ", map_instance);
+            map_instances.push(map_instance);
         });
+        this.game.map_instances = new MapInstances(map_instances);
     }
     load_character_instances() {
         this.game_data.character_instances.forEach((character_instance) => {
@@ -280,12 +331,10 @@ class GameLoader {
                 }
             });
 
-            this.game.sprite_sheets.each((sprite_sheet) => {
-                sprite_sheet.sprites.each((sprite) => {
-                    if (sprite.id === character_instance.character.sprite_id) {
-                        character_instance.character.sprite = sprite;
-                    }
-                });
+            this.game.sprites.each((sprite) => {
+                if (sprite.id === character_instance.character.sprite_id) {
+                    character_instance.character.sprite = sprite;
+                }
             });
 
             // setup sprite instance
@@ -311,6 +360,7 @@ class GameLoader {
             var body = this.create_body(this.character_body_data[character_instance.character.id]);
 
             var entity = new Entity();
+            entity.components = new Components();
             entity.components.add(new SpriteComponent({
                 sprite_instance: sprite_instance
             }));
@@ -368,133 +418,7 @@ class GameSaver {
     }
 }
 
-function load(folder_path, game_model) {
-    if (game_model === undefined) {
-        game_model = Game;
-    }
-    var game_data = JSON.parse(fs.readFileSync(path.normalize(folder_path + '/game.json')));
-    var game = new game_model(game_data);
-
-    game.path = folder_path;
-    console.log("Game Model: ", game);
-
-    // Hook up sprite sheets to map layers
-    game.maps.each((map) => {
-        console.log("Map: ", map);
-        map.layers.each((layer) => {
-            layer.sprite_sheet = null;
-            console.log("Map Layer Sprite Sheet ID: ", layer.sprite_sheet_id);
-            map.sprite_sheets.each((sprite_sheet) => {
-                if (sprite_sheet.id === layer.sprite_sheet_id) {
-                    layer.sprite_sheet = sprite_sheet;
-                }
-            });
-        });
-    });
-
-    game.sprite_sheets.each((sprite_sheet) => {
-        sprite_sheet.sprites.each((sprite) => {
-            sprite.sprite_path = sprite_sheet.path;
-        });
-    });
-
-    // Hook up maps to map instances, and map layers to map layer instances.
-    game.map_instances.each((map_instance) => {
-        game.maps.each((map) => {
-            if (map_instance.map_id === map.id) {
-                map_instance.map = map;
-                var layer_index = 0;
-                map_instance.layer_instances.each((layer_instance) => {
-                    map.layers.each((layer) => {
-                        if (layer_instance.map_layer_id === layer.id) {
-                            layer_instance.map_layer = layer;
-                        }
-                    });
-
-                    // var tile_index = 0;
-                    var layer_width = layer_instance.map_layer.width;
-                    var layer_height = layer_instance.map_layer.height;
-                    layer_instance.map_layer.tiles.forEach((tile_id, tile_index) => {
-                        if (tile_id === -1) {
-                            return;
-                        }
-                        var x = (tile_index % layer_width) * map.tile_width;
-                        var y = (Math.floor(tile_index / layer_width)) * map.tile_height;
-                        var sprite = layer_instance.map_layer.sprite_sheet.sprites.get(tile_id);
-                        var opacity = 1.0;
-                        layer_instance.sprite_instances.add({
-                            position: [x, y],
-                            current_animation: '',
-                            frame_time: 0.0,
-                            layer: layer_index,
-                            opacity: opacity,
-                            sprite: sprite,
-                            tile: (!sprite) ? null: sprite.tiles[0]
-                        });
-                        // tile_index += 1;
-                    });
-
-                    layer_index += 1;
-                });
-            }
-        });
-
-        map_instance.character_instances.each((character_instance) => {
-            game.characters.each((character) => {
-                console.log(character.id, character_instance.character_id);
-                if (character.id === character_instance.character_id) {
-                    character_instance.character = character;
-                }
-            });
-
-            game.sprite_sheets.each((sprite_sheet) => {
-                sprite_sheet.sprites.each((sprite) => {
-                    if (sprite.id === character_instance.character.sprite_id) {
-                        character_instance.character.sprite = sprite;
-                    }
-                });
-            });
-
-            // setup sprite instance
-            character_instance.sprite_instance = new SpriteInstance({
-                position: character_instance.position,
-                sprite: character_instance.character.sprite,
-                current_animation: character_instance.starting_animation,
-                frame_time: 0.0,
-                layer: map_instance.map.character_layer_index,
-                opacity: 1.0,
-                sprite: character_instance.character.sprite,
-                tile: character_instance.character.sprite.tiles[0]
-            });
-            // delete position fron character instance
-            delete character_instance.position;
-            delete character_instance.starting_animation;
-        });
-        console.log("Map Instance: ", map_instance);
-    });
-
-    game.particle_system_instances.each((particle_system_instance) => {
-        game.particle_systems.each((particle_system) => {
-            if (particle_system_instance.particle_system_id === particle_system.id) {
-                particle_system_instance.particle_system = particle_system;
-            }
-        });
-    });
-
-    // console.log("Finalized: ", game.serialize());
-
-    return game;
-}
-
-function save(game_model) {
-    var game_data = game_model.serialize();
-    console.log("Saved Game Data: ", game_data);
-    fs.writeFileSync(path.normalize(path.join(game_data.path, 'game.json')), JSON.stringify(game_data));
-}
-
 module.exports = {
-    load: load,
-    save: save,
     GameLoader: GameLoader,
     GameSaver: GameSaver
 };

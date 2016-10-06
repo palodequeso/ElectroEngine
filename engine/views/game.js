@@ -2,8 +2,8 @@
 
 var $ = require("jquery");
 var glmatrix = require("gl-matrix");
-var View = require('../../lib/view.js');
-var Timer = require('../../lib/timer.js');
+var View = require('exo').View;
+var Timer = require('exo').Timer;
 var Renderer = require('./renderer.js');
 
 class Game extends View {

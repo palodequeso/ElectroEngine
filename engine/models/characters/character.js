@@ -1,6 +1,6 @@
 'use strict';
 
-var Model = require('../../../lib/model.js');
+var Model = require('exo').Model;
 var Sprite = require('../graphics/sprite.js');
 
 class Character extends Model {
@@ -13,13 +13,13 @@ class Character extends Model {
             dimensions: [0, 0]
         };
     }
+    get types() {
+        return {
+            sprite: Sprite
+        };
+    }
     constructor(data) {
         super(data);
-
-        if (this.sprite === null) {
-            this.sprite = {};
-        }
-        this.sprite = new Sprite(this.sprite);
     }
 }
 

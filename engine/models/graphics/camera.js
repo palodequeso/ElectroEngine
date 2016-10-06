@@ -1,7 +1,7 @@
 'use strict';
 
 var glmatrix = require("gl-matrix");
-var Model = require('../../../lib/model.js');
+var Model = require('exo').Model;
 
 class Camera extends Model {
     get defaults() {

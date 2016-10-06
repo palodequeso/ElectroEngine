@@ -1,3 +1,5 @@
+'use strict';
+
 var Shape = require('./shape.js');
 
 class ShapeEdge extends Shape {

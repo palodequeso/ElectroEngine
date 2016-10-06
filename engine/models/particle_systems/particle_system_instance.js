@@ -1,7 +1,7 @@
 'use strict';
 
 var uuid = require('uuid');
-var Model = require('../../../lib/model.js');
+var Model = require('exo').Model;
 var util = require('../../util/util.js');
 var ParticleSystem = require("./particle_system.js");
 var Particle = require('./particle.js');
@@ -16,13 +16,14 @@ class ParticleSystemInstance extends Model {
             particle_system: null
         };
     }
+    get types() {
+        return {
+            particle_system: ParticleSystem
+        };
+    }
     constructor(data) {
         super(data);
 
-        if (this.particle_system === null) {
-            this.particle_system = {};
-        }
-        this.particle_system = new ParticleSystem(this.particle_system);
         this.particles = [];
     }
     update(time_delta) {

@@ -1,3 +1,5 @@
+'use strict';
+
 var Physics = require('./physics.js');
 
 // TODO: for both top down and platformer eventually I guess

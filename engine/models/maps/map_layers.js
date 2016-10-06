@@ -1,6 +1,6 @@
 'use strict';
 
-var Collection = require('../../../lib/collection.js');
+var Collection = require('exo').Collection;
 var MapLayer = require('./map_layer.js');
 
 class MapLayers extends Collection {

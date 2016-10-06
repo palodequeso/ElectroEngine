@@ -13,7 +13,7 @@ class Game extends View {
         this.renderer = new Renderer({
             model: this.model
         });
-        $("body").append(this.renderer.$element);
+        $("body").append(this.renderer.element);
 
         this.previous_time = 0.0;
         this.timer = new Timer();

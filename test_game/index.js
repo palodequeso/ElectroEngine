@@ -70,7 +70,7 @@ class TestGameplaySystem extends GameplaySystem {
             }
         }
     }
-    update(frame_time, entities, camera) {
+    update(frame_time, entities, camera, game) {
         // This logic should be moved to a custom system.
         entities.each((entity, index) => {
             var character_instance = null;
@@ -99,7 +99,11 @@ class TestGameplaySystem extends GameplaySystem {
             }
         });
 
-        camera.position[0] += -10 * (frame_time / 1000);
+        if (input.is_keydown(79)) {
+            game.set_current_map_instance('test_area_2');
+        }
+
+        //camera.position[0] += -10 * (frame_time / 1000);
         camera.calculate_matrix();
     }
 }
@@ -113,6 +117,7 @@ document.addEventListener("DOMContentLoaded", () => {
     game_systems.add(new PhysicsSystem({engine: new TestPhysics()}));
     var game_loader = new gameio.GameLoader(path.normalize("test_game/data"), GameModel, game_systems);
 
+    game_loader.game.set_current_map_instance('test_area');
     var game = new Game({
         model: game_loader.game
     });

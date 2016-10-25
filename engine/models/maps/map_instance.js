@@ -18,6 +18,11 @@ class MapInstance extends Model {
             layer_instances: null
         };
     }
+    get types() {
+        return {
+            layer_instances: MapLayerInstances
+        };
+    }
     constructor(data) {
         super(data);
     }

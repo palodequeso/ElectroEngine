@@ -2,6 +2,8 @@
 
 var Model = require('exo').Model;
 var SpriteInstances = require('../graphics/sprite_instances.js');
+var Entities = require('../ecs/entities.js');
+var MapLayer = require('./map_layer.js');
 
 // NOTE: I think this might need an instance version as well since it has sprite_instances, and can be used in many
 //   different map instances.
@@ -9,13 +11,15 @@ class MapLayerInstance extends Model {
     get defaults() {
         return {
             map_layer: null,
-            sprite_instances: null
+            sprite_instances: null,
+            entities: null
         };
     }
     get types() {
         return {
             map_layer: MapLayer,
-            sprite_instance: SpriteInstance
+            sprite_instances: SpriteInstances,
+            entities: Entities
         };
     }
     constructor(data) {

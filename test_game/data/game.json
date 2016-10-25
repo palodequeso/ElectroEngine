@@ -36,21 +36,11 @@
         },
         {
             "id": "test_area_2",
-            "map_id": "test_map",
+            "map_id": "test_map2",
             "position": [256, 256],
             "warps": {},
             "character_instances": [],
-            "particle_system_instances": [],
-            "layer_instances": [
-                {
-                    "id": "ground_instance",
-                    "map_layer_id": "ground"
-                },
-                {
-                    "id": "water_instance",
-                    "map_layer_id": "water"
-                }
-            ]
+            "particle_system_instances": []
         }
     ],
     "particle_system_instances": [

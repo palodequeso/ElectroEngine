@@ -2,8 +2,11 @@
 
 var Model = require('exo').Model;
 
+var gameio = require('../util/gameio.js');
+
 var input = require('./input.js');
 var Maps = require('./maps/maps.js');
+var CharacterInstance = require('./characters/character_instance.js');
 var Characters = require('./characters/characters.js');
 var Sprites = require('./graphics/sprites.js');
 var SpriteSheets = require('./graphics/sprite_sheets.js');
@@ -17,6 +20,8 @@ var MapInstances = require('./maps/map_instances.js');
 var MapInstance = require('./maps/map_instance.js');
 var MapLayerInstance = require('./maps/map_layer_instance.js');
 var SpriteComponent = require('./components/sprite.js');
+var BodyComponent = require('./components/collision_body.js');
+var CharacterComponent = require('./components/character.js');
 
 class Game extends Model {
     get defaults() {
@@ -74,6 +79,20 @@ class Game extends Model {
                 });
                 layer_instance.entities.reset();
             });
+
+            this.current_map_instance.character_instances.each(character_instance => {
+                if (character_instance.entity) {
+                    this.entities.remove(character_instance.entity);
+                    character_instance.entity = null;
+                }
+            });
+
+            this.current_map_instance.bodies.each(body => {
+                if (body.entity) {
+                    this.entities.remove(body.entity);
+                    body.entity = null;
+                }
+            });
         }
 
         this.current_map_instance = this.map_instances.get(id);
@@ -85,7 +104,7 @@ class Game extends Model {
         // Load the map layers
         var map = this.current_map_instance.map;
         this.current_map_instance.layer_instances.reset();// = new MapLayerInstances();
-        this.current_map_instance.map.layers.each((map_layer, layer_index) => {
+        this.current_map_instance.map.layers.each((map_layer, map_layer_id, layer_index) => {
             var map_layer_instance = new MapLayerInstance({
                 map_layer: map_layer
             });
@@ -125,24 +144,71 @@ class Game extends Model {
                 map_layer_instance.entities.add(entity);
             });
 
-            // TODO: Load Map Instance Sprites into entities, store as references on map_layer_instances?
             this.current_map_instance.layer_instances.add(map_layer_instance);
         });
 
         this.current_map_instance.bodies.each((body) => {
-            // TODO: Add to physics system.
+            var entity = new Entity();
+            entity.components.add(new BodyComponent({
+                body: body
+            }));
+            this.entities.add(entity);
+            body.entity = entity;
         });
 
-        this.current_map_instance.character_instances.forEach((character_instance) => {
-            // TODO: Load into it's own entities, and store reference on character_instance object.
+        this.current_map_instance.character_instances.each((character_instance) => {
+            this.characters.each((character) => {
+                if (character.id === character_instance.character_id) {
+                    character_instance.character = character;
+                }
+            });
+
+            this.sprite_sheets.each((sprite_sheet) => {
+                sprite_sheet.sprites.each((sprite) => {
+                    if (sprite.id === character_instance.character.sprite_id) {
+                        character_instance.character.sprite = sprite;
+                    }
+                });
+            });
+
+            // setup sprite instance
+            var sprite_instance = new SpriteInstance({
+                position: character_instance.position,
+                sprite: character_instance.character.sprite,
+                current_animation: character_instance.starting_animation,
+                frame_time: 0.0,
+                layer: this.current_map_instance.map.entity_layer_index,
+                opacity: 1.0,
+                tile: character_instance.character.sprite.tiles[0]
+            });
+            // delete position fron character instance
+            delete character_instance.position;
+            delete character_instance.starting_animation;
+
+            var new_character_instance = new CharacterInstance(character_instance);
+            // new_character_instance.sprite_instance = sprite_instance;
+            var body = gameio.create_body(character_instance.character.body);
+            character_instance.body = body;
+
+            var entity = new Entity();
+            entity.components.add(new SpriteComponent({
+                sprite_instance: sprite_instance
+            }));
+            entity.components.add(new CharacterComponent({
+                character_instance: new_character_instance
+            }));
+
+            if (body) {
+                body.position[0] = sprite_instance.position[0];
+                body.position[1] = sprite_instance.position[1];
+                entity.components.add(new BodyComponent({
+                    body: body
+                }));
+            }
+            this.entities.add(entity);
+            character_instance.entity = entity;
         });
 
-        // TODO: Map instance particle systems, when the time comes.
-
-        // var entity = new Entity();
-        // entity.add_component(new MapInstanceComponent({
-        //     map_instance: this.current_map_instance
-        // }));
         console.log("Current Map Instance: ", this.current_map_instance);
     }
     update(time_delta) {

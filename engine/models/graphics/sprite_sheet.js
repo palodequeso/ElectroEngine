@@ -12,7 +12,13 @@ class SpriteSheet extends Model {
             width: 0,
             height: 0,
             tile_width: 32,
-            tile_height: 32
+            tile_height: 32,
+            sprites: null
+        };
+    }
+    get types() {
+        return {
+            sprites: Sprites
         };
     }
     constructor(data) {

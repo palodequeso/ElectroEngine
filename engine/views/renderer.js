@@ -2,7 +2,6 @@
 
 var View = require('exo').View;
 var glmatrix = require("gl-matrix");
-var util = require('../util/util.js');
 
 var textured_quad_shader_vert_source = '' +
     'attribute vec4 vertex_position;' +
@@ -80,7 +79,8 @@ class Renderer extends View {
         var t = this;
         texture.image.onload = function() {
             if (texture.image.width > t.max_texture_size || texture.image.height > t.max_texture_size) {
-                console.error("The image being loaded is larger than the current WebGL's context MAX_TEXTURE_SIZE of ", t.max_texture_size);
+                console.error("The image being loaded is larger than the current WebGL's context MAX_TEXTURE_SIZE of ",
+                              t.max_texture_size);
             }
             t.gl.bindTexture(t.gl.TEXTURE_2D, texture);
             t.gl.pixelStorei(t.gl.UNPACK_FLIP_Y_WEBGL, false);
@@ -95,7 +95,6 @@ class Renderer extends View {
         texture.image.src = image_src;
     }
     load_sprite_images() {
-        var t = this;
         var images_loaded_statuses = {};
         var image_loaded_promises = [];
 
@@ -103,7 +102,7 @@ class Renderer extends View {
             map.sprite_sheets.each((sprite_sheet) => {
                 var image_src = sprite_sheet.path;
                 if (!images_loaded_statuses.hasOwnProperty(image_src)) {
-                    image_loaded_promises.push(new Promise((resolve, reject) => {
+                    image_loaded_promises.push(new Promise((resolve) => {
                         this.load_texture('data/images/sprite_sheets/' + image_src, (texture) => {
                             resolve({texture: texture, image_src: image_src});
                         });
@@ -116,7 +115,7 @@ class Renderer extends View {
         this.model.sprite_sheets.each((sprite_sheet) => {
             var image_src = sprite_sheet.path;
             if (!images_loaded_statuses.hasOwnProperty(image_src)) {
-                image_loaded_promises.push(new Promise((resolve, reject) => {
+                image_loaded_promises.push(new Promise((resolve) => {
                     this.load_texture('data/images/sprite_sheets/' + image_src, (texture) => {
                         resolve({texture: texture, image_src: image_src});
                     });
@@ -128,7 +127,7 @@ class Renderer extends View {
         this.model.particle_systems.each((particle_system) => {
             var image_src = particle_system.image;
             if (!images_loaded_statuses.hasOwnProperty(image_src)) {
-                image_loaded_promises.push(new Promise((resolve, reject) => {
+                image_loaded_promises.push(new Promise((resolve) => {
                     this.load_texture('data/images/particles/' + image_src, (texture) => {
                         resolve({texture: texture, image_src: image_src});
                     });
@@ -159,7 +158,7 @@ class Renderer extends View {
         ];
         var indices = [0, 1, 2, 0, 2, 3];
 
-        //http://blog.tojicode.com/2012/10/oesvertexarrayobject-extension.html
+        // http://blog.tojicode.com/2012/10/oesvertexarrayobject-extension.html
         if (this.use_vao) {
             this.vao_ext = this.gl.getExtension("OES_vertex_array_object");
             this.vao = this.vao_ext.createVertexArrayOES();
@@ -172,13 +171,15 @@ class Renderer extends View {
             this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.quad_vertices_buffer);
             this.gl.bufferData(this.gl.ARRAY_BUFFER, new Float32Array(vertices), this.gl.STATIC_DRAW);
             this.gl.enableVertexAttribArray(this.shaders.textured_quad.vertex_position_attribute);
-            this.gl.vertexAttribPointer(this.shaders.textured_quad.vertex_position_attribute, 4, this.gl.FLOAT, false, 0, 0);
+            this.gl.vertexAttribPointer(this.shaders.textured_quad.vertex_position_attribute, 4,
+                                        this.gl.FLOAT, false, 0, 0);
 
             this.quad_texcoords_buffer = this.gl.createBuffer();
             this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.quad_texcoords_buffer);
             this.gl.bufferData(this.gl.ARRAY_BUFFER, new Float32Array(texcoords), this.gl.STATIC_DRAW);
             this.gl.enableVertexAttribArray(this.shaders.textured_quad.texcoord_position_attribute);
-            this.gl.vertexAttribPointer(this.shaders.textured_quad.texcoord_position_attribute, 4, this.gl.FLOAT, false, 0, 0);
+            this.gl.vertexAttribPointer(this.shaders.textured_quad.texcoord_position_attribute, 4,
+                                        this.gl.FLOAT, false, 0, 0);
 
             this.quad_indices_buffer = this.gl.createBuffer();
             this.gl.bindBuffer(this.gl.ELEMENT_ARRAY_BUFFER, this.quad_indices_buffer);
@@ -200,9 +201,9 @@ class Renderer extends View {
     }
     create_shader(type, source) {
         var shader;
-        if (type == "frag") {
+        if (type === "frag") {
             shader = this.gl.createShader(this.gl.FRAGMENT_SHADER);
-        } else if (type == "vert") {
+        } else if (type === "vert") {
             shader = this.gl.createShader(this.gl.VERTEX_SHADER);
         } else {
             return null;
@@ -212,7 +213,7 @@ class Renderer extends View {
         this.gl.compileShader(shader);
 
         if (!this.gl.getShaderParameter(shader, this.gl.COMPILE_STATUS)) {
-            alert(this.gl.getShaderInfoLog(shader));
+            console.error(this.gl.getShaderInfoLog(shader));
             return null;
         }
 
@@ -239,34 +240,44 @@ class Renderer extends View {
         this.gl.linkProgram(this.shaders.textured_quad.shader);
 
         if (!this.gl.getProgramParameter(this.shaders.textured_quad.shader, this.gl.LINK_STATUS)) {
-          alert("Could not initialise shaders");
+          console.error("Could not initialise shaders");
         }
 
         this.gl.useProgram(this.shaders.textured_quad.shader);
-        this.shaders.textured_quad.vertex_position_attribute = this.gl.getAttribLocation(this.shaders.textured_quad.shader, "vertex_position");
+        this.shaders.textured_quad.vertex_position_attribute = this.gl.getAttribLocation(
+            this.shaders.textured_quad.shader, "vertex_position");
         this.gl.enableVertexAttribArray(this.shaders.textured_quad.vertex_position_attribute);
-        this.shaders.textured_quad.texcoord_position_attribute = this.gl.getAttribLocation(this.shaders.textured_quad.shader, "vertex_texcoord");
+        this.shaders.textured_quad.texcoord_position_attribute = this.gl.getAttribLocation(
+            this.shaders.textured_quad.shader, "vertex_texcoord");
         this.gl.enableVertexAttribArray(this.shaders.textured_quad.texcoord_position_attribute);
-        this.shaders.textured_quad.projection_matrix_location = this.gl.getUniformLocation(this.shaders.textured_quad.shader, "projection_matrix");
-        this.shaders.textured_quad.view_matrix_location = this.gl.getUniformLocation(this.shaders.textured_quad.shader, "view_matrix");
-        this.shaders.textured_quad.model_matrix_location = this.gl.getUniformLocation(this.shaders.textured_quad.shader, "model_matrix");
-        this.shaders.textured_quad.sprite_texcoord_location = this.gl.getUniformLocation(this.shaders.textured_quad.shader, "sprite_texcoord");
-        this.shaders.textured_quad.sprite_size_location = this.gl.getUniformLocation(this.shaders.textured_quad.shader, "sprite_size");
-        this.shaders.textured_quad.texture_location = this.gl.getUniformLocation(this.shaders.textured_quad.shader, "texture");
-        this.shaders.textured_quad.color_location = this.gl.getUniformLocation(this.shaders.textured_quad.shader, "color");
+        this.shaders.textured_quad.projection_matrix_location = this.gl.getUniformLocation(
+            this.shaders.textured_quad.shader, "projection_matrix");
+        this.shaders.textured_quad.view_matrix_location = this.gl.getUniformLocation(
+            this.shaders.textured_quad.shader, "view_matrix");
+        this.shaders.textured_quad.model_matrix_location = this.gl.getUniformLocation(
+            this.shaders.textured_quad.shader, "model_matrix");
+        this.shaders.textured_quad.sprite_texcoord_location = this.gl.getUniformLocation(
+            this.shaders.textured_quad.shader, "sprite_texcoord");
+        this.shaders.textured_quad.sprite_size_location = this.gl.getUniformLocation(
+            this.shaders.textured_quad.shader, "sprite_size");
+        this.shaders.textured_quad.texture_location = this.gl.getUniformLocation(
+            this.shaders.textured_quad.shader, "texture");
+        this.shaders.textured_quad.color_location = this.gl.getUniformLocation(
+            this.shaders.textured_quad.shader, "color");
     }
     draw_quad(position, dimensions, sprite_texcoord, color, texture, shader) {
         var model_matrix = glmatrix.mat4.create();
         glmatrix.mat4.translate(model_matrix, model_matrix, [position[0], position[1], 1.0]);
         glmatrix.mat4.scale(model_matrix, model_matrix, [dimensions[0], dimensions[1], 1.0]);
-        this.gl.uniformMatrix4fv(shader.model_matrix_location, false, model_matrix);//new FloatArray(model_matrix));
+        this.gl.uniformMatrix4fv(shader.model_matrix_location, false, model_matrix); // new FloatArray(model_matrix));
         this.gl.uniform1i(shader.texture_location, 0);
         this.gl.activeTexture(this.gl.TEXTURE0);
         this.gl.bindTexture(this.gl.TEXTURE_2D, texture);
         this.gl.uniform2f(shader.sprite_size_location, texture.image.width, texture.image.height);
         this.gl.uniform4f(shader.color_location, color[0], color[1], color[2], color[3]);
         this.gl.uniform1i(shader.texture_location, 0);
-        this.gl.uniform4f(shader.sprite_texcoord_location, sprite_texcoord[0], sprite_texcoord[3], sprite_texcoord[2], sprite_texcoord[1]);
+        this.gl.uniform4f(shader.sprite_texcoord_location, sprite_texcoord[0], sprite_texcoord[3], sprite_texcoord[2],
+                          sprite_texcoord[1]);
 
         if (this.use_vao) {
             this.vao_ext.bindVertexArrayOES(this.vao);
@@ -324,7 +335,7 @@ class Renderer extends View {
                 });
             }
 
-            var components = entity.components.get_by_index('type', 'particle_system');
+            components = entity.components.get_by_index('type', 'particle_system');
             if (components) {
                 components.forEach((component) => {
                     var particle_system_instance = component.particle_system_instance;
@@ -350,7 +361,8 @@ class Renderer extends View {
 
                         renderables.push({
                             layer: 10, // This needs to be a parameter.
-                            position: [data.position[0] + system_position[0] + 250.0, data.position[1] + system_position[1] + 250.0],
+                            position: [data.position[0] + system_position[0] + 250.0,
+                                       data.position[1] + system_position[1] + 250.0],
                             size: [data.size[0], data.size[1]],
                             texcoords: [0.0, 0.0, texture.image.width, texture.image.height],
                             color: [data.color[0], data.color[1], data.color[2], data.alpha],
@@ -373,4 +385,4 @@ class Renderer extends View {
     }
 }
 
-module.exports = Renderer
+module.exports = Renderer;

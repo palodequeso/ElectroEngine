@@ -1,8 +1,8 @@
 'use strict';
 
 var Model = require('exo').Model;
+var Bodies = require('../physics/bodies.js');
 var CharacterInstances = require('../characters/character_instances.js');
-var Map = require('./map.js');
 var MapLayerInstances = require('./map_layer_instances.js');
 
 class MapInstance extends Model {
@@ -13,14 +13,16 @@ class MapInstance extends Model {
             map: null,
             position: [0, 0],
             warps: [],
-            bodies: [],
+            bodies: null,
             character_instances: null,
             layer_instances: null
         };
     }
     get types() {
         return {
-            layer_instances: MapLayerInstances
+            layer_instances: MapLayerInstances,
+            character_instances: CharacterInstances,
+            bodies: Bodies
         };
     }
     constructor(data) {

@@ -2,38 +2,33 @@
 
 const {dialog} = require('electron').remote;
 
-var fs = require('fs');
-
-var $ = require('jquery');
-var Handlebars = require('handlebars');
-var View = require('../../lib/view.js');
+var View = require('exo').View;
 
 var game_model = require('../../engine/models/game.js');
 var game_views = require('./game.js');
 var gameio = require('../../engine/util/gameio.js');
 
 var Map = require('../../engine/models/maps/map.js');
-var Maps = require('../../engine/models/maps/maps.js');
 var MapEditor = require('./map.js');
 
 var SpriteSheet = require('../../engine/models/graphics/sprite_sheet.js');
-var SpriteSheets = require('../../engine/models/graphics/sprite_sheets.js');
 var SpriteSheetEditor = require('./sprite_sheet.js');
 
-var util = require('./util.js');
-
 class App extends View {
+    get events() {
+        return {
+            'click #edit_game_button': this.edit_game.bind(this),
+            'click #save_game_button': this.save_game.bind(this),
+            'click #build_game_button': this.build_game.bind(this),
+            'click #create_game_button': this.create_game.bind(this),
+            'click #load_game_button': this.load_game.bind(this),
+            'click #create_map_button': this.create_map.bind(this),
+            'click #create_sprite_sheet_button': this.create_sprite_sheet.bind(this)
+        };
+    }
     constructor(options) {
         super(options);
         this.game_model = null;
-
-        this.$element.on('click', '#edit_game_button', this.edit_game.bind(this));
-        this.$element.on('click', '#save_game_button', this.save_game.bind(this));
-        this.$element.on('click', '#build_game_button', this.build_game.bind(this));
-        this.$element.on('click', '#create_game_button', this.create_game.bind(this));
-        this.$element.on('click', '#load_game_button', this.load_game.bind(this));
-        this.$element.on('click', '#create_map_button', this.create_map.bind(this));
-        this.$element.on('click', '#create_sprite_sheet_button', this.create_sprite_sheet.bind(this));
     }
     edit_game() {
         //
@@ -53,14 +48,12 @@ class App extends View {
         gv.once('created', () => {
             this.game_model = gv.model;
             this.render();
-            console.log("Game Model Created and Set");
         });
 
-        this.$element.find(".content").empty();
-        this.$element.find(".content").append(gv.$element);
+        this.element.querySelector(".content").innerHTML = '';
+        this.element.querySelector(".content").appendChild(gv.element);
     }
     create_map() {
-        console.log("Create Map");
         var model = new Map();
         var view = new MapEditor({
             model: model,
@@ -69,8 +62,8 @@ class App extends View {
 
         this.game_model.maps.add(model);
 
-        this.$element.find(".content").empty();
-        this.$element.find(".content").append(view.$element);
+        this.element.querySelector(".content").innerHTML = '';
+        this.element.querySelector(".content").appendChild(view.element);
 
         view.render();
     }
@@ -83,8 +76,8 @@ class App extends View {
 
         this.game_model.sprite_sheets.add(model);
 
-        this.$element.find(".content").empty();
-        this.$element.find(".content").append(view.$element);
+        this.element.querySelector(".content").innerHTML = '';
+        this.element.querySelector(".content").appendChild(view.element);
 
         view.render();
     }
@@ -97,20 +90,22 @@ class App extends View {
         this.render();
     }
     render() {
-        this.$element.find("#game_edit_buttons").hide();
-        this.$element.find("#map_selector").empty();
-        this.$element.find("#entity_selector").empty();
-        this.$element.find("#particle_system_selector").empty();
+        console.log(this.element, this.element.querySelector);
+        this.element.querySelector("#game_edit_buttons").style.display = 'none';
+        this.element.querySelector("#map_selector").style.display = 'none';
+        this.element.querySelector("#entity_selector").style.display = 'none';
+        this.element.querySelector("#particle_system_selector").style.display = 'none';
 
         if (this.game_model === null) {
             return;
         }
 
-        this.$element.find("#game_edit_buttons").show();
+        this.element.querySelector("#game_edit_buttons").style.display = 'block';
 
         if (this.game_model.maps !== null) {
             this.game_model.maps.each((map) => {
-                this.$element.find("#map_selector").append('<div class="hx-sidebar-section">' + map.name + '</div>');
+                this.element.querySelector("#map_selector").innerHTML +=
+                    `<div class="hx-sidebar-section">${map.name}</div>`;
             });
         }
 

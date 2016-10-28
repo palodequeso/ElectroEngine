@@ -5,8 +5,6 @@ var SpriteSheet = require('../graphics/sprite_sheet.js');
 
 // NOTE: I think this might need an instance version as well since it has sprite_instances, and can be used in many
 //   different map instances.
-// TODO: Add ability for map layer to just be a background image as well, with scaling!
-// TODO: Add ability for map layers to scroll at different speeds, creating parallax
 class MapLayer extends Model {
     get defaults() {
         return {

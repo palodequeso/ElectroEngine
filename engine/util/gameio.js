@@ -219,7 +219,6 @@ class GameLoader {
                 sprite: character_instance.character.sprite,
                 current_animation: character_instance.starting_animation,
                 frame_time: 0.0,
-                // TODO: This should be set when a map instance is loaded.
                 layer: 10, // map_instance.map.character_layer_index,
                 opacity: 1.0,
                 tile: character_instance.character.sprite.tiles[0]

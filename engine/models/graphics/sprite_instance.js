@@ -8,7 +8,6 @@ class SpriteInstance extends Model {
         return {
             position: [0, 0],
             scale: [1, 1],
-            // TODO: Not sure if this is the best way to define this! Look it up!
             parallax_scale: [1, 1],
             current_animation: '',
             frame_time: 0.0,

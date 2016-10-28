@@ -3,7 +3,6 @@
 var util = require('../util/util.js');
 var Model = require('exo').Model;
 
-// TODO: Move to systems?
 class Input extends Model {
     get defaults() {
         return {

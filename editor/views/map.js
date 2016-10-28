@@ -6,15 +6,13 @@ var fs = require('fs');
 var path = require('path');
 var sizeOf = require('image-size');
 
-var $ = require('jquery');
 var Handlebars = require('handlebars');
-var View = require('../../lib/view.js');
-var edit_map_tmpl = fs.readFileSync(__dirname + '/../tmpl/edit_map.html', 'utf8');
-var map_editor_tools_tmpl = fs.readFileSync(__dirname + '/../tmpl/map_editor_tools.html', 'utf8');
+var View = require('exo').View;
+var edit_map_tmpl = fs.readFileSync(path.join(__dirname, '/../tmpl/edit_map.html'), 'utf8');
+var map_editor_tools_tmpl = fs.readFileSync(path.join(__dirname, '/../tmpl/map_editor_tools.html'), 'utf8');
 
 var SpriteSheet = require('../../engine/models/graphics/sprite_sheet.js');
 var SpriteSheets = require('../../engine/models/graphics/sprite_sheets.js');
-var image_manager = require('../../engine/util/image_manager.js');
 
 var Sidebar = require('./util.js').Sidebar;
 
@@ -30,7 +28,7 @@ class MapEditorTools extends Sidebar {
             var sprite_sheets_path = path.normalize(this.game.path + '/images/sprite_sheets/' + sheet.path);
             console.log("Sprite Sheets Path: ", sprite_sheets_path);
             sheet.modified_path = sprite_sheets_path;
-            sheet.modified_path = path.relative(path.normalize(__dirname + '/../'), sprite_sheets_path);
+            sheet.modified_path = path.relative(path.normalize(path.join(__dirname, '/../')), sprite_sheets_path);
             sheet.modified_path = sheet.modified_path.replace(/\\/gmi, '/');
             sheet.tiles_x = sheet.width / sheet.tile_width;
             sheet.tiles_y = sheet.height / sheet.tile_height;
@@ -52,23 +50,24 @@ class MapEditorTools extends Sidebar {
             new hx.Collapsible('#map_properties');
 
             map_data.sprite_sheets.forEach((sheet) => {
-                var tile_div = $(this.$element.find("#sprite_sheet_" + sheet.id + "_content").find(".sprite_selector_tiles"));
+                var tile_div = document.getElementById(`#sprite_sheet_${sheet.id}_content`)
+                    .querySelector('.sprite_selector_tiles');
                 console.log(tile_div);
-                tile_div.css({
-                    width: sheet.width,
-                    height: sheet.height
-                });
+                tile_div.style.width = sheet.width;
+                tile_div.style.height = sheet.height;
 
                 var i = 0;
                 var j = 0;
                 var tile_index = 0;
                 for (j = 0; j < (sheet.height / sheet.tile_height); j += 1) {
                     for (i = 0; i < (sheet.width / sheet.tile_width); i += 1) {
-                        var div = $('<div>').addClass('sprite_sheet_tile_selector').css({
-                            width: sheet.tile_width,
-                            height: sheet.tile_height
-                        }).data('tile_index', tile_index).data('sprite_sheet_id', sheet.id);
-                        tile_div.append(div);
+                        var div = document.createElement('div');
+                        div.classList.append('sprite_sheet_tile_selector');
+                        div.style.width = sheet.tile_width;
+                        div.style.height = sheet.tile_height;
+                        div.dataset.tile_index = tile_index;
+                        div.dataset.sprite_sheet_id = sheet.id;
+                        tile_div.appendChild(div);
                         tile_index += 1;
                     }
                 }
@@ -78,6 +77,14 @@ class MapEditorTools extends Sidebar {
 }
 
 class MapEditor extends View {
+    get events() {
+        return {
+            'click #add_sprite_sheet_button': this.add_sprite_sheet.bind(this),
+            'change .sprite_sheet_tile_width': this.tile_size_change.bind(this),
+            'change .sprite_sheet_tile_height': this.tile_size_change.bind(this),
+            'click .sprite_sheet_tile_selector': this.select_tile.bind(this)
+        };
+    }
     constructor(options) {
         super(options);
         this.game = options.game;
@@ -93,24 +100,18 @@ class MapEditor extends View {
         });
         this.tools.on('resize', this.tools_resize.bind(this));
 
-        this.$element.on('click', '#add_sprite_sheet_button', this.add_sprite_sheet.bind(this));
-        this.$element.on('change', '.sprite_sheet_tile_width', this.tile_size_change.bind(this));
-        this.$element.on('change', '.sprite_sheet_tile_height', this.tile_size_change.bind(this));
-        this.$element.on('click', '.sprite_sheet_tile_selector', this.select_tile.bind(this));
+
     }
     tools_resize(width) {
-        console.log("Tools Resize: ", width, $(this.$element.find("#map_editor_tiles")));
-        $(this.$element.find("#map_editor_tiles")).css({
-            width: 'calc(100% - ' + width + 'px)'
-        });
+        this.element.querySelector("#map_editor_tiles").style.width = `calc(100% - ${width}px)`;
     }
     tile_size_change(event) {
-        var $elem = $(event.currentTarget);
-        var id = $elem.data('id');
-        var value = $elem.val();
+        var elem = event.currentTarget;
+        var id = elem.dataset.id;
+        var value = elem.value;
         console.log("Tile Size Change: ", id, value);
     }
-    add_sprite_sheet(event) {
+    add_sprite_sheet() {
         console.log("Add Sprite Sheet");
         var choice = dialog.showOpenDialog({properties: ['openFile'], filters: [
             {name: 'Images', extensions: ['png']}
@@ -140,41 +141,39 @@ class MapEditor extends View {
         this.render();
     }
     select_tile(event) {
-        var $elem = $(event.currentTarget);
-        var tile_index = parseInt($elem.data('tile_index'), 10);
-        var sprite_sheet_id = $elem.data('sprite_sheet_id');
+        var elem = event.currentTarget;
+        var tile_index = parseInt(elem.dataset.tile_index, 10);
+        var sprite_sheet_id = elem.dataset.sprite_sheet_id;
         console.log("Select Tile: ", tile_index, sprite_sheet_id);
     }
     render() {
-        this.$element.html(edit_map_tmpl);
+        this.element.innerHTML = edit_map_tmpl;
 
         this.tools.render();
-        this.$element.find("#map_editor_container").append(this.tools.$element);
+        this.element.querySelector("#map_editor_container").appendChild(this.tools.element);
 
-        var tiles = this.$element.find('#map_editor_tiles');
-        tiles.empty();
-        var editor_div = $("<div>");
+        var tiles = this.element.querySelector('#map_editor_tiles');
+        tiles.innerHTML = '';
+        var editor_div = document.createElement('div');
 
         var i = 0;
         var j = 0;
         var tile_index = 0;
         for (j = 0; j < this.model.height; j += 1) {
             for (i = 0; i < this.model.width; i += 1) {
-                var div = $('<div>').addClass('map_tile').data('tile_index', tile_index);
-                div.css({
-                    width: this.model.tile_width,
-                    height: this.model.tile_height
-                });
-                editor_div.append(div);
+                var div = document.createElement('div');
+                div.classList.append('map_tile');
+                div.dataset.tile_index = tile_index;
+                div.style.width = this.model.tile_width;
+                div.style.height = this.model.tile_height;
+                editor_div.appendChild(div);
                 tile_index += 1;
             }
         }
 
-        editor_div.css({
-            width: this.model.tile_width * this.model.width,
-            height: this.model.tile_height * this.model.height
-        });
-        tiles.append(editor_div);
+        editor_div.width = this.model.tile_width * this.model.width;
+        editor_div.height = this.model.tile_height * this.model.height;
+        tiles.appendChild(editor_div);
     }
 }
 

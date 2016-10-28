@@ -1,8 +1,6 @@
 'use strict';
 
-var $ = require('jquery');
 var Handlebars = require('handlebars');
-
 var App = require('./views/app.js');
 
 Handlebars.registerHelper('times', function(n, block) {
@@ -24,7 +22,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }*/);
 
     var app = new App({
-        element: $("body")
+        element: document.querySelector('body')
     });
     app.render();
 });

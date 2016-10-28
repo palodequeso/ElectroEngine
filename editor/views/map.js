@@ -37,7 +37,7 @@ class MapEditorTools extends Sidebar {
         console.log("Map Data: ", map_data);
 
         setTimeout(() => {
-            content.append(this.template(map_data));
+            content.innerHTML = this.template(map_data);
 
             new hx.Collapsible('#layer_selector');
             new hx.DragContainer('#layer_selector_draggable_container');
@@ -62,7 +62,7 @@ class MapEditorTools extends Sidebar {
                 for (j = 0; j < (sheet.height / sheet.tile_height); j += 1) {
                     for (i = 0; i < (sheet.width / sheet.tile_width); i += 1) {
                         var div = document.createElement('div');
-                        div.classList.append('sprite_sheet_tile_selector');
+                        div.classList.add('sprite_sheet_tile_selector');
                         div.style.width = sheet.tile_width;
                         div.style.height = sheet.tile_height;
                         div.dataset.tile_index = tile_index;
@@ -98,9 +98,8 @@ class MapEditor extends View {
             game: this.game,
             model: this.model
         });
-        this.tools.on('resize', this.tools_resize.bind(this));
-
-
+        console.log(this.tools);
+        // this.tools.on('resize', this.tools_resize.bind(this));
     }
     tools_resize(width) {
         this.element.querySelector("#map_editor_tiles").style.width = `calc(100% - ${width}px)`;
@@ -162,7 +161,7 @@ class MapEditor extends View {
         for (j = 0; j < this.model.height; j += 1) {
             for (i = 0; i < this.model.width; i += 1) {
                 var div = document.createElement('div');
-                div.classList.append('map_tile');
+                div.classList.add('map_tile');
                 div.dataset.tile_index = tile_index;
                 div.style.width = this.model.tile_width;
                 div.style.height = this.model.tile_height;

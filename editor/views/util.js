@@ -46,12 +46,12 @@ class Sidebar extends View {
         container.appendChild(div);
     }
     render() {
-        this.element.classList.append('side_toolbar');
+        this.element.classList.add('side_toolbar');
         this.element.innerHTML = sidebar_tmpl;
         // new Draggable(this.$element.find('.sidebar_handle'), {
             // onDrag: this.resize.bind(this)
         // });
-        var sidebar_handle = this.element.querySelector('sidebar_handle');
+        var sidebar_handle = this.element.querySelector('.sidebar_handle');
         sidebar_handle.ondragstart = this.resize_start.bind(this);
         sidebar_handle.ondrag = this.resize.bind(this);
         sidebar_handle.ondragend = this.resize_end.bind(this);

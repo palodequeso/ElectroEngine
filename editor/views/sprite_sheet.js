@@ -64,7 +64,7 @@ class SpriteSheetEditor extends View {
                 var x = x_index * this.model.tile_width;
                 var y = y_index * this.model.tile_height;
                 var div = document.createElement('div');
-                div.classList.append('grid_cell');
+                div.classList.add('grid_cell');
                 div.style.left = x + 'px';
                 div.style.top = y + 'px';
                 div.style.width = (this.tile_width - 2) + 'px';

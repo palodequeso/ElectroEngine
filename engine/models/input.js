@@ -19,15 +19,12 @@ class Input extends Model {
         this.setup_events();
     }
     keydown_handler(event) {
-        console.log("KeyDown: ", event.keyCode);
         this.key_states[event.keyCode] = true;
     }
     keyup_handler(event) {
-        console.log("KeyUp: ", event.keyCode);
         this.key_states[event.keyCode] = false;
     }
     click_handler(event) {
-        console.log("Click: ", event);
         this.click_data.x = event.offsetX;
         this.click_data.y = event.offsetY;
         this.click_data.clicked = true;

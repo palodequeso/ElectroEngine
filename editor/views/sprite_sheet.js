@@ -19,7 +19,7 @@ class SpriteSheetEditor extends View {
     constructor(options) {
         super(options);
         this.game = options.game;
-        this.original_path = '';
+        this.original_path = path.join(this.game.path, 'images', 'sprite_sheets', this.model.path);
         this.template = Handlebars.compile(edit_sprite_sheet_tmpl);
     }
     select_sprite_sheet() {
@@ -54,6 +54,7 @@ class SpriteSheetEditor extends View {
         //
     }
     render_grid() {
+        console.log(this.model);
         var tiles_x = Math.floor(this.model.width / this.model.tile_width);
         var tiles_y = Math.floor(this.model.height / this.model.tile_height);
 
@@ -77,6 +78,7 @@ class SpriteSheetEditor extends View {
         var render_data = this.model.serialize();
         render_data.original_path = this.original_path;
         render_data.game_path = this.game.path;
+        console.log("Render Data: ", render_data);
         this.element.innerHTML = this.template(render_data);
 
         if (this.model.path === "") {

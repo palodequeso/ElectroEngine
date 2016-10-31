@@ -142,7 +142,6 @@ class GameLoader {
             this.map_bodies[map_data.id] = [];
             if (map_data.hasOwnProperty('bodies')) {
                 map_data.bodies.forEach((body_data) => {
-                    console.log("Body Data: ", body_data);
                     this.map_bodies[map_data.id].push(body_data);
                 });
                 delete map_data.bodies;
@@ -176,6 +175,8 @@ class GameLoader {
     load_game_data() {
         var game_json = fs.readFileSync(path.normalize(this.folder_path + '/game.json'), 'utf-8');
         this.game_data = JSON.parse(game_json);
+        this.game.name = this.game_data.name;
+        this.game.path = this.folder_path;
     }
     load_map_instances() {
         var map_instances = [];
@@ -200,7 +201,6 @@ class GameLoader {
     }
     load_character_instances() {
         this.game_data.character_instances.forEach((character_instance) => {
-            console.log("Character Instance: ", character_instance);
             this.game.characters.each((character) => {
                 if (character.id === character_instance.character_id) {
                     character_instance.character = character;
@@ -276,7 +276,6 @@ class GameLoader {
         this.load_map_instances();
         this.load_character_instances();
         this.load_particle_system_instances();
-        console.log(this.game);
     }
 }
 

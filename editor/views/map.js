@@ -25,11 +25,12 @@ class MapEditorTools extends Sidebar {
     render_content(content) {
         var map_data = this.model.serialize();
         map_data.sprite_sheets.forEach((sheet) => {
-            var sprite_sheets_path = path.normalize(this.game.path + '/images/sprite_sheets/' + sheet.path);
+            var sprite_sheets_path = path.normalize(path.join(this.game.path, '/images/sprite_sheets/', sheet.path));
             console.log("Sprite Sheets Path: ", sprite_sheets_path);
             sheet.modified_path = sprite_sheets_path;
             sheet.modified_path = path.relative(path.normalize(path.join(__dirname, '/../')), sprite_sheets_path);
             sheet.modified_path = sheet.modified_path.replace(/\\/gmi, '/');
+            console.log("Modified Path: ", sheet.modified_path);
             sheet.tiles_x = sheet.width / sheet.tile_width;
             sheet.tiles_y = sheet.height / sheet.tile_height;
         });

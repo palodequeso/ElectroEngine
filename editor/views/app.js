@@ -14,6 +14,12 @@ var MapEditor = require('./map.js');
 var SpriteSheet = require('../../engine/models/graphics/sprite_sheet.js');
 var SpriteSheetEditor = require('./sprite_sheet.js');
 
+var Character = require('../../engine/models/characters/character.js');
+var CharacterEditor = require('./character.js');
+
+var ParticleSystem = require('../../engine/models/particle_systems/particle_system.js');
+var ParticleSystemEditor = require('./particle_system.js');
+
 class App extends View {
     get events() {
         return {
@@ -23,7 +29,13 @@ class App extends View {
             'click #create_game_button': this.create_game.bind(this),
             'click #load_game_button': this.load_game.bind(this),
             'click #create_map_button': this.create_map.bind(this),
-            'click #create_sprite_sheet_button': this.create_sprite_sheet.bind(this)
+            'click #create_sprite_sheet_button': this.create_sprite_sheet.bind(this),
+            'click #create_particle_system_button': this.create_particle_system.bind(this),
+            'click #create_character_button': this.create_character.bind(this),
+            'click .select_map': this.select_map.bind(this),
+            'click .select_character': this.select_character.bind(this),
+            'click .select_particle_system': this.select_particle_system.bind(this),
+            'click .select_sprite_sheet': this.select_sprite_sheet.bind(this)
         };
     }
     constructor(options) {
@@ -53,6 +65,15 @@ class App extends View {
         this.element.querySelector(".content").innerHTML = '';
         this.element.querySelector(".content").appendChild(gv.element);
     }
+    load_game() {
+        var choice = dialog.showOpenDialog({properties: ['openDirectory']});
+        console.log("Game Folder: ", choice);
+        var game_loader = new gameio.GameLoader(choice[0], game_model);
+        // var result = gameio.load(choice[0], game_model);
+        console.log(choice[0], game_loader.game);
+        this.game_model = game_loader.game;
+        this.render();
+    }
     create_map() {
         var model = new Map();
         var view = new MapEditor({
@@ -66,6 +87,37 @@ class App extends View {
         this.element.querySelector(".content").appendChild(view.element);
 
         view.render();
+    }
+    select_map(event) {
+        var id = event.target.dataset.id;
+        var map = this.game_model.maps.get(id);
+        var view = new MapEditor({
+            model: map,
+            game: this.game_model
+        });
+
+        this.element.querySelector(".content").innerHTML = '';
+        this.element.querySelector(".content").appendChild(view.element);
+
+        view.render();
+    }
+    create_character() {
+        var character = new Character();
+        var view = new CharacterEditor({
+            model: character,
+            game: this.game_model
+        });
+    }
+    select_character(event) {
+        var id = event.target.dataset.id;
+        var character = this.game_model.characters.get(id);
+    }
+    create_particle_system() {
+        //
+    }
+    select_particle_system(event) {
+        var id = event.target.dataset.id;
+        var particle_system = this.game_model.particle_systems.get(id);
     }
     create_sprite_sheet() {
         var model = new SpriteSheet();
@@ -81,45 +133,60 @@ class App extends View {
 
         view.render();
     }
-    load_game() {
-        var choice = dialog.showOpenDialog({properties: ['openDirectory']});
-        console.log("Game Folder: ", choice);
-        var game_loader = new gameio.GameLoader(choice[0], game_model);
-        // var result = gameio.load(choice[0], game_model);
-        this.game_model = game_loader.game;
-        this.render();
+    select_sprite_sheet(event) {
+        var id = event.target.dataset.id;
+        var sprite_sheet = this.game_model.sprite_sheets.get(id);
+        console.log(sprite_sheet, this.game_model);
+        var view = new SpriteSheetEditor({
+            model: sprite_sheet,
+            game: this.game_model
+        });
+
+        this.element.querySelector('.content').innerHTML = '';
+        this.element.querySelector('.content').appendChild(view.element);
+
+        view.render();
     }
     render() {
-        console.log(this.element, this.element.querySelector);
-        this.element.querySelector("#game_edit_buttons").style.display = 'none';
-        this.element.querySelector("#map_selector").style.display = 'none';
-        this.element.querySelector("#entity_selector").style.display = 'none';
-        this.element.querySelector("#particle_system_selector").style.display = 'none';
-
         if (this.game_model === null) {
             return;
         }
 
-        this.element.querySelector("#game_edit_buttons").style.display = 'block';
+        this.game_model.maps.each(map => {
+            var div = document.createElement('div');
+            div.classList.add('hx-sidebar-section');
+            div.innerHTML = map.name;
+            div.classList.add('select_map');
+            div.dataset.id = map.id;
+            this.element.querySelector('#map_selector').appendChild(div);
+        });
 
-        if (this.game_model.maps !== null) {
-            this.game_model.maps.each((map) => {
-                this.element.querySelector("#map_selector").innerHTML +=
-                    `<div class="hx-sidebar-section">${map.name}</div>`;
-            });
-        }
+        this.game_model.characters.each(character => {
+            var div = document.createElement('div');
+            div.classList.add('hx-sidebar-section');
+            div.innerHTML = character.name;
+            div.classList.add('select_character');
+            div.dataset.id = character.id;
+            this.element.querySelector('#character_selector').appendChild(div);
+        });
 
-        // if (this.game_model.entities !== null) {
-        //     this.game_model.entities.each((entity) => {
-        //         this.$element.find("#entity_selector").append('<div class="hx-sidebar-section">' + entity.name + '</div>');
-        //     });
-        // }
-        //
-        // if (this.game_model.particle_systems !== null) {
-        //     this.game_model.particle_systems.models.forEach((particle_system) => {
-        //         this.$element.find("#particle_system_selector").append('<div class="hx-sidebar-section">' + particle_system.name + '</div>');
-        //     });
-        // }
+        this.game_model.particle_systems.each(particle_system => {
+            var div = document.createElement('div');
+            div.classList.add('hx-sidebar-section');
+            div.innerHTML = particle_system.name;
+            div.classList.add('select_particle_system');
+            div.dataset.id = particle_system.id;
+            this.element.querySelector('#particle_system_selector').appendChild(div);
+        });
+
+        this.game_model.sprite_sheets.each(sprite_sheet => {
+            var div = document.createElement('div');
+            div.classList.add('hx-sidebar-section');
+            div.innerHTML = sprite_sheet.name;
+            div.classList.add('select_sprite_sheet');
+            div.dataset.id = sprite_sheet.id;
+            this.element.querySelector('#sprite_sheet_selector').appendChild(div);
+        });
     }
 }
 

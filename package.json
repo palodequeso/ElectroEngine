@@ -13,6 +13,7 @@
     "easystarjs": "^0.2.3",
     "exo": "git://github.com/palodequeso/exo.git",
     "font-awesome": "^4.5.0",
+    "fs-extra": "^0.30.0",
     "gl-matrix": "^2.3.2",
     "handlebars": "^4.0.5",
     "hexagon-js": "^1.0.4",

@@ -5,6 +5,7 @@ const {dialog} = require('electron').remote;
 var fs = require('fs');
 var path = require('path');
 var sizeOf = require('image-size');
+var fse = require('fs-extra');
 
 var Handlebars = require('handlebars');
 var View = require('exo').View;
@@ -13,7 +14,9 @@ var edit_sprite_sheet_tmpl = fs.readFileSync(path.join(__dirname, '/../tmpl/edit
 class SpriteSheetEditor extends View {
     get events() {
         return {
-            'click #save_sprite_sheet_button': this.save.bind(this)
+            'click #save_sprite_sheet_button': this.save.bind(this),
+            'change .sprite_sheet_tile_width': this.adjust_tile_size.bind(this),
+            'change .sprite_sheet_tile_height': this.adjust_tile_size.bind(this)
         };
     }
     constructor(options) {
@@ -51,10 +54,35 @@ class SpriteSheetEditor extends View {
         this.render();
     }
     save() {
-        //
+        // NOTE: Path, Width and Height should not be changable!
+        var new_id = this.element.querySelector('.sprite_sheet_id').value;
+        this.model.sheet_path = this.element.querySelector('.sprite_sheet_path').value;
+        this.model.name = this.element.querySelector('.sprite_sheet_name').value;
+        this.model.width = this.element.querySelector('.sprite_sheet_width').value;
+        this.model.height = this.element.querySelector('.sprite_sheet_height').value;
+        this.model.tile_width = this.element.querySelector('.sprite_sheet_tile_width').value;
+        this.model.tile_height = this.element.querySelector('.sprite_sheet_tile_height').value;
+
+        var current_path = path.normalize(path.join(this.game.path, 'sprite_sheets',
+                                                    this.model.id.toString() + '.json'));
+        var new_path = path.normalize(path.join(this.game.path, 'sprite_sheets',
+                                                new_id + '.json'));
+        this.model.id = new_id;
+
+        if (current_path !== new_path) {
+            fse.copySync(current_path, new_path);
+        }
+
+        fs.writeFileSync(new_path, this.model.serialize());
+    }
+    adjust_tile_size() {
+        this.model.tile_width = parseInt(this.element.querySelector('.sprite_sheet_tile_width').value, 10);
+        this.model.tile_height = parseInt(this.element.querySelector('.sprite_sheet_tile_height').value, 10);
+        this.render_grid();
     }
     render_grid() {
         console.log(this.model);
+        this.element.querySelector('#sprite_sheet_grid').innerHTML = '';
         var tiles_x = Math.floor(this.model.width / this.model.tile_width);
         var tiles_y = Math.floor(this.model.height / this.model.tile_height);
 
@@ -68,8 +96,8 @@ class SpriteSheetEditor extends View {
                 div.classList.add('grid_cell');
                 div.style.left = x + 'px';
                 div.style.top = y + 'px';
-                div.style.width = (this.tile_width - 2) + 'px';
-                div.style.height = (this.tile_height - 2) + 'px';
+                div.style.width = (this.model.tile_width - 2) + 'px';
+                div.style.height = (this.model.tile_height - 2) + 'px';
                 this.element.querySelector('#sprite_sheet_grid').appendChild(div);
             }
         }

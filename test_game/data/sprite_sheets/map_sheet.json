@@ -1,9 +1,9 @@
 {
-    "id": "map_sheet",
     "name": "map_sheet",
     "path": "map_sheet.png",
     "width": 128,
     "height": 128,
     "tile_width": 32,
-    "tile_height": 32
+    "tile_height": 32,
+    "id": "map_sheet"
 }

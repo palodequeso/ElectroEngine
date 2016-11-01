@@ -16,7 +16,8 @@ class SpriteSheetEditor extends View {
         return {
             'click #save_sprite_sheet_button': this.save.bind(this),
             'change .sprite_sheet_tile_width': this.adjust_tile_size.bind(this),
-            'change .sprite_sheet_tile_height': this.adjust_tile_size.bind(this)
+            'change .sprite_sheet_tile_height': this.adjust_tile_size.bind(this),
+            'change .sprite_sheet_path': this.adjust_path.bind(this)
         };
     }
     constructor(options) {
@@ -53,15 +54,18 @@ class SpriteSheetEditor extends View {
 
         this.render();
     }
-    save() {
+    save(event) {
+        event.preventDefault();
+        event.stopPropagation();
+
         // NOTE: Path, Width and Height should not be changable!
         var new_id = this.element.querySelector('.sprite_sheet_id').value;
         this.model.sheet_path = this.element.querySelector('.sprite_sheet_path').value;
         this.model.name = this.element.querySelector('.sprite_sheet_name').value;
-        this.model.width = this.element.querySelector('.sprite_sheet_width').value;
-        this.model.height = this.element.querySelector('.sprite_sheet_height').value;
-        this.model.tile_width = this.element.querySelector('.sprite_sheet_tile_width').value;
-        this.model.tile_height = this.element.querySelector('.sprite_sheet_tile_height').value;
+        this.model.width = parseInt(this.element.querySelector('.sprite_sheet_width').value, 10);
+        this.model.height = parseInt(this.element.querySelector('.sprite_sheet_height').value, 10);
+        this.model.tile_width = parseInt(this.element.querySelector('.sprite_sheet_tile_width').value, 10);
+        this.model.tile_height = parseInt(this.element.querySelector('.sprite_sheet_tile_height').value, 10);
 
         var current_path = path.normalize(path.join(this.game.path, 'sprite_sheets',
                                                     this.model.id.toString() + '.json'));
@@ -73,12 +77,20 @@ class SpriteSheetEditor extends View {
             fse.copySync(current_path, new_path);
         }
 
-        fs.writeFileSync(new_path, this.model.serialize());
+        var out = this.model.serialize();
+        delete out.sprites;
+        out = JSON.stringify(out, null, 4);
+        fs.writeFileSync(new_path, out);
     }
     adjust_tile_size() {
         this.model.tile_width = parseInt(this.element.querySelector('.sprite_sheet_tile_width').value, 10);
         this.model.tile_height = parseInt(this.element.querySelector('.sprite_sheet_tile_height').value, 10);
         this.render_grid();
+    }
+    adjust_path() {
+        this.model.path = this.element.querySelector('.sprite_sheet_path').value;
+        this.original_path = path.join(this.game.path, 'images', 'sprite_sheets', this.model.path);
+        this.render();
     }
     render_grid() {
         console.log(this.model);

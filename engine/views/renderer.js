@@ -1,5 +1,6 @@
 "use strict";
 
+var path = require('path');
 var View = require('exo').View;
 var glmatrix = require("gl-matrix");
 
@@ -98,12 +99,16 @@ class Renderer extends View {
         var images_loaded_statuses = {};
         var image_loaded_promises = [];
 
+        var images_path = path.join(__dirname, '../../', this.model.path, 'images');
+        var sprite_sheets_path = path.normalize(path.join(images_path, 'sprite_sheets'));
+        var particles_path = path.normalize(path.join(images_path, 'particles'));
+
         this.model.maps.each((map) => {
             map.sprite_sheets.each((sprite_sheet) => {
                 var image_src = sprite_sheet.path;
                 if (!images_loaded_statuses.hasOwnProperty(image_src)) {
                     image_loaded_promises.push(new Promise((resolve) => {
-                        this.load_texture('data/images/sprite_sheets/' + image_src, (texture) => {
+                        this.load_texture(path.join(sprite_sheets_path, image_src), (texture) => {
                             resolve({texture: texture, image_src: image_src});
                         });
                     }));
@@ -116,7 +121,7 @@ class Renderer extends View {
             var image_src = sprite_sheet.path;
             if (!images_loaded_statuses.hasOwnProperty(image_src)) {
                 image_loaded_promises.push(new Promise((resolve) => {
-                    this.load_texture('data/images/sprite_sheets/' + image_src, (texture) => {
+                    this.load_texture(path.join(sprite_sheets_path, image_src), (texture) => {
                         resolve({texture: texture, image_src: image_src});
                     });
                 }));
@@ -128,7 +133,8 @@ class Renderer extends View {
             var image_src = particle_system.image;
             if (!images_loaded_statuses.hasOwnProperty(image_src)) {
                 image_loaded_promises.push(new Promise((resolve) => {
-                    this.load_texture('data/images/particles/' + image_src, (texture) => {
+                    console.log(path.join(particles_path, image_src));
+                    this.load_texture(path.join(particles_path, image_src), (texture) => {
                         resolve({texture: texture, image_src: image_src});
                     });
                 }));

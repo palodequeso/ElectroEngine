@@ -13,7 +13,7 @@ class Graphics extends System {
         super(data);
     }
     update(time_delta, entities) {
-        entities.each((entity, index) => {
+        entities.each(entity => {
             var components = entity.components.get_by_index('type', 'character');
             if (components) {
                 components.forEach((component) => {
@@ -21,14 +21,14 @@ class Graphics extends System {
                 });
             }
 
-            var components = entity.components.get_by_index('type', 'sprite');
+            components = entity.components.get_by_index('type', 'sprite');
             if (components) {
                 components.forEach((component) => {
                     component.update(time_delta);
                 });
             }
 
-            var components = entity.components.get_by_index('type', 'particle_system');
+            components = entity.components.get_by_index('type', 'particle_system');
             if (components) {
                 components.forEach((component) => {
                     component.update(time_delta);

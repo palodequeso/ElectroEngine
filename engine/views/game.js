@@ -1,7 +1,6 @@
 "use strict";
 
 var $ = require("jquery");
-var glmatrix = require("gl-matrix");
 var View = require('exo').View;
 var Timer = require('exo').Timer;
 var Renderer = require('./renderer.js');

@@ -118,6 +118,15 @@ class App extends View {
     select_particle_system(event) {
         var id = event.target.dataset.id;
         var particle_system = this.game_model.particle_systems.get(id);
+        var view = new ParticleSystemEditor({
+            model: particle_system,
+            game: this.game_model
+        });
+
+        this.element.querySelector('.content').innerHTML = '';
+        this.element.querySelector('.content').appendChild(view.element);
+
+        view.render();
     }
     create_sprite_sheet() {
         var model = new SpriteSheet();

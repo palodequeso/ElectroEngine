@@ -61,8 +61,8 @@ class ParticleSystemEditor extends View {
     get_values() {
         var start_color_begin = this.element.querySelector('#start_color_range_begin').value.split(',');
         var start_color_end = this.element.querySelector('#start_color_range_end').value.split(',');
-        var end_color_begin = this.element.querySelector('#start_color_range_begin').value.split(',');
-        var end_color_end = this.element.querySelector('#start_color_range_end').value.split(',');
+        var end_color_begin = this.element.querySelector('#end_color_range_begin').value.split(',');
+        var end_color_end = this.element.querySelector('#end_color_range_end').value.split(',');
 
         start_color_begin[0] = parseFloat(start_color_begin[0]);
         start_color_begin[1] = parseFloat(start_color_begin[1]);
@@ -78,6 +78,7 @@ class ParticleSystemEditor extends View {
         end_color_end[2] = parseFloat(end_color_end[2]);
 
         return {
+            id: this.element.querySelector('.particle_system_id').value,
             name: this.element.querySelector('.particle_system_name').value,
             emission_rate: parseInt(this.element.querySelector('.particle_system_emission_rate').value, 10),
             particle_count: parseInt(this.element.querySelector('.particle_system_particle_count').value, 10),
@@ -128,10 +129,28 @@ class ParticleSystemEditor extends View {
     save(event) {
         event.preventDefault();
         event.stopPropagation();
+
+        var values = this.get_values();
+        var new_id = values.id;
+        this.model.set(values);
+
+        var current_path = path.normalize(path.join(this.game.path, 'particle_systems',
+                                                    this.model.id.toString() + '.json'));
+        var new_path = path.normalize(path.join(this.game.path, 'particle_systems',
+                                                new_id + '.json'));
+        this.model.id = new_id;
+
+        if (current_path !== new_path) {
+            fse.copySync(current_path, new_path);
+        }
+
+        var out = this.model.serialize();
+        delete out.sprites;
+        out = JSON.stringify(out, null, 4);
+        fs.writeFileSync(new_path, out);
     }
     input_changed() {
         var values = this.get_values();
-        console.log("input_changed: ", values);
         this.model.set(values);
     }
     run() {

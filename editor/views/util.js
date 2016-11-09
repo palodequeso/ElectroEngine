@@ -6,6 +6,7 @@ var path = require('path');
 var Handlebars = require('handlebars');
 var View = require('exo').View;
 var sidebar_tmpl = fs.readFileSync(path.join(__dirname, '/../tmpl/sidebar.html'), 'utf8');
+var color_picker_tmpl = fs.readFileSync(path.join(__dirname, '/../tmpl/color_picker.html'), 'utf8');
 
 class Sidebar extends View {
     get class_name() {
@@ -59,6 +60,21 @@ class Sidebar extends View {
     }
 }
 
+class ColorPicker extends View {
+    get class_name() {
+        return 'color_picker';
+    }
+    constructor(options) {
+        super(options);
+
+        this.template = Handlebars.compile(color_picker_tmpl);
+    }
+    render() {
+        this.element.innerHTML = this.template({});
+    }
+}
+
 module.exports = {
-    Sidebar: Sidebar
+    Sidebar: Sidebar,
+    ColorPicker: ColorPicker
 };

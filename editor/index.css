@@ -164,3 +164,20 @@
     height: 30px;
     border: 1px dashed black;
 }
+
+#particle_system_editor_container input {
+    width: 50px;
+    min-width: 50px;
+}
+
+#particle_system_editor_container .hx-section {
+    display: inline-block;
+}
+
+#particle_system_editor_container .hx-section:first-child {
+    width: 656px;
+}
+
+#particle_system_editor_container .hx-section:last-child {
+    width: 300px;
+}

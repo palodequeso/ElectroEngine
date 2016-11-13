@@ -1,0 +1,33 @@
+<div id="character_editor_container">
+    <div class="hx-layout hx-group">
+        <div class="hx-section">
+            <div class="particle_system_canvas_container">
+            </div>
+        </div>
+        <div class="hx-section">
+            <form class="hx-form">
+                <div>
+                    <label>ID</label>
+                    <input type="text" value="{{id}}" class="character_id" />
+                </div>
+                <div>
+                    <label>Name</label>
+                    <input type="text" value="{{name}}" class="character_name" />
+                </div>
+                <div>
+                    <label>Sprite ID</label>
+                    <input type="text" value="{{sprite.id}}" class="character_sprite_id" />
+                </div>
+                <div>
+                    <label>Type</label>
+                    <input type="text" value="{{type}}" class="character_type" />
+                </div>
+                <div>
+                    <label>Position Offset</label>
+                    <input type="text" value="{{position_offset.[0]}}" class="character_position_offset_x" />
+                    <input type="text" value="{{position_offset.[1]}}" class="character_position_offset_y" />
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

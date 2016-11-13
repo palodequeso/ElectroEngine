@@ -14,6 +14,9 @@ var MapEditor = require('./map.js');
 var SpriteSheet = require('../../engine/models/graphics/sprite_sheet.js');
 var SpriteSheetEditor = require('./sprite_sheet.js');
 
+var Sprite = require('../../engine/models/graphics/sprite.js');
+var SpriteEditor = require('./sprite.js');
+
 var Character = require('../../engine/models/characters/character.js');
 var CharacterEditor = require('./character.js');
 
@@ -32,10 +35,12 @@ class App extends View {
             'click #create_sprite_sheet_button': this.create_sprite_sheet.bind(this),
             'click #create_particle_system_button': this.create_particle_system.bind(this),
             'click #create_character_button': this.create_character.bind(this),
+            'click #create_sprite': this.create_sprite.bind(this),
             'click .select_map': this.select_map.bind(this),
             'click .select_character': this.select_character.bind(this),
             'click .select_particle_system': this.select_particle_system.bind(this),
-            'click .select_sprite_sheet': this.select_sprite_sheet.bind(this)
+            'click .select_sprite_sheet': this.select_sprite_sheet.bind(this),
+            'click .select_sprite': this.select_sprite.bind(this)
         };
     }
     constructor(options) {
@@ -107,19 +112,74 @@ class App extends View {
             model: character,
             game: this.game_model
         });
+
+        this.element.querySelector('.content').innerHTML = '';
+        this.element.querySelector('.content').appendChild(view.element);
+
+        view.render();
     }
     select_character(event) {
         var id = event.target.dataset.id;
         var character = this.game_model.characters.get(id);
+        var view = new CharacterEditor({
+            model: character,
+            game: this.game_model
+        });
+
+        this.element.querySelector('.content').innerHTML = '';
+        this.element.querySelector('.content').appendChild(view.element);
+
+        view.render();
     }
     create_particle_system() {
-        //
+        var particle_system = new ParticleSystem({
+            id: "new_particle_system",
+            name: "new_particle_system",
+            image: 'particle.png'
+        });
+        var view = new ParticleSystemEditor({
+            model: particle_system,
+            game: this.game_model
+        });
+
+        this.element.querySelector('.content').innerHTML = '';
+        this.element.querySelector('.content').appendChild(view.element);
+
+        view.render();
     }
     select_particle_system(event) {
         var id = event.target.dataset.id;
         var particle_system = this.game_model.particle_systems.get(id);
         var view = new ParticleSystemEditor({
             model: particle_system,
+            game: this.game_model
+        });
+
+        this.element.querySelector('.content').innerHTML = '';
+        this.element.querySelector('.content').appendChild(view.element);
+
+        view.render();
+    }
+    create_sprite() {
+        var model = new Sprite();
+        var view = new SpriteEditor({
+            model: model,
+            game: this.game_model
+        });
+
+        this.game_model.sprites.add(model);
+
+        this.element.querySelector(".content").innerHTML = '';
+        this.element.querySelector(".content").appendChild(view.element);
+
+        view.render();
+    }
+    select_sprite(event) {
+        var id = event.target.dataset.id;
+        var sprite = this.game_model.sprites.get(id);
+        console.log(sprite, this.game_model);
+        var view = new SpriteEditor({
+            model: sprite,
             game: this.game_model
         });
 
@@ -186,6 +246,15 @@ class App extends View {
             div.classList.add('select_particle_system');
             div.dataset.id = particle_system.id;
             this.element.querySelector('#particle_system_selector').appendChild(div);
+        });
+
+        this.game_model.sprites.each(sprite => {
+            var div = document.createElement('div');
+            div.classList.add('hx-sidebar-section');
+            div.innerHTML = sprite.name;
+            div.classList.add('select_sprite');
+            div.dataset.id = sprite.id;
+            this.element.querySelector('#sprite_selector').appendChild(div);
         });
 
         this.game_model.sprite_sheets.each(sprite_sheet => {

@@ -7,19 +7,19 @@ class ParticleSystem extends Model {
         return {
             name: '',
             system_position: [0, 0],
-            emission_rate: 0.0,
+            emission_rate: 1.0,
             position_range: [[0, 0], [0, 0]],
-            velocity_range: [[0, 0], [0, 0]],
-            life_range: [0, 0],
-            decay_range: [0, 0],
-            image: null,
-            fade_range: [0, 0],
-            width_range: [0, 0],
-            height_range: [0, 0],
+            velocity_range: [[-10, 10], [0, 100]],
+            life_range: [0, 1],
+            decay_range: [0.1, 1],
+            image: 'particle.png',
+            fade_range: [0, 0.25],
+            width_range: [32, 32],
+            height_range: [32, 32],
             modifier: null,
-            particle_count: 0,
-            start_color_range: [[0, 0, 0], [0, 0, 0]],
-            end_color_range: [[0, 0, 0], [0, 0, 0]]
+            particle_count: 100,
+            start_color_range: [[1, 1, 1], [1, 1, 1]],
+            end_color_range: [[1, 1, 1], [1, 1, 1]]
         };
     }
     constructor(data) {

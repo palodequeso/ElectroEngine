@@ -23,9 +23,7 @@ class SpriteEditor extends View {
     constructor(options) {
         super(options);
         this.game = options.game;
-        this.sprites = options.sprites;
-        console.log(this.sprites[0]);
-        this.original_path = path.join(this.game.path, 'images', 'sprite_sheets', this.sprites[0].sprite_sheet.path);
+        this.original_path = path.join(this.game.path, 'images', 'sprite_sheets', this.model.sprite_sheet.path);
         this.template = Handlebars.compile(edit_sprite_tmpl);
     }
     select_sprite_sheet() {
@@ -123,11 +121,11 @@ class SpriteEditor extends View {
         console.log("Render Data: ", render_data);
         this.element.innerHTML = this.template(render_data);
 
-        if (this.model.path === "") {
-            this.select_sprite_sheet();
-        } else {
-            this.render_grid();
-        }
+        // if (this.model.path === "") {
+        //     this.select_sprite_sheet();
+        // } else {
+        //     this.render_grid();
+        // }
     }
 }
 

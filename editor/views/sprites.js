@@ -40,6 +40,7 @@ class SpritesEditor extends View {
         console.log("Select Sprite: ", sprite_id, this.sprites);
         this.current_sprite = this.sprites.get(sprite_id);
         console.log("Current Sprite: ", this.current_sprite);
+        this.render();
     }
     save(event) {
         event.preventDefault();
@@ -48,14 +49,26 @@ class SpritesEditor extends View {
         // TODO
     }
     render() {
-        var render_data = {
-            sprite_sheet: this.sprite_sheet,
-            sprites: this.sprites.serialize()
-        };
-        render_data.original_path = this.original_path;
-        render_data.game_path = this.game.path;
-        console.log("Render Data: ", render_data);
-        this.element.innerHTML = this.template(render_data);
+        if (this.current_sprite === null) {
+            var render_data = {
+                sprite_sheet: this.sprite_sheet,
+                sprites: this.sprites.serialize()
+            };
+            render_data.original_path = this.original_path;
+            render_data.game_path = this.game.path;
+            console.log("Render Data: ", render_data);
+            this.element.innerHTML = this.template(render_data);
+        } else {
+            this.element.innerHTML = `<div>
+                ${this.current_sprite.id}
+            </div>`;
+            var view = new SpriteEditor({
+                model: this.current_sprite,
+                game: this.game
+            });
+            view.render();
+            this.element.appendChild(view.element);
+        }
     }
 }
 

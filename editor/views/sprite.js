@@ -9,7 +9,7 @@ var fse = require('fs-extra');
 
 var Handlebars = require('handlebars');
 var View = require('exo').View;
-var edit_sprite_sheet_tmpl = fs.readFileSync(path.join(__dirname, '/../tmpl/edit_sprite_sheet.html'), 'utf8');
+var edit_sprite_tmpl = fs.readFileSync(path.join(__dirname, '/../tmpl/edit_sprite.html'), 'utf8');
 
 class SpriteEditor extends View {
     get events() {
@@ -23,8 +23,10 @@ class SpriteEditor extends View {
     constructor(options) {
         super(options);
         this.game = options.game;
-        this.original_path = path.join(this.game.path, 'images', 'sprite_sheets', this.model.path);
-        this.template = Handlebars.compile(edit_sprite_sheet_tmpl);
+        this.sprites = options.sprites;
+        console.log(this.sprites[0]);
+        this.original_path = path.join(this.game.path, 'images', 'sprite_sheets', this.sprites[0].sprite_sheet.path);
+        this.template = Handlebars.compile(edit_sprite_tmpl);
     }
     select_sprite_sheet() {
         var choice = dialog.showOpenDialog({properties: ['openFile'], filters: [

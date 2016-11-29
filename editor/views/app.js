@@ -16,6 +16,7 @@ var SpriteSheetEditor = require('./sprite_sheet.js');
 
 var Sprite = require('../../engine/models/graphics/sprite.js');
 var SpriteEditor = require('./sprite.js');
+var SpritesEditor = require('./sprites.js');
 
 var Character = require('../../engine/models/characters/character.js');
 var CharacterEditor = require('./character.js');
@@ -70,12 +71,13 @@ class App extends View {
         this.element.querySelector(".content").innerHTML = '';
         this.element.querySelector(".content").appendChild(gv.element);
     }
-    load_game() {
-        var choice = dialog.showOpenDialog({properties: ['openDirectory']});
-        console.log("Game Folder: ", choice);
-        var game_loader = new gameio.GameLoader(choice[0], game_model);
-        // var result = gameio.load(choice[0], game_model);
-        console.log(choice[0], game_loader.game);
+    load_game(path) {
+        if (path === undefined) {
+            var choice = dialog.showOpenDialog({properties: ['openDirectory']});
+            path = choice[0];
+        }
+        var game_loader = new gameio.GameLoader(path, game_model);
+        console.log(path, game_loader.game);
         this.game_model = game_loader.game;
         this.render();
     }
@@ -176,10 +178,12 @@ class App extends View {
     }
     select_sprite(event) {
         var id = event.target.dataset.id;
-        var sprite = this.game_model.sprites.get(id);
-        console.log(sprite, this.game_model);
-        var view = new SpriteEditor({
-            model: sprite,
+        var sprites = this.sprite_sheet_sprites[id];
+        // var sprite = this.game_model.sprites.get(id);
+        console.log(sprites, this.game_model);
+        var view = new SpritesEditor({
+            sprites: sprites,
+            sprite_sheet: sprites[0].sprite_sheet,
             game: this.game_model
         });
 
@@ -218,6 +222,9 @@ class App extends View {
     }
     render() {
         if (this.game_model === null) {
+            setTimeout(() => {
+                this.load_game("C:\\Users\\palod\\Projects\\ElectroEngine\\test_game\\data");
+            }, 250);
             return;
         }
 
@@ -248,14 +255,27 @@ class App extends View {
             this.element.querySelector('#particle_system_selector').appendChild(div);
         });
 
+        this.sprite_sheet_sprites = {};
         this.game_model.sprites.each(sprite => {
-            var div = document.createElement('div');
-            div.classList.add('hx-sidebar-section');
-            div.innerHTML = sprite.name;
-            div.classList.add('select_sprite');
-            div.dataset.id = sprite.id;
-            this.element.querySelector('#sprite_selector').appendChild(div);
+            if (!this.sprite_sheet_sprites.hasOwnProperty(sprite.sprite_sheet_id)) {
+                this.sprite_sheet_sprites[sprite.sprite_sheet_id] = [];
+                var div = document.createElement('div');
+                div.classList.add('hx-sidebar-section');
+                div.innerHTML = sprite.sprite_sheet_id;
+                div.classList.add('select_sprite');
+                div.dataset.id = sprite.sprite_sheet_id;
+                this.element.querySelector('#sprite_selector').appendChild(div);
+            }
+            this.sprite_sheet_sprites[sprite.sprite_sheet_id].push(sprite);
         });
+        // this.game_model.sprites.each(sprite => {
+        //     var div = document.createElement('div');
+        //     div.classList.add('hx-sidebar-section');
+        //     div.innerHTML = sprite.name;
+        //     div.classList.add('select_sprite');
+        //     div.dataset.id = sprite.id;
+        //     this.element.querySelector('#sprite_selector').appendChild(div);
+        // });
 
         this.game_model.sprite_sheets.each(sprite_sheet => {
             var div = document.createElement('div');

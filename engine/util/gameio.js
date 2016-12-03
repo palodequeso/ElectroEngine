@@ -175,6 +175,7 @@ class GameLoader {
     load_game_data() {
         var game_json = fs.readFileSync(path.normalize(this.folder_path + '/game.json'), 'utf-8');
         this.game_data = JSON.parse(game_json);
+        this.game.id = this.game_data.id;
         this.game.name = this.game_data.name;
         this.game.path = this.folder_path;
     }

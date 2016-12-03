@@ -1,0 +1,25 @@
+<div id="sprite_sheet_editor_container">
+    <div class="hx-layout hx-group hx-horizontal">
+        <div class="hx-section">
+            <div>
+                {{#if original_path}}
+                    <img src="{{original_path}}" />
+                {{else}}
+                    <!-- <img src="file://{{game_path}}/images/sprite_sheets/{{path}}" /> -->
+                {{/if}}
+                <div id="sprite_sheet_grid"></div>
+            </div>
+        </div>
+        <div class="hx-section">
+            Animations:<br>
+            <div class="">
+                {{#each animations}}
+                <div class="sprite_animation_selector" data-id="{{@key}}">
+                    <div class="animation_preview"></div>
+                    {{@key}}
+                </div>
+                {{/each}}
+            </div>
+        </div>
+    </div>
+</div>

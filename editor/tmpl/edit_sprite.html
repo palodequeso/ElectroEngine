@@ -11,12 +11,16 @@
             </div>
         </div>
         <div class="hx-section">
-            Animations:<br>
+            <div>
+                Animations:
+                <button class="hx-btn add_adnimation">Add</button>
+            </div>
             <div class="">
                 {{#each animations}}
                 <div class="sprite_animation_selector" data-id="{{@key}}">
                     <div class="animation_preview"></div>
                     {{@key}}
+                    <button class="hx-btn hx-negative delete_animation"><i class="fa fa-trash"></i></button>
                 </div>
                 {{/each}}
             </div>

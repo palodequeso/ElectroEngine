@@ -181,3 +181,8 @@
 #particle_system_editor_container .hx-section:last-child {
     width: 300px;
 }
+
+.sprite_animation_selector:hover {
+    background-color: #666666;
+    cursor: pointer;
+}

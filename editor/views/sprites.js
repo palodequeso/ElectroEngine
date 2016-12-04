@@ -59,9 +59,10 @@ class SpritesEditor extends View {
             console.log("Render Data: ", render_data);
             this.element.innerHTML = this.template(render_data);
         } else {
-            this.element.innerHTML = `<div>
-                ${this.current_sprite.id}
-            </div>`;
+            this.element.innerHTML = '';
+            // this.element.innerHTML = `<div>
+            //     ${this.current_sprite.id}
+            // </div>`;
             var view = new SpriteEditor({
                 model: this.current_sprite,
                 game: this.game

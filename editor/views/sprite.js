@@ -1,11 +1,11 @@
 'use strict';
 
-const {dialog} = require('electron').remote;
+// const {dialog} = require('electron').remote;
 
 var fs = require('fs');
 var path = require('path');
-var sizeOf = require('image-size');
-var fse = require('fs-extra');
+// var sizeOf = require('image-size');
+// var fse = require('fs-extra');
 
 var Handlebars = require('handlebars');
 var View = require('exo').View;
@@ -35,6 +35,15 @@ class SpriteAnimation extends View {
             this.current_frame_index = 0;
         }
         setTimeout(this.render.bind(this), frame.duration);
+    }
+}
+
+class SpriteAnimationEditor extends View {
+    constructor(options) {
+        super(options);
+    }
+    render() {
+        //
     }
 }
 
@@ -86,6 +95,9 @@ class SpriteEditor extends View {
     select_animation(event) {
         var id = event.target.dataset.id;
         console.log("Select Animation: ", id);
+        var animation = this.model.animations[id];
+        console.log("Animation: ", animation);
+        // {time: 800, frames: [{duration: 100, index 0}]}
     }
     render() {
         var render_data = this.model.serialize();

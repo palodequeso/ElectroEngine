@@ -156,6 +156,12 @@
     top: 8px;
 }
 
+#animation_selections {
+    padding: 8px;
+    position: absolute;;
+    top: 8px;
+}
+
 .grid_cell {
     position: absolute;
     left: 0;

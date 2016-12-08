@@ -200,3 +200,11 @@
 .hx-tree-node-parent {
     background: none !important;
 }
+
+.hx-tree-node-parent .hx-tree-node-parent-icon {
+    background: none !important;
+}
+
+.hx-tree-node-children {
+    border-left-color: none !important;
+}

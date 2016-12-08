@@ -16,7 +16,7 @@ var SpriteSheetEditor = require('./sprite_sheet.js');
 
 var Sprite = require('../../engine/models/graphics/sprite.js');
 var SpriteEditor = require('./sprite.js');
-var SpritesEditor = require('./sprites.js');
+var AnimationEditor = require('./animation.js');
 
 var Character = require('../../engine/models/characters/character.js');
 var CharacterEditor = require('./character.js');
@@ -41,7 +41,8 @@ class App extends View {
             'click .select_character': this.select_character.bind(this),
             'click .select_particle_system': this.select_particle_system.bind(this),
             'click .select_sprite_sheet': this.select_sprite_sheet.bind(this),
-            'click .select_sprite': this.select_sprite.bind(this)
+            'click .select_sprite': this.select_sprite.bind(this),
+            'click .select_sprite_animation': this.select_sprite_animation.bind(this)
         };
     }
     constructor(options) {
@@ -162,36 +163,6 @@ class App extends View {
 
         view.render();
     }
-    create_sprite() {
-        var model = new Sprite();
-        var view = new SpriteEditor({
-            model: model,
-            game: this.game_model
-        });
-
-        this.game_model.sprites.add(model);
-
-        this.element.querySelector(".content").innerHTML = '';
-        this.element.querySelector(".content").appendChild(view.element);
-
-        view.render();
-    }
-    select_sprite(event) {
-        var id = event.target.dataset.id;
-        var sprites = this.sprite_sheet_sprites[id];
-        // var sprite = this.game_model.sprites.get(id);
-        console.log(sprites, this.game_model);
-        var view = new SpritesEditor({
-            sprites: sprites,
-            sprite_sheet: sprites[0].sprite_sheet,
-            game: this.game_model
-        });
-
-        this.element.querySelector('.content').innerHTML = '';
-        this.element.querySelector('.content').appendChild(view.element);
-
-        view.render();
-    }
     create_sprite_sheet() {
         var model = new SpriteSheet();
         var view = new SpriteSheetEditor({
@@ -219,6 +190,53 @@ class App extends View {
         this.element.querySelector('.content').appendChild(view.element);
 
         view.render();
+    }
+    create_sprite() {
+        var model = new Sprite();
+        var view = new SpriteEditor({
+            model: model,
+            game: this.game_model
+        });
+
+        this.game_model.sprites.add(model);
+
+        this.element.querySelector(".content").innerHTML = '';
+        this.element.querySelector(".content").appendChild(view.element);
+
+        view.render();
+    }
+    select_sprite(event) {
+        var id = event.target.dataset.id;
+        var sprite = this.game_model.sprites.get(id);
+
+        var view = new SpriteEditor({
+            model: sprite,
+            game: this.game_model
+        });
+
+        this.element.querySelector('.content').innerHTML = '';
+        this.element.querySelector('.content').appendChild(view.element);
+
+        view.render();
+    }
+    select_sprite_animation(event) {
+        var id = event.target.dataset.id;
+        var sprite_id = event.target.dataset['sprite-id'];
+        var sprite = this.game_model.sprites.get(sprite_id);
+
+        var view = new AnimationEditor({
+            model: sprite,
+            animation_id: id,
+            game: this.game_model
+        });
+
+        this.element.querySelector('.content').innerHTML = '';
+        this.element.querySelector('.content').appendChild(view.element);
+
+        view.render();
+    }
+    create_sprite_animation(event) {
+        //
     }
     render() {
         if (this.game_model === null) {
@@ -277,7 +295,8 @@ class App extends View {
                 Object.keys(sprite.animations).forEach(animation_id => {
                     sprite_children.push({
                         type: 'sprite_animation',
-                        id: animation_id
+                        id: animation_id,
+                        sprite_id: sprite.id
                     });
                 });
 
@@ -299,20 +318,30 @@ class App extends View {
         var tree = new hx.Tree('#game_navigation', {
             renderer: function(elem, data) {
                 console.log(elem);
+                var icon;
                 if (data.type === 'category') {
                     hx.select(elem).html(data.name);
                 } else if (data.type === 'map') {
-                    hx.select(elem).html(data.name).attr('class', 'select_map').attr('data-id', data.id);
+                    icon = '<i class="fa fa-map"></i> ';
+                    hx.select(elem).html(icon + data.name).attr('class', 'select_map').attr('data-id', data.id);
                 } else if (data.type === 'character') {
-                    hx.select(elem).html(data.name).attr('class', 'select_character').attr('data-id', data.id);
+                    icon = '<i class="fa fa-user"></i> ';
+                    hx.select(elem).html(icon + data.name).attr('class', 'select_character').attr('data-id', data.id);
                 } else if (data.type === 'particle_system') {
-                    hx.select(elem).html(data.name).attr('class', 'select_particle_system').attr('data-id', data.id);
+                    icon = '<i class="fa fa-fire"></i> ';
+                    hx.select(elem).html(icon + data.name).attr('class', 'select_particle_system')
+                        .attr('data-id', data.id);
                 } else if (data.type === 'sprite_sheet') {
-                    hx.select(elem).html(data.name).attr('class', 'select_sprite_sheet').attr('data-id', data.id);
+                    icon = '<i class="fa fa-object-group"></i> ';
+                    hx.select(elem).html(icon + data.name).attr('class', 'select_sprite_sheet')
+                        .attr('data-id', data.id);
                 } else if (data.type === 'sprite') {
-                    hx.select(elem).html(data.id).attr('class', 'select_sprite').attr('data-id', data.id);
+                    icon = '<i class="fa fa-puzzle-piece"></i> ';
+                    hx.select(elem).html(icon + data.id).attr('class', 'select_sprite').attr('data-id', data.id);
                 } else if (data.type === 'sprite_animation') {
-                    hx.select(elem).html(data.id).attr('class', 'select_sprite_animation').attr('data-id', data.id);
+                    icon = '<i class="fa fa-motorcycle"></i> ';
+                    hx.select(elem).html(icon + data.id).attr('class', 'select_sprite_animation')
+                        .attr('data-id', data.id).attr('data-sprite-id', data.sprite_id);
                 }
             },
             items: items

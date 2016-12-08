@@ -228,62 +228,94 @@ class App extends View {
             return;
         }
 
+        var items = [
+            {name: 'Maps', type: 'category', children: []},
+            {name: 'Characters', type: 'category', children: []},
+            {name: 'Particle Systems', type: 'category', children: []},
+            {name: 'Sprites', type: 'category', children: []}
+        ];
+
         this.game_model.maps.each(map => {
-            var div = document.createElement('div');
-            div.classList.add('hx-sidebar-section');
-            div.innerHTML = map.name;
-            div.classList.add('select_map');
-            div.dataset.id = map.id;
-            this.element.querySelector('#map_selector').appendChild(div);
+            items[0].children.push({
+                type: 'map',
+                name: map.name,
+                id: map.id
+            });
         });
 
         this.game_model.characters.each(character => {
-            var div = document.createElement('div');
-            div.classList.add('hx-sidebar-section');
-            div.innerHTML = character.name;
-            div.classList.add('select_character');
-            div.dataset.id = character.id;
-            this.element.querySelector('#character_selector').appendChild(div);
+            items[1].children.push({
+                type: 'character',
+                name: character.name,
+                id: character.id
+            });
         });
 
         this.game_model.particle_systems.each(particle_system => {
-            var div = document.createElement('div');
-            div.classList.add('hx-sidebar-section');
-            div.innerHTML = particle_system.name;
-            div.classList.add('select_particle_system');
-            div.dataset.id = particle_system.id;
-            this.element.querySelector('#particle_system_selector').appendChild(div);
+            items[2].children.push({
+                type: 'particle_system',
+                name: particle_system.name,
+                id: particle_system.id
+            });
         });
 
         this.sprite_sheet_sprites = {};
         this.game_model.sprites.each(sprite => {
             if (!this.sprite_sheet_sprites.hasOwnProperty(sprite.sprite_sheet_id)) {
                 this.sprite_sheet_sprites[sprite.sprite_sheet_id] = [];
-                var div = document.createElement('div');
-                div.classList.add('hx-sidebar-section');
-                div.innerHTML = sprite.sprite_sheet_id;
-                div.classList.add('select_sprite');
-                div.dataset.id = sprite.sprite_sheet_id;
-                this.element.querySelector('#sprite_selector').appendChild(div);
             }
             this.sprite_sheet_sprites[sprite.sprite_sheet_id].push(sprite);
         });
-        // this.game_model.sprites.each(sprite => {
-        //     var div = document.createElement('div');
-        //     div.classList.add('hx-sidebar-section');
-        //     div.innerHTML = sprite.name;
-        //     div.classList.add('select_sprite');
-        //     div.dataset.id = sprite.id;
-        //     this.element.querySelector('#sprite_selector').appendChild(div);
-        // });
 
         this.game_model.sprite_sheets.each(sprite_sheet => {
-            var div = document.createElement('div');
-            div.classList.add('hx-sidebar-section');
-            div.innerHTML = sprite_sheet.name;
-            div.classList.add('select_sprite_sheet');
-            div.dataset.id = sprite_sheet.id;
-            this.element.querySelector('#sprite_sheet_selector').appendChild(div);
+            var sprite_sheet_children = [];
+
+            var sprites = this.sprite_sheet_sprites[sprite_sheet.id];
+            sprites.forEach(sprite => {
+                var sprite_children = [];
+
+                Object.keys(sprite.animations).forEach(animation_id => {
+                    sprite_children.push({
+                        type: 'sprite_animation',
+                        id: animation_id
+                    });
+                });
+
+                sprite_sheet_children.push({
+                    type: 'sprite',
+                    id: sprite.id,
+                    children: sprite_children
+                });
+            });
+
+            items[3].children.push({
+                type: 'sprite_sheet',
+                name: sprite_sheet.name,
+                id: sprite_sheet.id,
+                children: sprite_sheet_children
+            });
+        });
+
+        var tree = new hx.Tree('#game_navigation', {
+            renderer: function(elem, data) {
+                console.log(elem);
+                if (data.type === 'category') {
+                    hx.select(elem).html(data.name);
+                } else if (data.type === 'map') {
+                    hx.select(elem).html(data.name).attr('class', 'select_map').attr('data-id', data.id);
+                } else if (data.type === 'character') {
+                    hx.select(elem).html(data.name).attr('class', 'select_character').attr('data-id', data.id);
+                } else if (data.type === 'particle_system') {
+                    hx.select(elem).html(data.name).attr('class', 'select_particle_system').attr('data-id', data.id);
+                } else if (data.type === 'sprite_sheet') {
+                    hx.select(elem).html(data.name).attr('class', 'select_sprite_sheet').attr('data-id', data.id);
+                } else if (data.type === 'sprite') {
+                    hx.select(elem).html(data.id).attr('class', 'select_sprite').attr('data-id', data.id);
+                } else if (data.type === 'sprite_animation') {
+                    hx.select(elem).html(data.id).attr('class', 'select_sprite_animation').attr('data-id', data.id);
+                }
+            },
+            items: items
         });
     }
 }

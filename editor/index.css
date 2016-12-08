@@ -192,3 +192,11 @@
     background-color: #666666;
     cursor: pointer;
 }
+
+.hx-tree {
+    background: none !important;
+}
+
+.hx-tree-node-parent {
+    background: none !important;
+}

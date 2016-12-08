@@ -5,6 +5,7 @@ var Model = require('exo').Model;
 class Sprite extends Model {
     get defaults() {
         return {
+            purpose: null, // 'sprite' or 'entity'
             animations: null,
             tiles: null,
             sprite_sheet: null,

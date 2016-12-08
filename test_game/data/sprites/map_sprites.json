@@ -1,6 +1,7 @@
 [
     {
         "id": 0,
+        "purpose": "map",
         "sprite_sheet_id": "map_sheet",
         "animations": {},
         "tiles": [{"css_offset_x": 0, "css_offset_y": 0}],
@@ -9,6 +10,7 @@
     },
     {
         "id": 1,
+        "purpose": "map",
         "sprite_sheet_id": "map_sheet",
         "animations": {},
         "tiles": [{"css_offset_x": 32, "css_offset_y": 0}],
@@ -17,6 +19,7 @@
     },
     {
         "id": 2,
+        "purpose": "map",
         "sprite_sheet_id": "map_sheet",
         "animations": {},
         "tiles": [{"css_offset_x": 64, "css_offset_y": 0}],
@@ -25,6 +28,7 @@
     },
     {
         "id": 3,
+        "purpose": "map",
         "sprite_sheet_id": "map_sheet",
         "animations": {},
         "tiles": [{"css_offset_x": 96, "css_offset_y": 0}],
@@ -33,6 +37,7 @@
     },
     {
         "id": 4,
+        "purpose": "map",
         "sprite_sheet_id": "map_sheet",
         "animations": {},
         "tiles": [{"css_offset_x": 0, "css_offset_y": 32}],
@@ -41,6 +46,7 @@
     },
     {
         "id": 5,
+        "purpose": "map",
         "sprite_sheet_id": "map_sheet",
         "animations": {},
         "tiles": [{"css_offset_x": 32, "css_offset_y": 32}],
@@ -49,6 +55,7 @@
     },
     {
         "id": 6,
+        "purpose": "map",
         "sprite_sheet_id": "map_sheet",
         "animations": {},
         "tiles": [{"css_offset_x": 64, "css_offset_y": 32}],
@@ -57,6 +64,7 @@
     },
     {
         "id": 7,
+        "purpose": "map",
         "sprite_sheet_id": "map_sheet",
         "animations": {},
         "tiles": [{"css_offset_x": 96, "css_offset_y": 32}],
@@ -65,6 +73,7 @@
     },
     {
         "id": 8,
+        "purpose": "map",
         "sprite_sheet_id": "map_sheet",
         "animations": {},
         "tiles": [{"css_offset_x": 0, "css_offset_y": 64}],
@@ -73,6 +82,7 @@
     },
     {
         "id": 9,
+        "purpose": "map",
         "sprite_sheet_id": "map_sheet",
         "animations": {},
         "tiles": [{"css_offset_x": 32, "css_offset_y": 64}],
@@ -81,6 +91,7 @@
     },
     {
         "id": 10,
+        "purpose": "map",
         "sprite_sheet_id": "map_sheet",
         "animations": {},
         "tiles": [{"css_offset_x": 64, "css_offset_y": 64}],
@@ -89,6 +100,7 @@
     },
     {
         "id": 11,
+        "purpose": "map",
         "sprite_sheet_id": "map_sheet",
         "animations": {},
         "tiles": [{"css_offset_x": 96, "css_offset_y": 64}],
@@ -97,6 +109,7 @@
     },
     {
         "id": 12,
+        "purpose": "map",
         "sprite_sheet_id": "map_sheet",
         "animations": {},
         "tiles": [{"css_offset_x": 0, "css_offset_y": 96}],
@@ -105,6 +118,7 @@
     },
     {
         "id": 13,
+        "purpose": "map",
         "sprite_sheet_id": "map_sheet",
         "animations": {},
         "tiles": [{"css_offset_x": 32, "css_offset_y": 96}],
@@ -113,6 +127,7 @@
     },
     {
         "id": 14,
+        "purpose": "map",
         "sprite_sheet_id": "map_sheet",
         "animations": {},
         "tiles": [{"css_offset_x": 64, "css_offset_y": 96}],
@@ -121,6 +136,7 @@
     },
     {
         "id": 15,
+        "purpose": "map",
         "sprite_sheet_id": "map_sheet",
         "animations": {},
         "tiles": [{"css_offset_x": 96, "css_offset_y": 96}],

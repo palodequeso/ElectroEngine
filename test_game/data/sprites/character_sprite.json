@@ -1,5 +1,6 @@
 {
     "id": "character_sprite",
+    "purpose": "entity",
     "sprite_sheet_id": "character_sheet",
     "animations": {
         "walk_up": {

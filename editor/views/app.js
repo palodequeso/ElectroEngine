@@ -48,6 +48,7 @@ class App extends View {
     constructor(options) {
         super(options);
         this.game_model = null;
+        this.preload_game_path = options.preload_game_path;
     }
     edit_game() {
         //
@@ -239,9 +240,9 @@ class App extends View {
         //
     }
     render() {
-        if (this.game_model === null) {
+        if (this.game_model === null && this.preload_game_path) {
             setTimeout(() => {
-                this.load_game("C:\\Users\\palod\\Projects\\ElectroEngine\\test_game\\data");
+                this.load_game(this.preload_game_path);
             }, 250);
             return;
         }

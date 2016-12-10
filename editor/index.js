@@ -1,5 +1,7 @@
 'use strict';
 
+var fs = require('fs');
+var path = require('path');
 var Handlebars = require('handlebars');
 var App = require('./views/app.js');
 
@@ -14,6 +16,16 @@ Handlebars.registerHelper('times', function(n, block) {
 });
 
 document.addEventListener("DOMContentLoaded", () => {
+    var preload_game_path = null;
+    try {
+        var config = JSON.parse(fs.readFileSync(path.join(__dirname, "config.json"), 'utf-8'));
+        if (config.hasOwnProperty('preload_game_path')) {
+            preload_game_path = config.preload_game_path;
+        }
+    } catch (e) {
+        console.warn("No config file found in root dir!", e);
+    }
+
     var titlebar = new hx.TitleBar('.heading');
     var sidebar = new hx.Sidebar('.hx-sidebar'/*, {
         headerSelector: '.titlebar',
@@ -22,7 +34,8 @@ document.addEventListener("DOMContentLoaded", () => {
     }*/);
 
     var app = new App({
-        element: document.querySelector('body')
+        element: document.querySelector('body'),
+        preload_game_path: preload_game_path
     });
     app.render();
 });

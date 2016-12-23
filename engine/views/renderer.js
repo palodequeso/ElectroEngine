@@ -290,18 +290,18 @@ class Renderer extends View {
     }
     visibility_check(position, size) {
         // console.log(position, size, this.model.camera);
-        // if (position[0] + size[0] < this.model.camera.position[0]) {
-        //     return false;
-        // }
-        // if (position[0] > this.model.camera.position[0] + this.model.camera.resolution[0]) {
-        //     return false;
-        // }
-        // if (position[1] + size[1] < this.model.camera.position[1]) {
-        //     return false;
-        // }
-        // if (position[1] > this.model.camera.position[1] + this.model.camera.resolution[1]) {
-        //     return false;
-        // }
+        if (position[0] + size[0] < this.model.camera.position[0]) {
+            return false;
+        }
+        if (position[0] > this.model.camera.position[0] + this.model.camera.resolution[0]) {
+            return false;
+        }
+        if (position[1] + size[1] < this.model.camera.position[1]) {
+            return false;
+        }
+        if (position[1] > this.model.camera.position[1] + this.model.camera.resolution[1]) {
+            return false;
+        }
         // console.log("True");
         return true;
     }
@@ -433,19 +433,20 @@ class Renderer extends View {
         var renderables = [];
         this.model.entities.each((entity) => {
             var components;
-            // var components = entity.components.get_by_index('type', 'sprite');
-            // if (components) {
-            //     components.forEach(component => {
-            //         this.handle_sprite_component(component, renderables);
-            //     });
-            // }
-            //
-            // components = entity.components.get_by_index('type', 'particle_system');
-            // if (components) {
-            //     components.forEach(component => {
-            //         this.handle_particle_system_component(component, renderables);
-            //     });
-            // }
+
+            components = entity.components.get_by_index('type', 'sprite');
+            if (components) {
+                components.forEach(component => {
+                    this.handle_sprite_component(component, renderables);
+                });
+            }
+
+            components = entity.components.get_by_index('type', 'particle_system');
+            if (components) {
+                components.forEach(component => {
+                    this.handle_particle_system_component(component, renderables);
+                });
+            }
 
             components = entity.components.get_by_index('type', 'map');
             if (components) {

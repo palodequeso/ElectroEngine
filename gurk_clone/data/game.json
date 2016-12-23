@@ -6,8 +6,8 @@
     "character_instances": [],
     "map_instances": [
         {
-            "id": "overworld",
-            "map_id": "overworld",
+            "id": "overworld_1_forest",
+            "map_id": "overworld_1_forest",
             "position": [0, 0],
             "warps": [],
             "character_instances": [],

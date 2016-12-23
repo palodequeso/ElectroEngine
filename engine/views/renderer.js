@@ -41,9 +41,13 @@ class Renderer extends View {
     constructor(options) {
         super(options);
 
+        var canvas_size = [
+            this.model.camera.resolution[0] * this.model.camera.scale[0],
+            this.model.camera.resolution[1] * this.model.camera.scale[1]
+        ];
         this.canvas = document.createElement('canvas');
-        this.canvas.setAttribute("width", "650px");
-        this.canvas.setAttribute("height", "500px");
+        this.canvas.setAttribute("width", `${canvas_size[0]}px`);
+        this.canvas.setAttribute("height", `${canvas_size[1]}px`);
         this.element.appendChild(this.canvas);
         this.gl = this.canvas.getContext('webgl');
         this.max_texture_size = this.gl.getParameter(this.gl.MAX_TEXTURE_SIZE);
@@ -60,7 +64,8 @@ class Renderer extends View {
 
         this.projection_matrix = glmatrix.mat4.create();
         this.view_matrix = glmatrix.mat4.create();
-        glmatrix.mat4.ortho(this.projection_matrix, 0.0, 650.0, 0.0, 500.0, -1.0, 1.0);
+        glmatrix.mat4.ortho(this.projection_matrix, 0.0, this.model.camera.resolution[0], 0.0,
+            this.model.camera.resolution[1], -1.0, 1.0);
         // glmatrix.mat4.identity(this.view_matrix);
 
         this.textures_preloaded = false;
@@ -150,7 +155,6 @@ class Renderer extends View {
         ];
         var indices = [0, 1, 2, 0, 2, 3];
 
-        // http://blog.tojicode.com/2012/10/oesvertexarrayobject-extension.html
         if (this.use_vao) {
             this.vao_ext = this.gl.getExtension("OES_vertex_array_object");
             this.vao = this.vao_ext.createVertexArrayOES();
@@ -258,10 +262,14 @@ class Renderer extends View {
             this.shaders.textured_quad.shader, "color");
     }
     draw_quad(position, dimensions, sprite_texcoord, color, texture, shader) {
+        var p = [position[0] * this.model.camera.scale[0],
+                 position[1] * this.model.camera.scale[1]];
+        var d = [dimensions[0] * this.model.camera.scale[0],
+                 dimensions[1] * this.model.camera.scale[1]];
         var model_matrix = glmatrix.mat4.create();
-        glmatrix.mat4.translate(model_matrix, model_matrix, [position[0], position[1], 1.0]);
-        glmatrix.mat4.scale(model_matrix, model_matrix, [dimensions[0], dimensions[1], 1.0]);
-        this.gl.uniformMatrix4fv(shader.model_matrix_location, false, model_matrix); // new FloatArray(model_matrix));
+        glmatrix.mat4.translate(model_matrix, model_matrix, [p[0], p[1], 1.0]);
+        glmatrix.mat4.scale(model_matrix, model_matrix, [d[0], d[1], 1.0]);
+        this.gl.uniformMatrix4fv(shader.model_matrix_location, false, model_matrix);
         this.gl.uniform1i(shader.texture_location, 0);
         this.gl.activeTexture(this.gl.TEXTURE0);
         this.gl.bindTexture(this.gl.TEXTURE_2D, texture);
@@ -289,20 +297,18 @@ class Renderer extends View {
         }
     }
     visibility_check(position, size) {
-        // console.log(position, size, this.model.camera);
-        if (position[0] + size[0] < this.model.camera.position[0]) {
+        if (position[0] + size[0] < -this.model.camera.position[0]) {
             return false;
         }
-        if (position[0] > this.model.camera.position[0] + this.model.camera.resolution[0]) {
+        if (position[0] > -this.model.camera.position[0] + this.model.camera.resolution[0]) {
             return false;
         }
-        if (position[1] + size[1] < this.model.camera.position[1]) {
+        if (position[1] + size[1] < -this.model.camera.position[1]) {
             return false;
         }
-        if (position[1] > this.model.camera.position[1] + this.model.camera.resolution[1]) {
+        if (position[1] > -this.model.camera.position[1] + this.model.camera.resolution[1]) {
             return false;
         }
-        // console.log("True");
         return true;
     }
     handle_sprite_component(component, renderables) {

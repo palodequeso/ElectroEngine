@@ -1,7 +1,7 @@
 'use strict';
 
 var path = require("path");
-// var input = require('../engine/models/input.js');
+var input = require('../engine/models/input.js');
 var GameModel = require('../engine/models/game.js');
 var Game = require('../engine/views/game.js');
 var gameio = require('../engine/util/gameio.js');
@@ -28,6 +28,22 @@ class TestPhysics extends RigidBodyPhysics {
 
 class TestGameplaySystem extends GameplaySystem {
     update(frame_time, entities, camera/* , game*/) {
+        var camera_velocity = [0, 0];
+        var camera_speed = 8;
+        if (input.is_keydown(68)) {
+            camera_velocity[0] = camera_speed;
+        }
+        if (input.is_keydown(65)) {
+            camera_velocity[0] = -camera_speed;
+        }
+        if (input.is_keydown(87)) {
+            camera_velocity[1] = camera_speed;
+        }
+        if (input.is_keydown(83)) {
+            camera_velocity[1] = -camera_speed;
+        }
+        camera.position[0] -= camera_velocity[0];// * (frame_time / 1000);
+        camera.position[1] -= camera_velocity[1];// * (frame_time / 1000);
         camera.calculate_matrix();
     }
 }
@@ -41,9 +57,13 @@ document.addEventListener("DOMContentLoaded", () => {
     game_systems.add(new PhysicsSystem({engine: new TestPhysics()}));
     var game_loader = new gameio.GameLoader(path.normalize("gurk_clone/data"), GameModel, game_systems);
 
-    game_loader.game.set_current_map_instance('overworld');
+    game_loader.game.camera.resolution = [128, 128];
+    game_loader.game.camera.scale = [2, 2];
+
+    game_loader.game.set_current_map_instance('overworld_1_forest');
     var game = new Game({
-        model: game_loader.game
+        model: game_loader.game,
+        resolution: [128, 128]
     });
     game.run();
 });

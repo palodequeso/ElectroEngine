@@ -59,7 +59,6 @@ class Game extends Model {
     }
     constructor(data) {
         super(data);
-
         this.systems.sort();
     }
     set_current_map_instance(id, force) {

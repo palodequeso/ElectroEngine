@@ -92,6 +92,7 @@ class Renderer extends View {
             t.gl.pixelStorei(t.gl.UNPACK_FLIP_Y_WEBGL, false);
             t.gl.texImage2D(t.gl.TEXTURE_2D, 0, t.gl.RGBA, t.gl.RGBA, t.gl.UNSIGNED_BYTE, texture.image);
             t.gl.texParameteri(t.gl.TEXTURE_2D, t.gl.TEXTURE_MIN_FILTER, t.gl.NEAREST);
+            t.gl.texParameteri(t.gl.TEXTURE_2D, t.gl.TEXTURE_MAG_FILTER, t.gl.NEAREST);
             t.gl.texParameteri(t.gl.TEXTURE_2D, t.gl.TEXTURE_WRAP_S, t.gl.CLAMP_TO_EDGE);
             t.gl.texParameteri(t.gl.TEXTURE_2D, t.gl.TEXTURE_WRAP_T, t.gl.CLAMP_TO_EDGE);
             t.gl.bindTexture(t.gl.TEXTURE_2D, null);

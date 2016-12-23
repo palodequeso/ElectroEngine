@@ -1,0 +1,9 @@
+{
+    "id": "Objects",
+    "name": "Objects",
+    "path": "0-tileset.png",
+    "width": 320,
+    "height": 192,
+    "tile_width": 16,
+    "tile_height": 16
+}

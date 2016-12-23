@@ -103,20 +103,6 @@ class Renderer extends View {
         var sprite_sheets_path = path.normalize(path.join(images_path, 'sprite_sheets'));
         var particles_path = path.normalize(path.join(images_path, 'particles'));
 
-        this.model.maps.each((map) => {
-            map.sprite_sheets.each((sprite_sheet) => {
-                var image_src = sprite_sheet.path;
-                if (!images_loaded_statuses.hasOwnProperty(image_src)) {
-                    image_loaded_promises.push(new Promise((resolve) => {
-                        this.load_texture(path.join(sprite_sheets_path, image_src), (texture) => {
-                            resolve({texture: texture, image_src: image_src});
-                        });
-                    }));
-                    images_loaded_statuses[image_src] = true;
-                }
-            });
-        });
-
         this.model.sprite_sheets.each((sprite_sheet) => {
             var image_src = sprite_sheet.path;
             if (!images_loaded_statuses.hasOwnProperty(image_src)) {
@@ -302,6 +288,126 @@ class Renderer extends View {
             this.gl.drawElements(this.gl.TRIANGLES, 6, this.gl.UNSIGNED_SHORT, 0);
         }
     }
+    visibility_check(position, size) {
+        // console.log(position, size, this.model.camera);
+        // if (position[0] + size[0] < this.model.camera.position[0]) {
+        //     return false;
+        // }
+        // if (position[0] > this.model.camera.position[0] + this.model.camera.resolution[0]) {
+        //     return false;
+        // }
+        // if (position[1] + size[1] < this.model.camera.position[1]) {
+        //     return false;
+        // }
+        // if (position[1] > this.model.camera.position[1] + this.model.camera.resolution[1]) {
+        //     return false;
+        // }
+        // console.log("True");
+        return true;
+    }
+    handle_sprite_component(component, renderables) {
+        var sprite_instance = component.sprite_instance;
+        if (sprite_instance.tile) {
+            var position = sprite_instance.position;
+            var size = [sprite_instance.sprite.width, sprite_instance.sprite.height];
+            if (!this.visibility_check(position, size)) {
+                return;
+            }
+
+            renderables.push({
+                layer: sprite_instance.layer,
+                position: [position[0], position[1]],
+                size: size,
+                texcoords: [
+                    sprite_instance.tile.css_offset_x,
+                    sprite_instance.tile.css_offset_y,
+                    sprite_instance.tile.css_offset_x + sprite_instance.sprite.width,
+                    sprite_instance.tile.css_offset_y + sprite_instance.sprite.height
+                ],
+                color: [1, 1, 1, sprite_instance.opacity],
+                texture: this.textures[sprite_instance.sprite.sprite_sheet.path],
+                shader: this.shaders.textured_quad
+            });
+        }
+    }
+    handle_particle_system_component(component, renderables) {
+        var particle_system_instance = component.particle_system_instance;
+        var particle_system = particle_system_instance.particle_system;
+        var system_position = particle_system_instance.position;
+        var image = particle_system.image;
+        var texture = this.textures[image];
+        var shader = this.shaders.textured_quad;
+
+        var modifier = particle_system.modifier;
+        if (!modifier) {
+            modifier = function(particle_data) {
+                return particle_data;
+            };
+        }
+
+        particle_system_instance.particles.forEach((particle) => {
+            // var serialized = particle.serialize();
+            // var data = JSON.parse(serialized);
+            var data = particle;
+            data.alpha = ((data.life < data.fade) ? data.life / data.fade : 1.0) / 2.0;
+            // data = modifier(data);
+            var position = [data.position[0] + system_position[0] + 250.0,
+                            data.position[1] + system_position[1] + 250.0];
+            var size = [data.size[0], data.size[1]];
+            if (!this.visibility_check(position, size)) {
+                return;
+            }
+
+            renderables.push({
+                layer: 10, // This needs to be a parameter.
+                position: position,
+                size: size,
+                texcoords: [0.0, 0.0, texture.image.width, texture.image.height],
+                color: [data.color[0], data.color[1], data.color[2], data.alpha],
+                texture: texture,
+                shader: shader
+            });
+        });
+    }
+    handle_map_component(component, renderables) {
+        var map_instance = component.map_instance;
+        var map = map_instance.map;
+
+        var layer_index = 0;
+        var size = [map.tile_width, map.tile_height];
+        map.layers.each(layer => {
+            var tile_index = 0;
+            layer.tiles.forEach(tile_id => {
+                var x = (tile_index % layer.width) * map.tile_width;
+                var y = (map.tile_height * layer.height) - ((Math.floor(tile_index / layer.width)) * map.tile_height)
+                    - map.tile_height;
+                var position = [x, y];
+
+                if (!this.visibility_check(position, size)) {
+                    return;
+                }
+
+                var tile = map.map_tiles.get(tile_id);
+                var sprite_sheet = this.model.sprite_sheets.get(tile.sprite_sheet_id);
+                renderables.push({
+                    layer: layer_index,
+                    position: position,
+                    size: size,
+                    texcoords: [
+                        tile.css_offset_x,
+                        tile.css_offset_y,
+                        tile.css_offset_x + size[0],
+                        tile.css_offset_y + size[1]
+                    ],
+                    color: [1, 1, 1, 1],
+                    texture: this.textures[sprite_sheet.path],
+                    shader: this.shaders.textured_quad
+                });
+                tile_index += 1;
+            });
+            layer_index += 1;
+        });
+    }
     render() {
         if (!this.textures_preloaded) {
             return;
@@ -319,63 +425,22 @@ class Renderer extends View {
         this.model.entities.each((entity) => {
             var components = entity.components.get_by_index('type', 'sprite');
             if (components) {
-                components.forEach((component) => {
-                    var sprite_instance = component.sprite_instance;
-                    if (sprite_instance.tile) {
-                        var position = sprite_instance.position;
-                        renderables.push({
-                            layer: sprite_instance.layer,
-                            position: [position[0], position[1]],
-                            size: [sprite_instance.sprite.width, sprite_instance.sprite.height],
-                            texcoords: [
-                                sprite_instance.tile.css_offset_x,
-                                sprite_instance.tile.css_offset_y,
-                                sprite_instance.tile.css_offset_x + sprite_instance.sprite.width,
-                                sprite_instance.tile.css_offset_y + sprite_instance.sprite.height
-                            ],
-                            color: [1, 1, 1, sprite_instance.opacity],
-                            texture: this.textures[sprite_instance.sprite.sprite_sheet.path],
-                            shader: this.shaders.textured_quad
-                        });
-                    }
+                components.forEach(component => {
+                    this.handle_sprite_component(component, renderables);
                 });
             }
 
             components = entity.components.get_by_index('type', 'particle_system');
             if (components) {
+                components.forEach(component => {
+                    this.handle_particle_system_component(component, renderables);
+                });
+            }
+
+            components = entity.components.get_by_index('type', 'map');
+            if (components) {
                 components.forEach((component) => {
-                    var particle_system_instance = component.particle_system_instance;
-                    var particle_system = particle_system_instance.particle_system;
-                    var system_position = particle_system_instance.position;
-                    var image = particle_system.image;
-                    var texture = this.textures[image];
-                    var shader = this.shaders.textured_quad;
-
-                    var modifier = particle_system.modifier;
-                    if (!modifier) {
-                        modifier = function(particle_data) {
-                            return particle_data;
-                        };
-                    }
-
-                    particle_system_instance.particles.forEach((particle) => {
-                        // var serialized = particle.serialize();
-                        // var data = JSON.parse(serialized);
-                        var data = particle;
-                        data.alpha = ((data.life < data.fade) ? data.life / data.fade : 1.0) / 2.0;
-                        // data = modifier(data);
-
-                        renderables.push({
-                            layer: 10, // This needs to be a parameter.
-                            position: [data.position[0] + system_position[0] + 250.0,
-                                       data.position[1] + system_position[1] + 250.0],
-                            size: [data.size[0], data.size[1]],
-                            texcoords: [0.0, 0.0, texture.image.width, texture.image.height],
-                            color: [data.color[0], data.color[1], data.color[2], data.alpha],
-                            texture: texture,
-                            shader: shader
-                        });
-                    });
+                    this.handle_map_component(component, renderables);
                 });
             }
         });

@@ -8,7 +8,7 @@ const BrowserWindow = electron.BrowserWindow;
 // be closed automatically when the JavaScript object is garbage collected.
 var mainWindow;
 
-function createWindow () {
+function createWindow() {
     // Create the browser window.
     mainWindow = new BrowserWindow({width: 800, height: 600, autoHideMenuBar: true});
     mainWindow.maximize();
@@ -16,11 +16,14 @@ function createWindow () {
     // and load the index.html of the app.
     // mainWindow.loadURL('file://' + __dirname + '/index.html')
     // and load the index.html of the app.
-    if (process.argv[2] === '--test_game') {
-        mainWindow.loadURL('file://' + __dirname + '/test_game/index.html');
-    } else {
-        mainWindow.loadURL('file://' + __dirname + '/editor/index.html');
+    var path = 'file://' + __dirname + '/editor/index.html'
+    if (process.argv[2] && process.argv[2].startsWith('--')) {
+        var game_folder = process.argv[2].slice(2);
+        path = 'file://' + __dirname + `/${game_folder}/index.html`;
     }
+    // path = 'file:///home/douglas/Projects/ElectroEngine/gurk_clone/index.html';
+    console.log("Loading: ", path);
+    mainWindow.loadURL(path);
 
     // Open the DevTools.
     mainWindow.webContents.openDevTools();

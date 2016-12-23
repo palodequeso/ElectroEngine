@@ -137,7 +137,7 @@ class GameLoader {
         var map_filenames = fs.readdirSync(path.normalize(this.folder_path + '/maps/'));
         map_filenames.forEach((map_filename) => {
             var map_json_path = path.normalize(this.folder_path + '/maps/' + map_filename);
-            var map_json = fs.readFileSync(map_json_path);
+            var map_json = fs.readFileSync(map_json_path, 'utf-8');
             var map_data = JSON.parse(map_json);
             this.map_bodies[map_data.id] = [];
             if (map_data.hasOwnProperty('bodies')) {
@@ -168,7 +168,7 @@ class GameLoader {
         particle_system_filenames.forEach((particle_system_filename) => {
             var particle_system = new ParticleSystem(JSON.parse(fs.readFileSync(
                 path.normalize(this.folder_path + '/particle_systems/' +
-                particle_system_filename))));
+                particle_system_filename), 'utf-8')));
             this.game.particle_systems.add(particle_system);
         });
     }

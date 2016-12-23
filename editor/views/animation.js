@@ -23,6 +23,7 @@ class AnimationEditor extends View {
         this.template = Handlebars.compile(edit_animation_tmpl);
     }
     render() {
+        //
     }
 }
 

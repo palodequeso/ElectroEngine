@@ -3,7 +3,7 @@
 var Model = require('exo').Model;
 var Bodies = require('../physics/bodies.js');
 var CharacterInstances = require('../characters/character_instances.js');
-var MapLayerInstances = require('./map_layer_instances.js');
+var MapTileInstances = require('./map_tile_instances.js');
 
 class MapInstance extends Model {
     get defaults() {
@@ -13,15 +13,15 @@ class MapInstance extends Model {
             map: null,
             position: [0, 0],
             warps: [],
-            bodies: null,
+            bodies: null, // For reference only!
             character_instances: null,
-            layer_instances: null
+            map_tile_instances: null // Only one per unique map_tile is needed, just gets rendered multiple times.
         };
     }
     get types() {
         return {
-            layer_instances: MapLayerInstances,
             character_instances: CharacterInstances,
+            map_tile_instances: MapTileInstances,
             bodies: Bodies
         };
     }
@@ -29,13 +29,8 @@ class MapInstance extends Model {
         super(data);
     }
     update(time_delta) {
-        this.layer_instances.each((layer_instance) => {
-            layer_instance.sprite_instances.each((sprite_instance) => {
-                sprite_instance.update(time_delta);
-            });
-        });
-        this.character_instances.each((character_instances) => {
-            character_instances.update(time_delta);
+        this.map_tile_instances.each(map_tile_instance => {
+            map_tile_instance.update(time_delta);
         });
     }
 }

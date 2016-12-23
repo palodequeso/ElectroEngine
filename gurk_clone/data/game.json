@@ -1,0 +1,18 @@
+{
+    "id": "test_game",
+    "name": "Test",
+    "description": "Test game",
+    "version": "0.1",
+    "character_instances": [],
+    "map_instances": [
+        {
+            "id": "overworld",
+            "map_id": "overworld",
+            "position": [0, 0],
+            "warps": [],
+            "character_instances": [],
+            "particle_system_instances": []
+        }
+    ],
+    "particle_system_instances": []
+}

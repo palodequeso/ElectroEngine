@@ -18,7 +18,7 @@ var Systems = require('./ecs/systems.js');
 var Camera = require('./graphics/camera.js');
 var MapInstances = require('./maps/map_instances.js');
 var MapInstance = require('./maps/map_instance.js');
-var MapLayerInstance = require('./maps/map_layer_instance.js');
+var MapComponent = require('./components/map.js');
 var SpriteComponent = require('./components/sprite.js');
 var BodyComponent = require('./components/collision_body.js');
 var CharacterComponent = require('./components/character.js');
@@ -54,7 +54,7 @@ class Game extends Model {
             systems: Systems,
             camera: Camera,
             map_instances: MapInstances,
-            current_map_instance: MapInstance
+            current_map_instance: Entity
         };
     }
     constructor(data) {
@@ -67,87 +67,36 @@ class Game extends Model {
             force = false;
         }
 
-        if (force || (this.current_map_instance && id === this.current_map_instance.id)) {
+        if (force || (this.current_map_instance && this.current_map_instance.map_instance
+            && id === this.current_map_instance.map_instance.id)) {
             return;
         }
 
         // NOTE: This only allows one map to be viewed at a time, so we'll have to work on that.
-        if (this.current_map_instance) {
-            this.current_map_instance.layer_instances.each(layer_instance => {
-                layer_instance.entities.each(entity => {
-                    this.entities.remove(entity);
-                });
-                layer_instance.entities.reset();
-            });
-
-            this.current_map_instance.character_instances.each(character_instance => {
+        if (this.current_map_instance.map_instance) {
+            this.current_map_instance.map_instance.character_instances.each(character_instance => {
                 if (character_instance.entity) {
                     this.entities.remove(character_instance.entity);
                     character_instance.entity = null;
                 }
             });
 
-            this.current_map_instance.bodies.each(body => {
+            this.current_map_instance.map_instance.bodies.each(body => {
                 if (body.entity) {
                     this.entities.remove(body.entity);
                     body.entity = null;
                 }
             });
+
+            this.entities.remove(this.current_map_instance);
         }
 
-        this.current_map_instance = this.map_instances.get(id);
-
-        if (!this.current_map_instance) {
+        var map_instance = this.map_instances.get(id);
+        if (!map_instance) {
             return;
         }
 
-        // Load the map layers
-        var map = this.current_map_instance.map;
-        this.current_map_instance.layer_instances.reset();// = new MapLayerInstances();
-        this.current_map_instance.map.layers.each((map_layer, map_layer_id, layer_index) => {
-            var map_layer_instance = new MapLayerInstance({
-                map_layer: map_layer
-            });
-
-            var layer_width = map_layer.width;
-            var layer_height = map_layer.height;
-            map_layer.tiles.forEach((tile_id, tile_index) => {
-                if (tile_id === -1) {
-                    return;
-                }
-
-                var x = (tile_index % layer_width) * map.tile_width;
-                var y = (map.tile_height * layer_height) - ((Math.floor(tile_index / layer_width)) * map.tile_height)
-                    - map.tile_height;
-
-                map_layer_instance.map_layer.sprite_sheet = this.sprite_sheets.get(
-                    map_layer_instance.map_layer.sprite_sheet_id);
-                var sprite = this.sprites.get(tile_id);
-                var opacity = 1.0;
-
-                var sprite_instance = new SpriteInstance({
-                    position: [x, y],
-                    current_animation: '',
-                    frame_time: 0.0,
-                    layer: layer_index,
-                    opacity: opacity,
-                    sprite: sprite,
-                    tile: (!sprite) ? null : sprite.tiles[0]
-                });
-
-                var entity = new Entity();
-                entity.components.add(new SpriteComponent({
-                    sprite_instance: sprite_instance
-                }));
-
-                this.entities.add(entity);
-                map_layer_instance.entities.add(entity);
-            });
-
-            this.current_map_instance.layer_instances.add(map_layer_instance);
-        });
-
-        this.current_map_instance.bodies.each((body) => {
+        map_instance.bodies.each((body) => {
             var entity = new Entity();
             entity.components.add(new BodyComponent({
                 body: body
@@ -156,7 +105,7 @@ class Game extends Model {
             body.entity = entity;
         });
 
-        this.current_map_instance.character_instances.each((character_instance) => {
+        map_instance.character_instances.each((character_instance) => {
             this.characters.each((character) => {
                 if (character.id === character_instance.character_id) {
                     character_instance.character = character;
@@ -164,11 +113,12 @@ class Game extends Model {
             });
 
             this.sprite_sheets.each((sprite_sheet) => {
-                sprite_sheet.sprites.each((sprite) => {
-                    if (sprite.id === character_instance.character.sprite_id) {
-                        character_instance.character.sprite = sprite;
-                    }
-                });
+                // TODO!
+                // sprite_sheet.sprites.each((sprite) => {
+                //     if (sprite.id === character_instance.character.sprite_id) {
+                //         character_instance.character.sprite = sprite;
+                //     }
+                // });
             });
 
             // setup sprite instance
@@ -177,7 +127,7 @@ class Game extends Model {
                 sprite: character_instance.character.sprite,
                 current_animation: character_instance.starting_animation,
                 frame_time: 0.0,
-                layer: this.current_map_instance.map.entity_layer_index,
+                layer: map_instance.map.entity_layer_index,
                 opacity: 1.0,
                 tile: character_instance.character.sprite.tiles[0]
             });
@@ -208,6 +158,12 @@ class Game extends Model {
             this.entities.add(entity);
             character_instance.entity = entity;
         });
+
+        this.current_map_instance = new Entity();
+        this.current_map_instance.components.add(new MapComponent({
+            map_instance: map_instance
+        }));
+        this.entities.add(this.current_map_instance);
 
         console.log("Current Map Instance: ", this.current_map_instance);
     }

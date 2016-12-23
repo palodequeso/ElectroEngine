@@ -1,0 +1,9 @@
+{
+    "id": "Forest",
+    "name": "Forest",
+    "path": "tileset.png",
+    "width": 928,
+    "height": 320,
+    "tile_width": 16,
+    "tile_height": 16
+}

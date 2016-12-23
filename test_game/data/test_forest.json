@@ -1,0 +1,57 @@
+{ "height":32,
+ "layers":[
+        {
+         "compression":"zlib",
+         "data":"eJztxtEJACAMxNCzHV8dSx1LbwnpTx4EIgEAAAAA8F8PabgZNb\/cdqfor1NKLWv+AVaLNhM=",
+         "encoding":"base64",
+         "height":32,
+         "name":"Ground",
+         "opacity":1,
+         "type":"tilelayer",
+         "visible":true,
+         "width":32,
+         "x":0,
+         "y":0
+        }, 
+        {
+         "compression":"zlib",
+         "data":"eJztzccVQQEQQNH5mpC1IOtJ1oKsD1kLsj5kLcgWXgdWfxbOvHPu+olYlmVZlmVZlvWrKmqoo4EmWmijo\/CfYoY5FlhihTU2Cv8rbrjjgSdeeOOj8I86IjHEkUASKaSRcdz\/Z3nkkEcBRZRQRkXh3+XRQx8DDDHCGBOF\/5bHDnsccMQJZ1wU\/l6PiA9+BBBECGFEPO7\/\/6UvLM8kEQ==",
+         "encoding":"base64",
+         "height":32,
+         "name":"Trees",
+         "opacity":1,
+         "type":"tilelayer",
+         "visible":true,
+         "width":32,
+         "x":0,
+         "y":0
+        }],
+ "nextobjectid":1,
+ "orientation":"orthogonal",
+ "properties":
+    {
+
+    },
+ "renderorder":"right-down",
+ "tileheight":16,
+ "tilesets":[
+        {
+         "firstgid":1,
+         "image":"..\/..\/..\/..\/Downloads\/Magic Cliffs v1.01\/GDM-Magic-Cliffs-Environment\/PNG\/tileset.png",
+         "imageheight":320,
+         "imagewidth":928,
+         "margin":0,
+         "name":"Forest",
+         "properties":
+            {
+
+            },
+         "spacing":0,
+         "tilecount":1160,
+         "tileheight":16,
+         "tilewidth":16
+        }],
+ "tilewidth":16,
+ "version":1,
+ "width":32
+}

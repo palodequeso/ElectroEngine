@@ -3,14 +3,13 @@
 var path = require("path");
 var input = require('../engine/models/input.js');
 var GameModel = require('../engine/models/game.js');
-var Renderer = require('../engine/views/renderer.js');
 var Game = require('../engine/views/game.js');
 var gameio = require('../engine/util/gameio.js');
 
-var p2 = require('p2');
 var AudioSystem = require('../engine/models/systems/audio.js');
 var GameplaySystem = require('../engine/models/systems/gameplay.js');
 var GraphicsSystem = require('../engine/models/systems/graphics.js');
+var MapSystem = require('../engine/models/systems/map.js');
 var PhysicsSystem = require('../engine/models/systems/physics.js');
 var Systems = require('../engine/models/ecs/systems.js');
 
@@ -72,7 +71,7 @@ class TestGameplaySystem extends GameplaySystem {
     }
     update(frame_time, entities, camera, game) {
         // This logic should be moved to a custom system.
-        entities.each((entity, index) => {
+        entities.each(entity => {
             var character_instance = null;
             var components = entity.components.get_by_index('type', 'character');
             if (components) {
@@ -103,7 +102,7 @@ class TestGameplaySystem extends GameplaySystem {
             game.set_current_map_instance('test_area_2');
         }
 
-        //camera.position[0] += -10 * (frame_time / 1000);
+        // camera.position[0] += -10 * (frame_time / 1000);
         camera.calculate_matrix();
     }
 }
@@ -114,8 +113,11 @@ document.addEventListener("DOMContentLoaded", () => {
     game_systems.add(new AudioSystem());
     game_systems.add(new TestGameplaySystem());
     game_systems.add(new GraphicsSystem());
+    game_systems.add(new MapSystem());
     game_systems.add(new PhysicsSystem({engine: new TestPhysics()}));
+    console.log("DOOM");
     var game_loader = new gameio.GameLoader(path.normalize("test_game/data"), GameModel, game_systems);
+    console.log("HERE?");
 
     game_loader.game.set_current_map_instance('test_area');
     var game = new Game({

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="32" height="32" tilewidth="16" tileheight="16" nextobjectid="1">
+ <tileset firstgid="1" name="Forest" tilewidth="16" tileheight="16" tilecount="1160">
+  <image source="../../../../../Downloads/Magic Cliffs v1.01/GDM-Magic-Cliffs-Environment/PNG/tileset.png" width="928" height="320"/>
+ </tileset>
+ <layer name="Ground" width="32" height="32">
+  <data encoding="base64" compression="zlib">
+   eJztxtEJACAMxNCzHV8dSx1LbwnpTx4EIgEAAAAA8F8PabgZNb/cdqfor1NKLWv+AVaLNhM=
+  </data>
+ </layer>
+ <layer name="Trees" width="32" height="32">
+  <data encoding="base64" compression="zlib">
+   eJztzccVQQEQQNH5mpC1IOtJ1oKsD1kLsj5kLcgWXgdWfxbOvHPu+olYlmVZlmVZlvWrKmqoo4EmWmijo/CfYoY5FlhihTU2Cv8rbrjjgSdeeOOj8I86IjHEkUASKaSRcdz/Z3nkkEcBRZRQRkXh3+XRQx8DDDHCGBOF/5bHDnsccMQJZ1wU/l6PiA9+BBBECGFEPO7//6UvLM8kEQ==
+  </data>
+ </layer>
+</map>

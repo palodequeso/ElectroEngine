@@ -7,6 +7,7 @@ class Camera extends Model {
     get defaults() {
         return {
             position: [0, 0],
+            scaled_position: [0, 0],
             scale: [1, 1],
             resolution: [650, 500],
             view_matrix: null
@@ -23,9 +24,14 @@ class Camera extends Model {
         glmatrix.mat4.identity(this.view_matrix);
         glmatrix.mat4.translate(this.view_matrix, this.view_matrix,
             [this.position[0], this.position[1], 0.0]);
-        glmatrix.mat4.scale(this.view_matrix, this.view_matrix, [
-            this.scale[0], this.scale[1], 1.0
-        ]);
+        // glmatrix.mat4.scale(this.view_matrix, this.view_matrix, [
+        //     this.scale[0], this.scale[1], 1.0
+        // ]);
+        this.scaled_position = [
+            this.position[0] / this.scale[0],
+            this.position[1] / this.scale[1]
+        ];
+        // console.log(this.view_matrix);
     }
 }
 

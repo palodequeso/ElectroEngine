@@ -29,7 +29,7 @@ class TestPhysics extends RigidBodyPhysics {
 class TestGameplaySystem extends GameplaySystem {
     update(frame_time, entities, camera/* , game*/) {
         var camera_velocity = [0, 0];
-        var camera_speed = 8;
+        var camera_speed = 8 * camera.scale[0];
         if (input.is_keydown(68)) {
             camera_velocity[0] = camera_speed;
         }
@@ -58,7 +58,7 @@ document.addEventListener("DOMContentLoaded", () => {
     var game_loader = new gameio.GameLoader(path.normalize("gurk_clone/data"), GameModel, game_systems);
 
     game_loader.game.camera.resolution = [128, 128];
-    game_loader.game.camera.scale = [2, 2];
+    game_loader.game.camera.scale = [4, 4];
 
     game_loader.game.set_current_map_instance('overworld_1_forest');
     var game = new Game({

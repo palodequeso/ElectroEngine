@@ -41,13 +41,14 @@ class Renderer extends View {
     constructor(options) {
         super(options);
 
-        var canvas_size = [
+        this.canvas_size = [
             this.model.camera.resolution[0] * this.model.camera.scale[0],
             this.model.camera.resolution[1] * this.model.camera.scale[1]
         ];
+        console.log("Canvas Size: ", this.canvas_size);
         this.canvas = document.createElement('canvas');
-        this.canvas.setAttribute("width", `${canvas_size[0]}px`);
-        this.canvas.setAttribute("height", `${canvas_size[1]}px`);
+        this.canvas.setAttribute("width", `${this.canvas_size[0]}px`);
+        this.canvas.setAttribute("height", `${this.canvas_size[1]}px`);
         this.element.appendChild(this.canvas);
         this.gl = this.canvas.getContext('webgl');
         this.max_texture_size = this.gl.getParameter(this.gl.MAX_TEXTURE_SIZE);
@@ -64,15 +65,14 @@ class Renderer extends View {
 
         this.projection_matrix = glmatrix.mat4.create();
         this.view_matrix = glmatrix.mat4.create();
-        glmatrix.mat4.ortho(this.projection_matrix, 0.0, this.model.camera.resolution[0], 0.0,
-            this.model.camera.resolution[1], -1.0, 1.0);
+        glmatrix.mat4.ortho(this.projection_matrix, 0.0, this.canvas_size[0], 0.0, this.canvas_size[1], -1.0, 1.0);
         // glmatrix.mat4.identity(this.view_matrix);
 
         this.textures_preloaded = false;
         this.textures = {};
         this.load_sprite_images();
 
-        this.gl.viewport(0, 0, this.canvas.width, this.canvas.height);
+        this.gl.viewport(0, 0, this.canvas_size[0], this.canvas_size[1]);
         this.gl.clearColor(0.0, 0.0, 0.0, 1.0);
         this.gl.disable(this.gl.DEPTH_TEST);
         this.gl.enable(this.gl.BLEND);
@@ -297,16 +297,16 @@ class Renderer extends View {
         }
     }
     visibility_check(position, size) {
-        if (position[0] + size[0] < -this.model.camera.position[0]) {
+        if (position[0] + size[0] < -this.model.camera.scaled_position[0]) {
             return false;
         }
-        if (position[0] > -this.model.camera.position[0] + this.model.camera.resolution[0]) {
+        if (position[0] > -this.model.camera.scaled_position[0] + this.model.camera.resolution[0]) {
             return false;
         }
-        if (position[1] + size[1] < -this.model.camera.position[1]) {
+        if (position[1] + size[1] < -this.model.camera.scaled_position[1]) {
             return false;
         }
-        if (position[1] > -this.model.camera.position[1] + this.model.camera.resolution[1]) {
+        if (position[1] > -this.model.camera.scaled_position[1] + this.model.camera.resolution[1]) {
             return false;
         }
         return true;
@@ -322,7 +322,7 @@ class Renderer extends View {
 
             renderables.push({
                 layer: sprite_instance.layer,
-                position: [position[0], position[1]],
+                position: position,
                 size: size,
                 texcoords: [
                     sprite_instance.tile.css_offset_x,
@@ -352,11 +352,8 @@ class Renderer extends View {
         }
 
         particle_system_instance.particles.forEach((particle) => {
-            // var serialized = particle.serialize();
-            // var data = JSON.parse(serialized);
             var data = particle;
             data.alpha = ((data.life < data.fade) ? data.life / data.fade : 1.0) / 2.0;
-            // data = modifier(data);
             var position = [data.position[0] + system_position[0] + 250.0,
                             data.position[1] + system_position[1] + 250.0];
             var size = [data.size[0], data.size[1]];

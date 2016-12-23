@@ -104,7 +104,9 @@ class TiledMapConverter {
                 height: tileset.imageheight,
                 tile_width: tileset.tilewidth,
                 tile_height: tileset.tileheight,
-                image: tileset.image
+                image: tileset.image,
+                firstgid: tileset.firstgid,
+                tilecount: tileset.tilecount
             };
             this.sprite_sheets[tileset.firstgid + tileset.tilecount] = sprite_sheet;
         });
@@ -136,7 +138,7 @@ class TiledMapConverter {
                 var sprite_sheet = this.sprite_sheets[sprite_sheet_end_id];
                 var map_tile = this.map.map_tiles.get(tile_value);
                 if (!map_tile) {
-                    var tile_index = tile_value - 1;
+                    var tile_index = tile_value - sprite_sheet.firstgid;
                     var row = Math.floor((tile_index * sprite_sheet.tile_width) / sprite_sheet.width);
                     var y = row * sprite_sheet.tile_height;
                     var x = tile_index * sprite_sheet.tile_width - (row * sprite_sheet.width);

@@ -45,7 +45,6 @@ class Renderer extends View {
             this.model.camera.resolution[0] * this.model.camera.scale[0],
             this.model.camera.resolution[1] * this.model.camera.scale[1]
         ];
-        console.log("Canvas Size: ", this.canvas_size);
         this.canvas = document.createElement('canvas');
         this.canvas.setAttribute("width", `${this.canvas_size[0]}px`);
         this.canvas.setAttribute("height", `${this.canvas_size[1]}px`);

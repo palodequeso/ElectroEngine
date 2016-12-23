@@ -109,15 +109,12 @@ class TestGameplaySystem extends GameplaySystem {
 
 document.addEventListener("DOMContentLoaded", () => {
     var game_systems = new Systems();
-    console.log(game_systems);
     game_systems.add(new AudioSystem());
     game_systems.add(new TestGameplaySystem());
     game_systems.add(new GraphicsSystem());
     game_systems.add(new MapSystem());
     game_systems.add(new PhysicsSystem({engine: new TestPhysics()}));
-    console.log("DOOM");
     var game_loader = new gameio.GameLoader(path.normalize("test_game/data"), GameModel, game_systems);
-    console.log("HERE?");
 
     game_loader.game.set_current_map_instance('test_area');
     var game = new Game({

@@ -378,26 +378,35 @@ class Renderer extends View {
         map.layers.each(layer => {
             var tile_index = 0;
             layer.tiles.forEach(tile_id => {
+                if (tile_id === 0) {
+                    tile_index += 1;
+                    return;
+                }
+
                 var x = (tile_index % layer.width) * map.tile_width;
                 var y = (map.tile_height * layer.height) - ((Math.floor(tile_index / layer.width)) * map.tile_height)
                     - map.tile_height;
                 var position = [x, y];
 
                 if (!this.visibility_check(position, size)) {
+                    tile_index += 1;
                     return;
                 }
 
                 var tile = map.map_tiles.get(tile_id);
+                var tile_instance = map_instance.map_tile_instances.get(tile_id);
                 var sprite_sheet = this.model.sprite_sheets.get(tile.sprite_sheet_id);
+                var frame = tile.frames[tile_instance.current_frame_index];
+
                 renderables.push({
                     layer: layer_index,
                     position: position,
                     size: size,
                     texcoords: [
-                        tile.css_offset_x,
-                        tile.css_offset_y,
-                        tile.css_offset_x + size[0],
-                        tile.css_offset_y + size[1]
+                        frame.css_offset_x,
+                        frame.css_offset_y,
+                        frame.css_offset_x + size[0],
+                        frame.css_offset_y + size[1]
                     ],
                     color: [1, 1, 1, 1],
                     texture: this.textures[sprite_sheet.path],
@@ -423,19 +432,20 @@ class Renderer extends View {
 
         var renderables = [];
         this.model.entities.each((entity) => {
-            var components = entity.components.get_by_index('type', 'sprite');
-            if (components) {
-                components.forEach(component => {
-                    this.handle_sprite_component(component, renderables);
-                });
-            }
-
-            components = entity.components.get_by_index('type', 'particle_system');
-            if (components) {
-                components.forEach(component => {
-                    this.handle_particle_system_component(component, renderables);
-                });
-            }
+            var components;
+            // var components = entity.components.get_by_index('type', 'sprite');
+            // if (components) {
+            //     components.forEach(component => {
+            //         this.handle_sprite_component(component, renderables);
+            //     });
+            // }
+            //
+            // components = entity.components.get_by_index('type', 'particle_system');
+            // if (components) {
+            //     components.forEach(component => {
+            //         this.handle_particle_system_component(component, renderables);
+            //     });
+            // }
 
             components = entity.components.get_by_index('type', 'map');
             if (components) {
@@ -449,7 +459,7 @@ class Renderer extends View {
             return left.layer - right.layer;
         });
 
-        renderables.forEach((renderable) => {
+        renderables.forEach(renderable => {
             this.draw_quad(renderable.position, renderable.size, renderable.texcoords,
                            renderable.color, renderable.texture, renderable.shader);
         });

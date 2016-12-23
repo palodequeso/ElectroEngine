@@ -113,12 +113,11 @@ class Game extends Model {
             });
 
             this.sprite_sheets.each((sprite_sheet) => {
-                // TODO!
-                // sprite_sheet.sprites.each((sprite) => {
-                //     if (sprite.id === character_instance.character.sprite_id) {
-                //         character_instance.character.sprite = sprite;
-                //     }
-                // });
+                sprite_sheet.sprites.each((sprite) => {
+                    if (sprite.id === character_instance.character.sprite_id) {
+                        character_instance.character.sprite = sprite;
+                    }
+                });
             });
 
             // setup sprite instance

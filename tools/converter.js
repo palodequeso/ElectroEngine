@@ -146,8 +146,8 @@ class TiledMapConverter {
                         sprite_sheet_id: sprite_sheet.id,
                         total_animation_duration: 0,
                         frames: [{
-                            css_offset_x: -x,
-                            css_offset_y: -y,
+                            css_offset_x: x,
+                            css_offset_y: y,
                             duration: 0
                         }]
                     }));

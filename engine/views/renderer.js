@@ -430,6 +430,7 @@ class Renderer extends View {
         this.gl.uniformMatrix4fv(this.shaders.textured_quad.projection_matrix_location, false, this.projection_matrix);
         this.gl.uniformMatrix4fv(this.shaders.textured_quad.view_matrix_location, false, this.model.camera.view_matrix);
 
+        // TODO: This should only be done when the data changes, not every frame!
         var renderables = [];
         this.model.entities.each((entity) => {
             var components;

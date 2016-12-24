@@ -8,29 +8,47 @@ class CollisionLayer extends Model {
         return {
             tiles_x: 0,
             tiles_y: 0,
-            tile_width: 0,
-            tile_height: 0,
             image_width: 0,
             image_height: 0,
-            blocks: null,
-            easystar_grid: null
+            blocks: { /*
+                2: {
+                    4: true, // collides
+                    5: false // doesn't collide (don't need this one!)
+                }
+            */ },
+            easystar_grid: []
         };
     }
     constructor(data) {
         super(data);
         this.easystar = null;
+        this.recalculate_easystar_grid();
     }
-    find_path(position, end_position, callback) {
+    recalculate_easystar_grid() {
+        this.easystar_grid = [];
+        for (var y = 0; y < this.tiles_y; y += 1) {
+            var row = [];
+            for (var x = 0; x < this.tiles_x; x += 1) {
+                row.push((this.blocks.hasOwnProperty(x) &&
+                          this.blocks[x].hasOwnProperty(y) &&
+                          this.blocks[x][y]) ? 1 : 0);
+            }
+            this.easystar_grid.push(row);
+        }
+    }
+    find_path(position, end_position) {
         if (this.easystar === null) {
             this.easystar = new EasyStar.js();
             this.easystar.setGrid(this.easystar_grid);
             this.easystar.setAcceptableTiles([0]);
             this.easystar.setIterationsPerCalculation(100);
         }
-        this.easystar.findPath(position[0], position[1], end_position[0], end_position[1], (path) => {
-            callback(path);
+        return new Promise(resolve => {
+            this.easystar.findPath(position[0], position[1], end_position[0], end_position[1], (path) => {
+                resolve(path);
+            });
+            this.easystar.calculate();
         });
-        this.easystar.calculate();
     }
     check_collision(position, velocity, dimensions) {
         // NOTE: position is top left of collision rect.

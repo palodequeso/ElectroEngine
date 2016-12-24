@@ -8,13 +8,7 @@ var mkdirp = require('mkdirp');
 var Map = require('../engine/models/maps/map.js');
 var MapTile = require('../engine/models/maps/map_tile.js');
 var MapLayer = require('../engine/models/maps/map_layer.js');
-
-function convert_index_to_coords(index, width, height, tile_width, tile_height) {
-    var tiles_x = Math.floor(width / tile_width);
-    var row = Math.floor(index / tiles_x);
-    var col = index % tiles_x;
-    return [col * tile_width, row * tile_height];
-}
+var CollisionLayer = require('../engine/models/maps/collision_layer.js');
 
 class TiledMapConverter {
     constructor(map_path, out_path) {
@@ -125,8 +119,36 @@ class TiledMapConverter {
             var buffer = zlib.inflateSync(zipped);
             var tiles = [];
             var tile_count = this.map.width * this.map.height * 4;
-            for (var i = 0; i < tile_count; i += 4) {
-                var tile_value = buffer.readUInt32LE(i);
+            var tile_value;
+            var tile_index;
+            var i = 0;
+            var x;
+            var y;
+
+            if (layer.name === 'collisions') {
+                tile_index = 0;
+                var collision_layer = new CollisionLayer();
+                collision_layer.tiles_x = layer.width;
+                collision_layer.tiles_y = layer.height;
+                for (i = 0; i < tile_count; i += 4) {
+                    tile_value = buffer.readUInt32LE(i);
+                    if (tile_value !== 0) {
+                        y = Math.floor(tile_index / layer.width);
+                        x = tile_index - (y * layer.width);
+                        if (!collision_layer.blocks.hasOwnProperty(x)) {
+                            collision_layer.blocks[x] = {};
+                        }
+                        collision_layer.blocks[x][y] = true;
+                    }
+                    tile_index += 1;
+                }
+                collision_layer.recalculate_easystar_grid();
+                this.map.collision_layer = collision_layer;
+                return;
+            }
+
+            for (i = 0; i < tile_count; i += 4) {
+                tile_value = buffer.readUInt32LE(i);
                 tiles.push(tile_value);
                 var sprite_sheet_end_id = null;
                 this.sprite_sheet_end_ids.forEach(end_id => {
@@ -138,10 +160,10 @@ class TiledMapConverter {
                 var sprite_sheet = this.sprite_sheets[sprite_sheet_end_id];
                 var map_tile = this.map.map_tiles.get(tile_value);
                 if (!map_tile) {
-                    var tile_index = tile_value - sprite_sheet.firstgid;
+                    tile_index = tile_value - sprite_sheet.firstgid;
                     var row = Math.floor((tile_index * sprite_sheet.tile_width) / sprite_sheet.width);
-                    var y = row * sprite_sheet.tile_height;
-                    var x = tile_index * sprite_sheet.tile_width - (row * sprite_sheet.width);
+                    y = row * sprite_sheet.tile_height;
+                    x = tile_index * sprite_sheet.tile_width - (row * sprite_sheet.width);
 
                     this.map.map_tiles.add(new MapTile({
                         id: tile_value,

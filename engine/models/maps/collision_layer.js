@@ -41,7 +41,7 @@ class CollisionLayer extends Model {
             this.easystar = new EasyStar.js();
             this.easystar.setGrid(this.easystar_grid);
             this.easystar.setAcceptableTiles([0]);
-            this.easystar.setIterationsPerCalculation(100);
+            this.easystar.setIterationsPerCalculation(1000);
         }
         return new Promise(resolve => {
             this.easystar.findPath(position[0], position[1], end_position[0], end_position[1], (path) => {

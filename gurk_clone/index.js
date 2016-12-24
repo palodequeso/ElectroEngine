@@ -55,16 +55,17 @@ class TestGameplaySystem extends GameplaySystem {
         camera.calculate_matrix();
     }
     figure_out_path_data(start_position, mouse_position, camera, map) {
-        console.log(start_position, mouse_position, camera, map);
         var start = [
             Math.floor(start_position[0] / map.tile_width),
             map.height - (Math.floor(start_position[1] / map.tile_height)) - 1
         ];
+
+        var mpx = mouse_position[0];
+        var mpy = (camera.resolution[1] * camera.scale[1]) - mouse_position[1];
         var end = [
-            Math.floor((-camera.position[0] + mouse_position[0]) / camera.scale[0] / map.tile_width),
-            map.height - (Math.floor((camera.position[1] + (512 - mouse_position[1])) / camera.scale[1] / map.tile_height)) - 1
+            Math.floor((-camera.position[0] + mpx) / camera.scale[0] / map.tile_width),
+            map.height - (Math.floor((-camera.position[1] + mpy) / camera.scale[1] / map.tile_height)) - 1
         ];
-        console.log(start, end);
         return {start: start, end: end};
     }
 }

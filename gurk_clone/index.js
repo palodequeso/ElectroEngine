@@ -58,13 +58,13 @@ class TestGameplaySystem extends GameplaySystem {
         console.log(start_position, mouse_position, camera, map);
         var start = [
             Math.floor(start_position[0] / map.tile_width),
-            map.height - (Math.floor(start_position[1] / map.tile_height))
+            map.height - (Math.floor(start_position[1] / map.tile_height)) - 1
         ];
         var end = [
             Math.floor((-camera.position[0] + mouse_position[0]) / camera.scale[0] / map.tile_width),
-            map.height - (Math.floor((camera.position[1] + mouse_position[1]) / camera.scale[1] / map.tile_height))
+            map.height - (Math.floor((camera.position[1] + (512 - mouse_position[1])) / camera.scale[1] / map.tile_height)) - 1
         ];
-        return {start: [0, 0], end: [255, 95]};
+        console.log(start, end);
         return {start: start, end: end};
     }
 }

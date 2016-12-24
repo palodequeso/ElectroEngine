@@ -16,7 +16,7 @@ var Systems = require('../engine/models/ecs/systems.js');
 var BasicPhysics = require('../engine/models/physics/basic_physics.js');
 
 class TestGameplaySystem extends GameplaySystem {
-    update(frame_time, entities, camera/* , game*/) {
+    update(frame_time, entities, camera, game) {
         var camera_velocity = [0, 0];
         var camera_speed = 8 * camera.scale[0];
         if (input.is_keydown(68)) {
@@ -31,9 +31,39 @@ class TestGameplaySystem extends GameplaySystem {
         if (input.is_keydown(83)) {
             camera_velocity[1] = -camera_speed;
         }
+        var click_data = input.is_clicked();
+        if (click_data !== null) {
+            var map = null;
+            var components = game.current_map_instance.components.get_by_index('type', 'map');
+            if (components) {
+                components.forEach(component => {
+                    map = component.map_instance.map;
+                });
+            }
+
+            if (map !== null && map.collision_layer.tiles_x > 0 && map.collision_layer.tiles_y > 0) {
+                var path_data = this.figure_out_path_data([0, 0], click_data, camera, map);
+                console.log(path_data);
+                // TODO: Path data is incorrect :(, womp
+                map.collision_layer.find_path(path_data.start, path_data.end).then(character_path => {
+                    console.log("Path: ", character_path);
+                });
+            }
+        }
         camera.position[0] -= camera_velocity[0];// * (frame_time / 1000);
         camera.position[1] -= camera_velocity[1];// * (frame_time / 1000);
         camera.calculate_matrix();
+    }
+    figure_out_path_data(start_position, mouse_position, camera, map) {
+        var start = [
+            Math.floor(start_position[0] / map.tile_width),
+            map.height - (Math.floor(start_position[1] / map.tile_height))
+        ];
+        var end = [
+            Math.floor((camera.position[0] + mouse_position[0]) / camera.scale[0] / map.tile_width),
+            map.height - (Math.floor((camera.position[1] + mouse_position[1]) / camera.scale[1] / map.tile_height))
+        ];
+        return {start: start, end: end};
     }
 }
 

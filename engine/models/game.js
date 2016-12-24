@@ -57,6 +57,19 @@ class Game extends Model {
             current_map_instance: Entity
         };
     }
+    get collision_layer() {
+        var out = null;
+        var components = current_map_instance.components.get_by_index('type', 'map');
+        if (components) {
+            components.forEach(component => {
+                var cl = component.map_instance.map.collision_layer;
+                if (cl.tiles_x >= 0 && cl.tiles_y >= 0) {
+                    out = cl;
+                }
+            });
+        }
+        return out;
+    }
     constructor(data) {
         super(data);
         this.systems.sort();

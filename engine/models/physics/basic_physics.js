@@ -33,7 +33,7 @@ class BasicPhysics extends Physics {
         });
 
         var collision_layer = map_instance.map.collision_layer;
-        if (collision_layer.width <= 0 && collision_layer.height <= 0) {
+        if (collision_layer.tiles_x <= 0 && collision_layer.tiles_y <= 0) {
             // No viable collision layer!
             return;
         }

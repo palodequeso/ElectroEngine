@@ -23,7 +23,7 @@ class CharacterInstance extends Model {
     constructor(data) {
         super(data);
     }
-    update(time_delta) {
+    update(/* time_delta */) {
         var position = this.sprite_instance.position;
         var velocity = this.velocity;
         position[0] += velocity[0];
@@ -31,8 +31,12 @@ class CharacterInstance extends Model {
         this.sprite_instance.position = position;
     }
     set_velocity_and_animation(velocity, animation) {
+        if (animation === undefined) {
+            animation = this.sprite_instance.current_animation;
+        }
+
         var previous_velocity = this.previous_velocity;
-        if (velocity[0] != previous_velocity[0] || velocity[1] != previous_velocity[1]) {
+        if (velocity[0] !== previous_velocity[0] || velocity[1] !== previous_velocity[1]) {
             previous_velocity[0] = velocity[0];
             previous_velocity[1] = velocity[1];
         }

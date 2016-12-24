@@ -113,7 +113,7 @@ document.addEventListener("DOMContentLoaded", () => {
     game_systems.add(new TestGameplaySystem());
     game_systems.add(new GraphicsSystem());
     game_systems.add(new MapSystem());
-    game_systems.add(new PhysicsSystem({engine: new TestPhysics()}));
+    game_systems.add(new PhysicsSystem({engine: new TestPhysics(), type: 'rigid_body'}));
     var game_loader = new gameio.GameLoader(path.normalize("test_game/data"), GameModel, game_systems);
 
     game_loader.game.set_current_map_instance('test_area');

@@ -13,18 +13,7 @@ var MapSystem = require('../engine/models/systems/map.js');
 var PhysicsSystem = require('../engine/models/systems/physics.js');
 var Systems = require('../engine/models/ecs/systems.js');
 
-var RigidBodyPhysics = require('../engine/models/physics/rigid_body_physics.js');
-
-class TestPhysics extends RigidBodyPhysics {
-    get defaults() {
-        var defaults = super.defaults;
-        defaults.gravity = [0.0, 0.0];
-        return defaults;
-    }
-    constructor(data) {
-        super(data);
-    }
-}
+var BasicPhysics = require('../engine/models/physics/basic_physics.js');
 
 class TestGameplaySystem extends GameplaySystem {
     update(frame_time, entities, camera/* , game*/) {
@@ -54,7 +43,7 @@ document.addEventListener("DOMContentLoaded", () => {
     game_systems.add(new TestGameplaySystem());
     game_systems.add(new GraphicsSystem());
     game_systems.add(new MapSystem());
-    game_systems.add(new PhysicsSystem({engine: new TestPhysics()}));
+    game_systems.add(new PhysicsSystem({engine: new BasicPhysics(), type: 'basic'}));
     var game_loader = new gameio.GameLoader(path.normalize("gurk_clone/data"), GameModel, game_systems);
 
     game_loader.game.camera.resolution = [128, 128];

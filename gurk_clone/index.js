@@ -39,6 +39,8 @@ class TestGameplaySystem extends GameplaySystem {
             });
         }
 
+        var map_instance = game.map_instance;
+
         var camera_velocity = [0, 0];
         var camera_speed = 8 * camera.scale[0];
         if (input.is_keydown(68)) {
@@ -72,8 +74,8 @@ class TestGameplaySystem extends GameplaySystem {
                     console.log("Path: ", character_path);
                     var last_tile = character_path[character_path.length - 1];
                     this.character_instance.sprite_instance.position = [
-                        last_tile.x * 8,
-                        (96 - last_tile.y - 1) * 8
+                        last_tile.x * map_instance.map.tile_width,
+                        (map_instance.map.height - last_tile.y - 1) * map_instance.map.tile_height
                     ];
                     console.log(last_tile, this.character_instance.sprite_instance.position);
                 });

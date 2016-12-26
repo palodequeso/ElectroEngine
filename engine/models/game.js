@@ -59,13 +59,23 @@ class Game extends Model {
     }
     get collision_layer() {
         var out = null;
-        var components = current_map_instance.components.get_by_index('type', 'map');
+        var components = this.current_map_instance.components.get_by_index('type', 'map');
         if (components) {
             components.forEach(component => {
                 var cl = component.map_instance.map.collision_layer;
                 if (cl.tiles_x >= 0 && cl.tiles_y >= 0) {
                     out = cl;
                 }
+            });
+        }
+        return out;
+    }
+    get map_instance() {
+        var out = null;
+        var components = this.current_map_instance.components.get_by_index('type', 'map');
+        if (components) {
+            components.forEach(component => {
+                out = component.map_instance;
             });
         }
         return out;

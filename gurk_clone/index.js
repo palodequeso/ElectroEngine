@@ -16,7 +16,29 @@ var Systems = require('../engine/models/ecs/systems.js');
 var BasicPhysics = require('../engine/models/physics/basic_physics.js');
 
 class TestGameplaySystem extends GameplaySystem {
+    constructor() {
+        super();
+        this.character_entity = null;
+        this.character_instance = null;
+    }
     update(frame_time, entities, camera, game) {
+        if (this.character_entity === null) {
+            entities.each(entity => {
+                var found = false;
+                var components = entity.components.get_by_index('type', 'character');
+                if (components && !found) {
+                    components.forEach(component => {
+                        if (component.character_instance.id === 'player_character') {
+                            this.character_entity = entity;
+                            this.character_instance = component.character_instance;
+                            console.log("CI: ", component.character_instance);
+                            found = true;
+                        }
+                    });
+                }
+            });
+        }
+
         var camera_velocity = [0, 0];
         var camera_speed = 8 * camera.scale[0];
         if (input.is_keydown(68)) {
@@ -42,11 +64,18 @@ class TestGameplaySystem extends GameplaySystem {
             }
 
             if (map !== null && map.collision_layer.tiles_x > 0 && map.collision_layer.tiles_y > 0) {
-                var path_data = this.figure_out_path_data([0, 0], click_data, camera, map);
+                var position = this.character_instance.sprite_instance.position;
+                var path_data = this.figure_out_path_data(position, click_data, camera, map);
                 console.log(path_data);
                 // TODO: Path data is incorrect :(, womp
                 map.collision_layer.find_path(path_data.start, path_data.end).then(character_path => {
                     console.log("Path: ", character_path);
+                    var last_tile = character_path[character_path.length - 1];
+                    this.character_instance.sprite_instance.position = [
+                        last_tile.x * 8,
+                        (96 - last_tile.y - 1) * 8
+                    ];
+                    console.log(last_tile, this.character_instance.sprite_instance.position);
                 });
             }
         }

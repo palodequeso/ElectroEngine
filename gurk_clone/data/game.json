@@ -3,7 +3,14 @@
     "name": "Test",
     "description": "Test game",
     "version": "0.1",
-    "character_instances": [],
+    "character_instances": [
+        {
+            "id": "player_character",
+            "character_id": "player",
+            "position": [0, 0],
+            "starting_animation": "default"
+        }
+    ],
     "map_instances": [
         {
             "id": "overworld_1_forest",

@@ -7,7 +7,7 @@
         {
             "id": "player_character",
             "character_id": "test_character",
-            "position": [192, 192],
+            "position": [192, 512],
             "starting_animation": "walk_up"
         }
     ],
@@ -21,7 +21,7 @@
                 {
                     "id": "test_npc",
                     "character_id": "test_character",
-                    "position": [64, 64],
+                    "position": [64, 512],
                     "starting_animation": "walk_up"
                 }
             ],

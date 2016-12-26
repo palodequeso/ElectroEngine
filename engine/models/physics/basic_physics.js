@@ -24,8 +24,8 @@ class BasicPhysics extends Physics {
             components = entity.components.get_by_index('type', 'character');
             if (components) {
                 components.forEach(component => {
-                    if (component.character_instance.character.velocity[0] !== 0 ||
-                        component.character_instance.character.velocity[1] !== 0) {
+                    if (component.character_instance.velocity[0] !== 0 ||
+                        component.character_instance.velocity[1] !== 0) {
                         character_instances.push(component.character_instance);
                     }
                 });

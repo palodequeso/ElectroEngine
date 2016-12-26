@@ -82,6 +82,7 @@ class App extends View {
         console.log(path, game_loader.game);
         this.game_model = game_loader.game;
         this.render();
+        this.create_particle_system();
     }
     create_map() {
         var model = new Map();
@@ -290,30 +291,30 @@ class App extends View {
             var sprite_sheet_children = [];
 
             var sprites = this.sprite_sheet_sprites[sprite_sheet.id];
-            sprites.forEach(sprite => {
-                var sprite_children = [];
+            // sprites.forEach(sprite => {
+            //     var sprite_children = [];
+            //
+            //     Object.keys(sprite.animations).forEach(animation_id => {
+            //         sprite_children.push({
+            //             type: 'sprite_animation',
+            //             id: animation_id,
+            //             sprite_id: sprite.id
+            //         });
+            //     });
+            //
+            //     sprite_sheet_children.push({
+            //         type: 'sprite',
+            //         id: sprite.id,
+            //         children: sprite_children
+            //     });
+            // });
 
-                Object.keys(sprite.animations).forEach(animation_id => {
-                    sprite_children.push({
-                        type: 'sprite_animation',
-                        id: animation_id,
-                        sprite_id: sprite.id
-                    });
-                });
-
-                sprite_sheet_children.push({
-                    type: 'sprite',
-                    id: sprite.id,
-                    children: sprite_children
-                });
-            });
-
-            items[3].children.push({
-                type: 'sprite_sheet',
-                name: sprite_sheet.name,
-                id: sprite_sheet.id,
-                children: sprite_sheet_children
-            });
+            // items[3].children.push({
+            //     type: 'sprite_sheet',
+            //     name: sprite_sheet.name,
+            //     id: sprite_sheet.id,
+            //     children: sprite_sheet_children
+            // });
         });
 
         var tree = new hx.Tree('#game_navigation', {

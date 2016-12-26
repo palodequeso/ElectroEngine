@@ -1,0 +1,18 @@
+{
+    "id": "black_mage",
+    "purpose": "entity",
+    "sprite_sheet_id": "characters",
+    "animations": {
+        "default": {
+            "time": 0.0,
+            "frames": [
+                {"duration": 0.0, "index": 0}
+            ]
+        }
+    },
+    "tiles": [
+        {"css_offset_x": 111, "css_offset_y": 0}
+    ],
+    "width": 18,
+    "height": 17
+}

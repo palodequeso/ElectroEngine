@@ -33,7 +33,8 @@ var ShapeEdge = require('../models/physics/shape_edge.js');
 var ShapePolygon = require('../models/physics/shape_polygon.js');
 
 function create_body(body_data) {
-    if (!body_data) {
+    console.log("Create Body: ", body_data);
+    if (!body_data || !body_data.hasOwnProperty('shapes')) {
         return null;
     }
 
@@ -93,6 +94,7 @@ class GameLoader {
     load_sprite_sheets() {
         var sprite_sheet_filenames = fs.readdirSync(path.normalize(this.folder_path + '/sprite_sheets/'));
         sprite_sheet_filenames.forEach((sprite_sheet_filename) => {
+            console.log("Loading Sprite Sheet: ", sprite_sheet_filename);
             var sprite_sheet = new SpriteSheet(JSON.parse(fs.readFileSync(
                 path.normalize(this.folder_path + '/sprite_sheets/' +
                                sprite_sheet_filename, 'utf-8'))));
@@ -102,6 +104,7 @@ class GameLoader {
     load_sprites() {
         var sprite_filenames = fs.readdirSync(path.normalize(this.folder_path + '/sprites/'));
         sprite_filenames.forEach((sprite_filename) => {
+            console.log("Loading Sprite: ", sprite_filename);
             var sprite_data = JSON.parse(fs.readFileSync(path.normalize(
                 this.folder_path + '/sprites/' + sprite_filename), 'utf-8'));
             if (Array.isArray(sprite_data)) {
@@ -116,6 +119,7 @@ class GameLoader {
     load_characters() {
         var characters_filenames = fs.readdirSync(path.normalize(this.folder_path + '/characters/'));
         characters_filenames.forEach((characters_filename) => {
+            console.log("Loading Character: ", characters_filename);
             var character = new Character(JSON.parse(fs.readFileSync(
                 path.normalize(this.folder_path + '/characters/' +
                                characters_filename), 'utf-8')));
@@ -136,6 +140,7 @@ class GameLoader {
     load_maps() {
         var map_filenames = fs.readdirSync(path.normalize(this.folder_path + '/maps/'));
         map_filenames.forEach((map_filename) => {
+            console.log("Loading Map: ", map_filename);
             var map_json_path = path.normalize(this.folder_path + '/maps/' + map_filename);
             var map_json = fs.readFileSync(map_json_path, 'utf-8');
             var map_data = JSON.parse(map_json);
@@ -202,6 +207,7 @@ class GameLoader {
     }
     load_character_instances() {
         this.game_data.character_instances.forEach((character_instance) => {
+            console.log("Character Instance Being Loaded: ", character_instance);
             this.game.characters.each((character) => {
                 if (character.id === character_instance.character_id) {
                     character_instance.character = character;

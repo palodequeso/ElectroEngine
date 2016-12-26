@@ -1,0 +1,18 @@
+{
+    "id": "ranger",
+    "purpose": "entity",
+    "sprite_sheet_id": "characters",
+    "animations": {
+        "default": {
+            "time": 0.0,
+            "frames": [
+                {"duration": 0.0, "index": 0}
+            ]
+        }
+    },
+    "tiles": [
+        {"css_offset_x": 65, "css_offset_y": 5}
+    ],
+    "width": 12,
+    "height": 12
+}

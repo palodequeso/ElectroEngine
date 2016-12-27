@@ -1,0 +1,44 @@
+{ "height":16,
+ "layers":[
+        {
+         "compression":"zlib",
+         "data":"eJxjZGBgYKQxZiFCDRMJ5jHTwc3kYmxuI8VvA4GJiR9y1A7GuMIVF9SMo8HmZ3zxCAA1GgEZ",
+         "encoding":"base64",
+         "height":16,
+         "name":"Ground",
+         "opacity":1,
+         "type":"tilelayer",
+         "visible":true,
+         "width":16,
+         "x":0,
+         "y":0
+        }],
+ "nextobjectid":1,
+ "orientation":"orthogonal",
+ "properties":
+    {
+
+    },
+ "renderorder":"right-down",
+ "tileheight":8,
+ "tilesets":[
+        {
+         "firstgid":1,
+         "image":"..\/..\/Game Assets\/GurkClone\/Micro Tileset - Overworld and Dungeon vv1.1\/tileset.png",
+         "imageheight":256,
+         "imagewidth":256,
+         "margin":0,
+         "name":"Environment",
+         "properties":
+            {
+
+            },
+         "spacing":0,
+         "tilecount":1024,
+         "tileheight":8,
+         "tilewidth":8
+        }],
+ "tilewidth":8,
+ "version":1,
+ "width":16
+}

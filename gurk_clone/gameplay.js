@@ -15,7 +15,6 @@ class RPGGameplaySystem extends GameplaySystem {
 
         this.camera_control = new CameraControl();
         this.party = new Party();
-        this.gameplay = new Gameplay();
     }
     update(frame_time, entities, camera, game) {
         if (this.character_entity === null) {
@@ -37,7 +36,7 @@ class RPGGameplaySystem extends GameplaySystem {
 
         var map_instance = game.map_instance;
 
-        this.camera_control.update(time_delta, camera);
+        this.camera_control.update(frame_time, camera);
 
         var click_data = input.is_clicked();
         if (click_data !== null) {

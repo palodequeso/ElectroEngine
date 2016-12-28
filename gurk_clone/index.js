@@ -13,7 +13,7 @@ var Systems = require('../engine/models/ecs/systems.js');
 
 var BasicPhysics = require('../engine/models/physics/basic_physics.js');
 
-var RPGGameplaySystem = require('./gameplay.js');
+var RPGGameplaySystem = require('./src/gameplay.js');
 
 document.addEventListener("DOMContentLoaded", () => {
     var game_systems = new Systems();

@@ -55,6 +55,10 @@ class RPGGameplaySystem extends GameplaySystem {
                 // TODO: Path data is incorrect :(, womp
                 map.collision_layer.find_path(path_data.start, path_data.end).then(character_path => {
                     console.log("Path: ", character_path);
+                    if (character_path === null) {
+                        return;
+                    }
+
                     var last_tile = character_path[character_path.length - 1];
                     this.character_instance.sprite_instance.position = [
                         last_tile.x * map_instance.map.tile_width,

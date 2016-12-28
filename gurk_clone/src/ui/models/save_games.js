@@ -2,7 +2,7 @@
 
 const Collection = require('exo').Collection;
 
-const SaveGame = reuqire('./save_game.js');
+const SaveGame = require('./save_game.js');
 
 class SaveGames extends Collection {
     get model() {

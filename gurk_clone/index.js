@@ -1,5 +1,6 @@
 'use strict';
 
+var fs = require('fs');
 var path = require("path");
 var GameModel = require('../engine/models/game.js');
 var Game = require('../engine/views/game.js');
@@ -45,6 +46,7 @@ document.addEventListener("DOMContentLoaded", () => {
         resolution: [128, 128]
     });
     game.run();
+    game.running = false;
 
     var save_games = new SaveGames(read_saves());
     var title = new TitleView({collection: save_games});

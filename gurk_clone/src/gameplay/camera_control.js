@@ -2,7 +2,7 @@
 
 var Model = require('exo').Model;
 
-var input = require('../engine/models/input.js');
+var input = require('../../../engine/models/input.js');
 
 class CameraControl extends Model {
     constructor(options) {

@@ -1,7 +1,7 @@
 'use strict';
 
-var GameplaySystem = require('../engine/models/systems/gameplay.js');
-var input = require('../engine/models/input.js');
+var GameplaySystem = require('../../../engine/models/systems/gameplay.js');
+var input = require('../../../engine/models/input.js');
 
 var CameraControl = require('./camera_control.js');
 var Party = require('./party.js');

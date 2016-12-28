@@ -2,7 +2,7 @@
 
 var Model = require('exo').Model;
 
-var Entity = require('../../engine/models/ecs/entity.js');
+var Entity = require('../../../engine/models/ecs/entity.js');
 
 var Inventory = require('./inventory.js');
 

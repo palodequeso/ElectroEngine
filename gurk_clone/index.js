@@ -13,7 +13,19 @@ var Systems = require('../engine/models/ecs/systems.js');
 
 var BasicPhysics = require('../engine/models/physics/basic_physics.js');
 
-var RPGGameplaySystem = require('./src/gameplay.js');
+var RPGGameplaySystem = require('./src/gameplay/gameplay.js');
+
+var SaveGames = require('./src/ui/models/save_games.js');
+var TitleView = require('./src/ui/views/title.js');
+
+function read_saves() {
+    var out = [];
+    var save_files = fs.readdirSync(path.join(__dirname, 'saves'));
+    save_files.forEach(save_file => {
+        out.push(JSON.parse(fs.readFileSync(path.join(__dirname, 'saves', save_file), 'utf-8')));
+    });
+    return out;
+}
 
 document.addEventListener("DOMContentLoaded", () => {
     var game_systems = new Systems();
@@ -33,4 +45,9 @@ document.addEventListener("DOMContentLoaded", () => {
         resolution: [128, 128]
     });
     game.run();
+
+    var save_games = new SaveGames(read_saves());
+    var title = new TitleView({collection: save_games});
+    title.render();
+    document.querySelector('body').appendChild(title.element);
 });

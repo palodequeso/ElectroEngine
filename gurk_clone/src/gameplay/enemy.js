@@ -2,7 +2,7 @@
 
 const Model = require('exo').Model;
 
-var PartyMembers = require('./party_members.js');
+var Entity = require('../../../engine/models/ecs/entity.js');
 
 class Enemy extends Model {
     get defaults() {

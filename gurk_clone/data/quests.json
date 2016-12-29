@@ -1,0 +1,12 @@
+[
+    {
+        "id": "slime_cave",
+        "name": "Slime Cave",
+        "quest_trigger": "luna_priest",
+        "quest_trigger_type": "npc",
+        "ending_trigger": "slime_boss",
+        "ending_trigger_type": "enemy_death",
+        "reward": "gold",
+        "reward_value": 50
+    }
+]

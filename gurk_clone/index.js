@@ -50,6 +50,19 @@ document.addEventListener("DOMContentLoaded", () => {
 
     var save_games = new SaveGames(read_saves());
     var title = new TitleView({collection: save_games});
+    title.on('new_game', () => {
+        //
+    });
+    title.on('continue_game', () => {
+        //
+    });
+    title.on('game_options', () => {
+        //
+    });
+    title.on('exit_game', () => {
+        //
+    });
     title.render();
+
     document.querySelector('body').appendChild(title.element);
 });

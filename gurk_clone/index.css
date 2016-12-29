@@ -25,7 +25,7 @@ canvas {
 }
 
 .title {
-    background-color: black;
+    /*background-color: black;*/
     color: white;
     position: fixed;
     top: 0px;
@@ -35,6 +35,10 @@ canvas {
     padding: 8px;
     margin-left: auto;
     margin-right: auto;
+}
+
+.title ul {
+    list-style: none;
 }
 
 .title .link {

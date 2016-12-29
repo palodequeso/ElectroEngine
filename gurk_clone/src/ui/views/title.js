@@ -3,7 +3,7 @@
 var fs = require('fs');
 var path = require('path');
 
-var Handlebars = require('handlebars');
+// var Handlebars = require('handlebars');
 var View = require('exo').View;
 var title_tmpl = fs.readFileSync(path.join(__dirname, '/../tmpl/title.html'), 'utf8');
 
@@ -18,22 +18,20 @@ class Title extends View {
     }
     constructor(options) {
         super(options);
-        //this.template = Handlebars.compile(title_tmpl);
     }
     continue_game() {
-        //
+        this.emit('continue_game');
     }
     new_game() {
-        //
+        this.emit('new_game');
     }
     game_options() {
-        //
+        this.emit('game_options');
     }
     exit_game() {
-        //
+        this.emit('exit_game');
     }
     render() {
-        //this.element.innerHTML = this.template(this.model.serialize());
         this.element.innerHTML = title_tmpl;
     }
 }

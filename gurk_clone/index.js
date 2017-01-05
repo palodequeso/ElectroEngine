@@ -1,27 +1,29 @@
 'use strict';
 
-var fs = require('fs');
-var path = require("path");
-var GameModel = require('../engine/models/game.js');
-var Game = require('../engine/views/game.js');
-var gameio = require('../engine/util/gameio.js');
+const fs = require('fs');
+const path = require("path");
+const process = require('process');
+const GameModel = require('../engine/models/game.js');
+const Game = require('../engine/views/game.js');
+const gameio = require('../engine/util/gameio.js');
 
-var AudioSystem = require('../engine/models/systems/audio.js');
-var GraphicsSystem = require('../engine/models/systems/graphics.js');
-var MapSystem = require('../engine/models/systems/map.js');
-var PhysicsSystem = require('../engine/models/systems/physics.js');
-var Systems = require('../engine/models/ecs/systems.js');
+const AudioSystem = require('../engine/models/systems/audio.js');
+const GraphicsSystem = require('../engine/models/systems/graphics.js');
+const MapSystem = require('../engine/models/systems/map.js');
+const PhysicsSystem = require('../engine/models/systems/physics.js');
+const Systems = require('../engine/models/ecs/systems.js');
 
-var BasicPhysics = require('../engine/models/physics/basic_physics.js');
+const BasicPhysics = require('../engine/models/physics/basic_physics.js');
 
-var RPGGameplaySystem = require('./src/gameplay/gameplay.js');
+const RPGGameplaySystem = require('./src/gameplay/gameplay.js');
 
-var SaveGames = require('./src/ui/models/save_games.js');
-var TitleView = require('./src/ui/views/title.js');
+const SaveGames = require('./src/ui/models/save_games.js');
+const TitleView = require('./src/ui/views/title.js');
+const NewGameView = require('./src/ui/views/new_game.js');
 
 function read_saves() {
-    var out = [];
-    var save_files = fs.readdirSync(path.join(__dirname, 'saves'));
+    const out = [];
+    const save_files = fs.readdirSync(path.join(__dirname, 'saves'));
     save_files.forEach(save_file => {
         out.push(JSON.parse(fs.readFileSync(path.join(__dirname, 'saves', save_file), 'utf-8')));
     });
@@ -29,40 +31,47 @@ function read_saves() {
 }
 
 document.addEventListener("DOMContentLoaded", () => {
-    var game_systems = new Systems();
+    const body = document.querySelector('body');
+    const game_systems = new Systems();
+    const gameplay = new RPGGameplaySystem();
     game_systems.add(new AudioSystem());
-    game_systems.add(new RPGGameplaySystem());
+    game_systems.add(gameplay);
     game_systems.add(new GraphicsSystem());
     game_systems.add(new MapSystem());
     game_systems.add(new PhysicsSystem({engine: new BasicPhysics(), type: 'basic'}));
-    var game_loader = new gameio.GameLoader(path.normalize("gurk_clone/data"), GameModel, game_systems);
+    const game_loader = new gameio.GameLoader(path.normalize("gurk_clone/data"), GameModel, game_systems);
 
     game_loader.game.camera.resolution = [128, 128];
     game_loader.game.camera.scale = [4, 4];
 
     game_loader.game.set_current_map_instance('overworld_1_forest');
-    var game = new Game({
-        model: game_loader.game,
+    const game = game_loader.game;
+    const game_view = new Game({
+        model: game,
         resolution: [128, 128]
     });
-    game.run();
-    game.running = false;
+    game_view.run();
+    game_view.running = false;
 
-    var save_games = new SaveGames(read_saves());
-    var title = new TitleView({collection: save_games});
-    title.on('new_game', () => {
-        //
+    const save_games = new SaveGames(read_saves());
+    const title = new TitleView({collection: save_games});
+    title.on('new_game_out', () => {
+        const new_game_view = new NewGameView();
+        new_game_view.render();
+        title.element.parentNode.removeChild(title.element);
+        body.appendChild(new_game_view.element);
+        // gameplay.new_game(__dirname);
     });
     title.on('continue_game', () => {
-        //
+        gameplay.continue_game();
     });
     title.on('game_options', () => {
         //
     });
     title.on('exit_game', () => {
-        //
+        process.exit();
     });
     title.render();
 
-    document.querySelector('body').appendChild(title.element);
+    body.appendChild(title.element);
 });

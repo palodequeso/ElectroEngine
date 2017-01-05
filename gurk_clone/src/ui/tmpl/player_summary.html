@@ -1,0 +1,20 @@
+<div class="hx-group hx-horizontal">
+    <div class="hx-section">
+        Portrait
+    </div>
+    <div class="hx-section">
+        {{#if name}}
+            {{name}}
+        {{else}}
+            <input type="text" class="player_name" placeholder="Player Name..." />
+        {{/if}}<br>
+        {{#if class}}
+            {{class}}
+        {{else}}
+            <select class="player_class">
+                <option value="">Player Class...</option>
+                <option value="fighter">Figher</option>
+            </select>
+        {{/if}}<br>
+    </div>
+</div>

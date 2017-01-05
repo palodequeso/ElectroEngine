@@ -44,3 +44,26 @@ canvas {
 .title .link {
     //
 }
+
+.modal {
+    background-color: black;
+    color: white;
+    position: fixed;
+    top: 8px;
+    bottom: 8px;
+    left: 8px;
+    right: 8px;
+    border: 2px solid #AAAAAA;
+    border-radius: 6px;
+    padding: 8px;
+}
+
+.player_inventory_summary label {
+    display: inline-block;
+    width: 120px;
+}
+
+.player_stats label {
+    display: inline-block;
+    width: 120px;
+}

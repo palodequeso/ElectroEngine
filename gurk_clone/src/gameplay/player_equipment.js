@@ -1,6 +1,6 @@
 'use strict';
 
-var Model = require('exo').Model;
+const Model = require('exo').Model;
 
 class PlayerEquipment extends Model {
     get defaults() {
@@ -22,4 +22,4 @@ class PlayerEquipment extends Model {
     }
 }
 
-module.exporst = PlayerEquipment;
+module.exports = PlayerEquipment;

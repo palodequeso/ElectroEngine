@@ -1,8 +1,8 @@
 'use strict';
 
-var Collection = require('exo').Collection;
+const Collection = require('exo').Collection;
 
-var InventoryItem = require('./inventory_item.js');
+const InventoryItem = require('./inventory_item.js');
 
 class Inventory extends Collection {
     get model() {

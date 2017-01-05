@@ -11,7 +11,8 @@ class Quest extends Model {
             ending_trigger: '',
             ending_trigger_type: '',
             reward: '',
-            reward_value: null
+            reward_value: null,
+            completed: false
         };
     }
 }

@@ -1,10 +1,11 @@
 'use strict';
 
-var GameplaySystem = require('../../../engine/models/systems/gameplay.js');
-var input = require('../../../engine/models/input.js');
+const GameplaySystem = require('../../../engine/models/systems/gameplay.js');
+const input = require('../../../engine/models/input.js');
 
-var CameraControl = require('./camera_control.js');
-var Party = require('./party.js');
+const CameraControl = require('./camera_control.js');
+const Party = require('./party.js');
+const Quests = require('./quests.js');
 
 class RPGGameplaySystem extends GameplaySystem {
     constructor() {
@@ -15,12 +16,24 @@ class RPGGameplaySystem extends GameplaySystem {
 
         this.camera_control = new CameraControl();
         this.party = new Party();
+        this.quests = new Quests();
+    }
+    new_game(root_directory) {
+        this.quests.reset(JSON.parse(fs.readFileSync(path.normalize(
+            path.join(root_directory, 'data', 'quests.json')), 'utf-8')));
+        console.log(this.quests.serialize());
+    }
+    continue_game(root_directory) {
+        //
+    }
+    save_game(root_directory) {
+        //
     }
     update(frame_time, entities, camera, game) {
         if (this.character_entity === null) {
             entities.each(entity => {
-                var found = false;
-                var components = entity.components.get_by_index('type', 'character');
+                let found = false;
+                const components = entity.components.get_by_index('type', 'character');
                 if (components && !found) {
                     components.forEach(component => {
                         if (component.character_instance.id === 'player_character') {
@@ -34,14 +47,14 @@ class RPGGameplaySystem extends GameplaySystem {
             });
         }
 
-        var map_instance = game.map_instance;
+        const map_instance = game.map_instance;
 
         this.camera_control.update(frame_time, camera);
 
-        var click_data = input.is_clicked();
+        const click_data = input.is_clicked();
         if (click_data !== null) {
-            var map = null;
-            var components = game.current_map_instance.components.get_by_index('type', 'map');
+            let map = null;
+            const components = game.current_map_instance.components.get_by_index('type', 'map');
             if (components) {
                 components.forEach(component => {
                     map = component.map_instance.map;
@@ -49,8 +62,8 @@ class RPGGameplaySystem extends GameplaySystem {
             }
 
             if (map !== null && map.collision_layer.tiles_x > 0 && map.collision_layer.tiles_y > 0) {
-                var position = this.character_instance.sprite_instance.position;
-                var path_data = this.figure_out_path_data(position, click_data, camera, map);
+                const position = this.character_instance.sprite_instance.position;
+                const path_data = this.figure_out_path_data(position, click_data, camera, map);
                 console.log(path_data);
                 // TODO: Path data is incorrect :(, womp
                 map.collision_layer.find_path(path_data.start, path_data.end).then(character_path => {
@@ -59,7 +72,7 @@ class RPGGameplaySystem extends GameplaySystem {
                         return;
                     }
 
-                    var last_tile = character_path[character_path.length - 1];
+                    const last_tile = character_path[character_path.length - 1];
                     this.character_instance.sprite_instance.position = [
                         last_tile.x * map_instance.map.tile_width,
                         (map_instance.map.height - last_tile.y - 1) * map_instance.map.tile_height
@@ -70,14 +83,14 @@ class RPGGameplaySystem extends GameplaySystem {
         }
     }
     figure_out_path_data(start_position, mouse_position, camera, map) {
-        var start = [
+        const start = [
             Math.floor(start_position[0] / map.tile_width),
             map.height - (Math.floor(start_position[1] / map.tile_height)) - 1
         ];
 
-        var mpx = mouse_position[0];
-        var mpy = (camera.resolution[1] * camera.scale[1]) - mouse_position[1];
-        var end = [
+        const mpx = mouse_position[0];
+        const mpy = (camera.resolution[1] * camera.scale[1]) - mouse_position[1];
+        const end = [
             Math.floor((-camera.position[0] + mpx) / camera.scale[0] / map.tile_width),
             map.height - (Math.floor((-camera.position[1] + mpy) / camera.scale[1] / map.tile_height)) - 1
         ];

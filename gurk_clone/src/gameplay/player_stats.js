@@ -1,11 +1,13 @@
 'use strict';
 
-var Model = require('exo').Model;
+const Model = require('exo').Model;
 
 class PlayerStats extends Model {
     get defaults() {
         return {
+            max_health: 0,
             health: 0,
+            max_mana: 0,
             mana: 0,
             level: 0,
             experience: 0,
@@ -23,4 +25,4 @@ class PlayerStats extends Model {
     }
 }
 
-module.exporst = PlayerStats;
+module.exports = PlayerStats;

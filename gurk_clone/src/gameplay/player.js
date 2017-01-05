@@ -1,16 +1,18 @@
 'use strict';
 
-var Model = require('exo').Model;
+const Model = require('exo').Model;
 
-var Entity = require('../../../engine/models/ecs/entity.js');
+const Entity = require('../../../engine/models/ecs/entity.js');
 
-var Inventory = require('./inventory.js');
-var Equipment = require('./player_equipment.js');
-var Stats = require('./player_stats.js');
+const Inventory = require('./inventory.js');
+const PlayerEquipment = require('./player_equipment.js');
+const PlayerStats = require('./player_stats.js');
 
 class Player extends Model {
     get defaults() {
         return {
+            name: '',
+            class: '',
             stats: null,
             equipment: null,
             inventory: null,
@@ -19,8 +21,8 @@ class Player extends Model {
     }
     get types() {
         return {
-            stats: Stats,
-            equipment: Equipment,
+            stats: PlayerStats,
+            equipment: PlayerEquipment,
             inventory: Inventory,
             character_entity: Entity
         };

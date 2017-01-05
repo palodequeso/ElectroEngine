@@ -2,9 +2,8 @@
     "party": [],
     "quests": [
         {
-            "map_instance_id": "",
-            "npc": "",
-            "destination_map_id": ""
+            "id": "slime_cave",
+            "completed": "false"
         }
     ]
 }

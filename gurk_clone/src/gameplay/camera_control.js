@@ -1,16 +1,16 @@
 'use strict';
 
-var Model = require('exo').Model;
+const Model = require('exo').Model;
 
-var input = require('../../../engine/models/input.js');
+const input = require('../../../engine/models/input.js');
 
 class CameraControl extends Model {
     constructor(options) {
         super(options);
     }
     update(time_delta, camera) {
-        var camera_velocity = [0, 0];
-        var camera_speed = 8 * camera.scale[0];
+        const camera_velocity = [0, 0];
+        const camera_speed = 8 * camera.scale[0];
         if (input.is_keydown(68)) {
             camera_velocity[0] = camera_speed;
         }

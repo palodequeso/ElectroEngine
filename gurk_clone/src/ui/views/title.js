@@ -20,15 +20,19 @@ class Title extends View {
         super(options);
     }
     continue_game() {
+        console.log("Continue Game");
         this.emit('continue_game');
     }
     new_game() {
-        this.emit('new_game');
+        console.log("New Game");
+        this.emit('new_game_out');
     }
     game_options() {
+        console.log("Game Options");
         this.emit('game_options');
     }
     exit_game() {
+        console.log("Exit Game");
         this.emit('exit_game');
     }
     render() {

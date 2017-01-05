@@ -7,6 +7,7 @@
         "ending_trigger": "slime_boss",
         "ending_trigger_type": "enemy_death",
         "reward": "gold",
-        "reward_value": 50
+        "reward_value": 50,
+        "completed": false
     }
 ]

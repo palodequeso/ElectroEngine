@@ -11,13 +11,14 @@ class PlayerStats extends Model {
             mana: 0,
             level: 0,
             experience: 0,
-            strength: 0,
-            constitution: 0,
-            dexterity: 0,
-            agility: 0,
-            knowledge: 0,
-            intellect: 0,
-            charisma: 0
+            strength: 8,
+            constitution: 8,
+            dexterity: 8,
+            agility: 8,
+            knowledge: 8,
+            intellect: 8,
+            charisma: 8,
+            max_stats: 84
         };
     }
     constructor(options) {

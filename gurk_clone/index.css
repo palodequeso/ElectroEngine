@@ -67,3 +67,11 @@ canvas {
     display: inline-block;
     width: 120px;
 }
+
+.player_stat_down_button {
+    color: white;
+}
+
+.player_stat_up_button {
+    color: white;
+}

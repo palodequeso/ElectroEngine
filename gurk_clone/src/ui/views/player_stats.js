@@ -9,6 +9,9 @@ const View = require('exo').View;
 
 const player_stats_tmpl = fs.readFileSync(path.join(__dirname, '/../tmpl/player_stats.html'), 'utf8');
 
+const player_class_stat_bonuses = require('./../../gameplay/player_class_stat_bonuses.js');
+const levels = require('./../../gameplay/levels.js');
+
 class PlayerStats extends View {
     get events() {
         return {
@@ -20,6 +23,7 @@ class PlayerStats extends View {
     constructor(options) {
         super(options);
         this.template = Handlebars.compile(player_stats_tmpl);
+        this.class = options.class;
     }
     check_stat(elem, value, stat) {
         let quantity = 0;
@@ -31,6 +35,8 @@ class PlayerStats extends View {
             quantity = quantity - (this.model.max_stats - quantity);
             elem.value = quantity;
         }
+
+        this.update_stat_values();
 
         console.log(stat, value, quantity);
     }
@@ -60,8 +66,32 @@ class PlayerStats extends View {
         const stat = elem.dataset.stat;
         this.check_stat(elem, value, stat);
     }
+    update_stat_values() {
+        this.element.querySelectorAll('.stat_bonus').forEach(element => {
+            const stat = element.dataset.stat;
+            let bonus = 0;
+            if (player_class_stat_bonuses.hasOwnProperty(this.class)) {
+                bonus = player_class_stat_bonuses[this.class][stat];
+            }
+            const new_value = this.model[stat] + bonus;
+            if (bonus < 0) {
+                element.innerHTML = ` -`;
+            } else {
+                element.innerHTML = ` +`;
+            }
+            element.innerHTML += ` ${bonus} = ${new_value}`;
+        });
+    }
     render() {
-        this.element.innerHTML = this.template(this.model.serialize());
+        const render_data = this.model.serialize();
+        render_data.next_level = levels[0];
+        levels.forEach((level, index) => {
+            if (render_data.experience > level && levels[index + 1] && render_data.experience < levels[index + 1]) {
+                render_data.next_level = (levels[index + 1] ? levels[index + 1] : levels[index]);
+            }
+        });
+        this.element.innerHTML = this.template(render_data);
+        this.update_stat_values();
     }
 }
 

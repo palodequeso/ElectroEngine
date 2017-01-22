@@ -17,6 +17,9 @@ class Player extends View {
         super(options);
         this.template = Handlebars.compile(player_tmpl);
     }
+    save_to_model() {
+        //
+    }
     render() {
         this.element.innerHTML = this.template({});
 
@@ -28,7 +31,8 @@ class Player extends View {
             model: this.model
         });
         const player_stats = new PlayerStatsView({
-            model: this.model.stats
+            model: this.model.stats,
+            class: this.model.class
         });
 
         player_summary.render();
@@ -37,6 +41,11 @@ class Player extends View {
         this.element.querySelector('.player_inventory_summary').appendChild(player_inventory_summary.element);
         player_stats.render();
         this.element.querySelector('.player_stats').appendChild(player_stats.element);
+
+        player_summary.on('class_change', () => {
+            player_stats.class = this.model.class;
+            player_stats.render();
+        });
     }
 }
 

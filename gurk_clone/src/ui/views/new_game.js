@@ -23,16 +23,23 @@ class NewGame extends View {
         this.template = Handlebars.compile(new_game_tmpl);
         this.content = null;
         this.players = [];
+        this.player_view = null;
     }
     next_player() {
+        if (this.player_view !== null) {
+            this.player_view.save_to_model();
+            this.players.push(this.player_view.model);
+            this.player_view = null;
+        }
         if (this.players.length === 4) {
             // DONE
+            console.log("Done", this.players);
         } else {
-            const player_view = new PlayerView({model: new Player()});
-            player_view.render();
+            this.player_view = new PlayerView({model: new Player()});
+            this.player_view.render();
             this.content.innerHTML = '';
-            this.content.appendChild(player_view.element);
-            player_view.element.querySelector('.next_player').style.display = 'block';
+            this.content.appendChild(this.player_view.element);
+            this.player_view.element.querySelector('.next_player').style.display = 'block';
         }
     }
     render() {

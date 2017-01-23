@@ -19,6 +19,19 @@ class PlayerSummary extends View {
         super(options);
         this.template = Handlebars.compile(player_summary_tmpl);
     }
+    save_to_model() {
+        const player_name = this.element.querySelector('.player_name').value;
+        const player_class = this.element.querySelector('.player_class').value;
+
+        this.model.name = player_name;
+        this.model.class = player_class;
+
+        if (player_name === '' || player_class === '') {
+            return false;
+        }
+
+        return true;
+    }
     change_player_class() {
         const player_class = this.element.querySelector('.player_class').value;
         if (player_class === '') {

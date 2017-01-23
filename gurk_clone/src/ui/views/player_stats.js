@@ -24,6 +24,28 @@ class PlayerStats extends View {
         super(options);
         this.template = Handlebars.compile(player_stats_tmpl);
         this.class = options.class;
+        this.is_new = options.is_new || false;
+    }
+    save_to_model() {
+        let quantity = 0;
+        this.element.querySelectorAll('.player_stat_value').forEach(element => {
+            quantity += parseInt(element.value, 10);
+        });
+        if (quantity !== this.model.max_stats) {
+            console.log("Quantity: ", quantity);
+            return false;
+        }
+
+        this.element.querySelectorAll('.player_stat_value').forEach(element => {
+            const stat = element.dataset.stat;
+            this.model[stat] = parseInt(element.value, 10);
+
+            if (player_class_stat_bonuses.hasOwnProperty(this.class)) {
+                this.model[stat] += player_class_stat_bonuses[this.class][stat];
+            }
+        });
+
+        return true;
     }
     check_stat(elem, value, stat) {
         let quantity = 0;
@@ -73,6 +95,22 @@ class PlayerStats extends View {
             if (player_class_stat_bonuses.hasOwnProperty(this.class)) {
                 bonus = player_class_stat_bonuses[this.class][stat];
             }
+
+            if (stat === 'constitution' && this.is_new) {
+                const hp_bonus = Math.floor((this.model[stat] + bonus - 10) / 2.0);
+                let hp_base = 8;
+                if (this.class === 'fighter') {
+                    hp_base = 10;
+                }
+                this.model.health = hp_base + hp_bonus;
+                this.model.max_health = hp_base + hp_bonus;
+            } else if (stat === 'intellect' && this.is_new) {
+                const mana_bonus = Math.floor((this.model[stat] + bonus - 10) / 2.0);
+                let mana_base = 8;
+                this.model.mana = mana_base + mana_bonus;
+                this.model.max_mana = mana_base + mana_bonus;
+            }
+
             const new_value = this.model[stat] + bonus;
             if (bonus < 0) {
                 element.innerHTML = ` -`;

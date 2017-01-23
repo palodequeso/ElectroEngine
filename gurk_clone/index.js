@@ -3,7 +3,10 @@
 const fs = require('fs');
 const path = require("path");
 const process = require('process');
+
 const GameModel = require('../engine/models/game.js');
+const Party = require('./src/gameplay/party.js');
+
 const Game = require('../engine/views/game.js');
 const gameio = require('../engine/util/gameio.js');
 
@@ -57,6 +60,12 @@ document.addEventListener("DOMContentLoaded", () => {
     const title = new TitleView({collection: save_games});
     title.on('new_game_out', () => {
         const new_game_view = new NewGameView();
+        new_game_view.on('done', players => {
+            gameplay.party.members.reset(players);
+            new_game_view.element.parentNode.removeChild(new_game_view.element);
+            game_view.running = true;
+            console.log("Party: ", gameplay.party);
+        });
         new_game_view.render();
         title.element.parentNode.removeChild(title.element);
         body.appendChild(new_game_view.element);

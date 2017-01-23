@@ -27,15 +27,20 @@ class NewGame extends View {
     }
     next_player() {
         if (this.player_view !== null) {
-            this.player_view.save_to_model();
+            const result = this.player_view.save_to_model();
+            if (!result) {
+                hx.notify.negative('Form incomplete!');
+                return;
+            }
+
             this.players.push(this.player_view.model);
             this.player_view = null;
         }
         if (this.players.length === 4) {
-            // DONE
             console.log("Done", this.players);
+            this.emit('done', this.players);
         } else {
-            this.player_view = new PlayerView({model: new Player()});
+            this.player_view = new PlayerView({model: new Player(), is_new: true});
             this.player_view.render();
             this.content.innerHTML = '';
             this.content.appendChild(this.player_view.element);

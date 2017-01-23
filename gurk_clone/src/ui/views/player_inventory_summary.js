@@ -15,6 +15,9 @@ class PlayerStats extends View {
         super(options);
         this.template = Handlebars.compile(player_inventory_summary_tmpl);
     }
+    save_to_model() {
+        return true;
+    }
     render() {
         const data = {
             count: this.model.inventory.length,

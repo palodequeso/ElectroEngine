@@ -16,35 +16,43 @@ class Player extends View {
     constructor(options) {
         super(options);
         this.template = Handlebars.compile(player_tmpl);
+        this.is_new = options.is_new || false;
+        this.player_stats = null;
+        this.player_summary = null;
+        this.player_inventory_summary = null;
     }
     save_to_model() {
-        //
+        return (
+            this.player_stats.save_to_model() ||
+            this.player_summary.save_to_model() ||
+            this.player_inventory_summary.save_to_model()
+        );
     }
     render() {
         this.element.innerHTML = this.template({});
 
         console.log(this.model);
-        const player_summary = new PlayerSummaryView({
+        this.player_summary = new PlayerSummaryView({
             model: this.model
         });
-        const player_inventory_summary = new PlayerInventorySummaryView({
+        this.player_inventory_summary = new PlayerInventorySummaryView({
             model: this.model
         });
-        const player_stats = new PlayerStatsView({
+        this.player_stats = new PlayerStatsView({
             model: this.model.stats,
             class: this.model.class
         });
 
-        player_summary.render();
-        this.element.querySelector('.player_summary').appendChild(player_summary.element);
-        player_inventory_summary.render();
-        this.element.querySelector('.player_inventory_summary').appendChild(player_inventory_summary.element);
-        player_stats.render();
-        this.element.querySelector('.player_stats').appendChild(player_stats.element);
+        this.player_summary.render();
+        this.element.querySelector('.player_summary').appendChild(this.player_summary.element);
+        this.player_inventory_summary.render();
+        this.element.querySelector('.player_inventory_summary').appendChild(this.player_inventory_summary.element);
+        this.player_stats.render();
+        this.element.querySelector('.player_stats').appendChild(this.player_stats.element);
 
-        player_summary.on('class_change', () => {
-            player_stats.class = this.model.class;
-            player_stats.render();
+        this.player_summary.on('class_change', () => {
+            this.player_stats.class = this.model.class;
+            this.player_stats.render();
         });
     }
 }

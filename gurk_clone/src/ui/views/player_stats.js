@@ -32,7 +32,7 @@ class PlayerStats extends View {
             quantity += parseInt(element.value, 10);
         });
         if (quantity !== this.model.max_stats) {
-            console.log("Quantity: ", quantity);
+            console.log("Quantity: ", `${quantity} / ${this.model.max_stats}`);
             return false;
         }
 
@@ -53,10 +53,12 @@ class PlayerStats extends View {
             quantity += parseInt(element.value, 10);
         });
 
-        if (quantity >= this.model.max_stats) {
-            quantity = quantity - (this.model.max_stats - quantity);
+        if (quantity > this.model.max_stats) {
+            quantity = this.model.max_stats - (quantity - value);
             elem.value = quantity;
         }
+
+        this.model[stat] = quantity;
 
         this.update_stat_values();
 

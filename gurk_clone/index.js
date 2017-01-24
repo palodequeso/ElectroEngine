@@ -61,10 +61,24 @@ document.addEventListener("DOMContentLoaded", () => {
     title.on('new_game_out', () => {
         const new_game_view = new NewGameView();
         new_game_view.on('done', players => {
+            // Set the party to the current gameplay class.
             gameplay.party.members.reset(players);
+            // Remove the new game view.
             new_game_view.element.parentNode.removeChild(new_game_view.element);
+
+            // Create a copy of the game template.
+            const game_template = JSON.parse(fs.readFileSync(path.join(__dirname, 'game_template.json'), 'utf-8'));
+            // Set the players, for saving.
+            game_template.party = players;
+            // Generate a new game unique file for saves.
+            let save_filename = `${new Date().toISOString()}-${players[0].name}-${players[1].name}-${players[2].name}-${players[3].name}`;
+            // Save that file to the saves dir.
+            const save_file_path = path.join(__dirname, 'saves', `${save_filename}.json`);
+            fs.writeFileSync(save_file_path, JSON.stringify(game_template, null, 2));
+
+            // Set the game to start running.
             game_view.running = true;
-            console.log("Party: ", gameplay.party);
+            game_view.run();
         });
         new_game_view.render();
         title.element.parentNode.removeChild(title.element);

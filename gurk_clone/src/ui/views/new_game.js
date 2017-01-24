@@ -37,7 +37,6 @@ class NewGame extends View {
             this.player_view = null;
         }
         if (this.players.length === 4) {
-            console.log("Done", this.players);
             this.emit('done', this.players);
         } else {
             this.player_view = new PlayerView({model: new Player(), is_new: true});

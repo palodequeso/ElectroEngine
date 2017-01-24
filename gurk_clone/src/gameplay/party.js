@@ -9,7 +9,7 @@ class Party extends Model {
         return {
             members: null,
             current_active: 0,
-            mode: 'battle' // or 'travel' (which is just one character like other RPGs)
+            mode: 'travel' // or 'battle'
         };
     }
     get types() {

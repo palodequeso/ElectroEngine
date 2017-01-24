@@ -23,15 +23,14 @@ class Player extends View {
     }
     save_to_model() {
         return (
-            this.player_stats.save_to_model() ||
-            this.player_summary.save_to_model() ||
+            this.player_stats.save_to_model() &&
+            this.player_summary.save_to_model() &&
             this.player_inventory_summary.save_to_model()
         );
     }
     render() {
         this.element.innerHTML = this.template({});
 
-        console.log(this.model);
         this.player_summary = new PlayerSummaryView({
             model: this.model
         });

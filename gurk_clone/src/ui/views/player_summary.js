@@ -27,6 +27,7 @@ class PlayerSummary extends View {
         this.model.class = player_class;
 
         if (player_name === '' || player_class === '') {
+            hx.notify.negative(`You must provide a name and select a class!`);
             return false;
         }
 

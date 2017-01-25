@@ -32,6 +32,7 @@ class PlayerStats extends View {
             quantity += parseInt(element.value, 10);
         });
         if (quantity !== this.model.max_stats) {
+            hx.notify.negative(`Stats cannot total more than ${this.model.max_stats}, and must be between 8 and 32!`);
             console.log("Quantity: ", `${quantity} / ${this.model.max_stats}`);
             return false;
         }
@@ -48,21 +49,21 @@ class PlayerStats extends View {
         return true;
     }
     check_stat(elem, value, stat) {
-        let quantity = 0;
-        this.element.querySelectorAll('.player_stat_value').forEach(element => {
-            quantity += parseInt(element.value, 10);
-        });
+        // let quantity = 0;
+        // this.element.querySelectorAll('.player_stat_value').forEach(element => {
+        //     quantity += parseInt(element.value, 10);
+        // });
+        //
+        // if (quantity > this.model.max_stats) {
+        //     quantity = this.model.max_stats - (quantity - value);
+        //     elem.value = quantity;
+        // }
 
-        if (quantity > this.model.max_stats) {
-            quantity = this.model.max_stats - (quantity - value);
-            elem.value = quantity;
-        }
-
-        this.model[stat] = quantity;
+        this.model[stat] = value;//quantity;
 
         this.update_stat_values();
 
-        console.log(stat, value, quantity);
+        console.log(stat, value);//, quantity);
     }
     stat_down(event) {
         const elem = event.target.parentNode;
@@ -121,6 +122,11 @@ class PlayerStats extends View {
             }
             element.innerHTML += ` ${bonus} = ${new_value}`;
         });
+        let quantity = 0;
+        this.element.querySelectorAll('.player_stat_value').forEach(element => {
+            quantity += parseInt(element.value, 10);
+        });
+        this.element.querySelector('.stat_sum').innerHTML = quantity.toString();
     }
     render() {
         const render_data = this.model.serialize();

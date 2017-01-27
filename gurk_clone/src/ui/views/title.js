@@ -1,11 +1,11 @@
 'use strict';
 
-var fs = require('fs');
-var path = require('path');
+const fs = require('fs');
+const path = require('path');
 
 // var Handlebars = require('handlebars');
-var View = require('exo').View;
-var title_tmpl = fs.readFileSync(path.join(__dirname, '/../tmpl/title.html'), 'utf8');
+const View = require('exo').View;
+const title_tmpl = fs.readFileSync(path.join(__dirname, '/../tmpl/title.html'), 'utf8');
 
 class Title extends View {
     get events() {

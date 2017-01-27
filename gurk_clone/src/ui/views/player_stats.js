@@ -59,11 +59,11 @@ class PlayerStats extends View {
         //     elem.value = quantity;
         // }
 
-        this.model[stat] = value;//quantity;
+        this.model[stat] = value; // quantity;
 
         this.update_stat_values();
 
-        console.log(stat, value);//, quantity);
+        console.log(stat, value); // , quantity);
     }
     stat_down(event) {
         const elem = event.target.parentNode;
@@ -109,7 +109,7 @@ class PlayerStats extends View {
                 this.model.max_health = hp_base + hp_bonus;
             } else if (stat === 'intellect' && this.is_new) {
                 const mana_bonus = Math.floor((this.model[stat] + bonus - 10) / 2.0);
-                let mana_base = 8;
+                const mana_base = 8;
                 this.model.mana = mana_base + mana_bonus;
                 this.model.max_mana = mana_base + mana_bonus;
             }

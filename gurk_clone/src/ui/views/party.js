@@ -1,11 +1,11 @@
 'use strict';
 
-var fs = require('fs');
-var path = require('path');
+const fs = require('fs');
+const path = require('path');
 
-var Handlebars = require('handlebars');
-var View = require('exo').View;
-var party_tmpl = fs.readFileSync(path.join(__dirname, '/../tmpl/party.html'), 'utf8');
+const Handlebars = require('handlebars');
+const View = require('exo').View;
+const party_tmpl = fs.readFileSync(path.join(__dirname, '/../tmpl/party.html'), 'utf8');
 
 class Party extends View {
     get events() {

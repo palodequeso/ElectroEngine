@@ -1,11 +1,10 @@
 'use strict';
 
-const fs = require('fs');
+const fs = require('fs-extra');
 const path = require("path");
 const process = require('process');
 
 const GameModel = require('../engine/models/game.js');
-const Party = require('./src/gameplay/party.js');
 
 const Game = require('../engine/views/game.js');
 const gameio = require('../engine/util/gameio.js');
@@ -69,12 +68,16 @@ document.addEventListener("DOMContentLoaded", () => {
             // Create a copy of the game template.
             const game_template = JSON.parse(fs.readFileSync(path.join(__dirname, 'game_template.json'), 'utf-8'));
             // Set the players, for saving.
-            game_template.party = players;
+            game_template.party = gameplay.party.serialize();
             // Generate a new game unique file for saves.
-            let save_filename = `${new Date().toISOString()}-${players[0].name}-${players[1].name}-${players[2].name}-${players[3].name}`;
+            const save_filename = `${(new Date).getTime()}.json`;
             // Save that file to the saves dir.
-            const save_file_path = path.join(__dirname, 'saves', `${save_filename}.json`);
-            fs.writeFileSync(save_file_path, JSON.stringify(game_template, null, 2));
+            const save_file_path = path.join(__dirname, 'saves', `${save_filename}`);
+            try {
+                fs.writeFileSync(save_file_path, JSON.stringify(game_template, null, 2));
+            } catch (e) {
+                console.error(e, save_file_path, JSON.stringify(game_template, null, 2));
+            }
 
             // Set the game to start running.
             game_view.running = true;

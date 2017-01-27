@@ -87,7 +87,7 @@
     "no-iterator": 1,
     "no-labels": 1,
     "no-lone-blocks": 1,
-    "no-loop-func": 0,
+    "no-loop-func": 1,
     "no-multi-spaces": 1,
     "no-multi-str": 1,
     "no-native-reassign": 1,
@@ -107,7 +107,7 @@
     "no-throw-literal": 1,
     "no-unused-expressions": 0,
     "no-void": 0,
-    "no-warning-comments": [0, { "terms": ["todo", "tofix"], "location": "start" }],
+    "no-warning-comments": [1, { "terms": ["todo", "tofix"], "location": "start" }],
     "no-with": 1,
     "radix": 1,
     # "vars-on-top": 1,
@@ -123,7 +123,7 @@
     "no-shadow": 1,
     "no-undef-init": 1,
     # "no-undef": 1,
-    "no-undefined": 0,
+    "no-undefined": 1,
     "no-unused-vars": [1, { "vars": "local", "args": "after-used" }],
     "no-use-before-define": 1,
     /* Node.js */
@@ -157,7 +157,7 @@
     "no-inline-comments": 0,
     "no-lonely-if": 1,
     "no-mixed-spaces-and-tabs": 1,
-    "no-multiple-empty-lines": [0, { "max": 1 }],
+    "no-multiple-empty-lines": [1, { "max": 1 }],
     "no-nested-ternary": 0,
     "no-new-object": 1,
     "no-spaced-func": 1,
@@ -195,7 +195,7 @@
     "max-len": [1, 121, 2],
     "max-params": 0,
     "max-statements": 0,
-    "no-bitwise": 0,
+    "no-bitwise": 1,
     "no-plusplus": 1
   }
 }

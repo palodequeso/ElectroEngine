@@ -1,8 +1,8 @@
 'use strict';
 
-var Model = require('exo').Model;
+const Model = require('exo').Model;
 
-var PartyMembers = require('./party_members.js');
+const PartyMembers = require('./party_members.js');
 
 class Party extends Model {
     get defaults() {

@@ -18,6 +18,8 @@ const Systems = require('../engine/models/ecs/systems.js');
 const BasicPhysics = require('../engine/models/physics/basic_physics.js');
 
 const RPGGameplaySystem = require('./src/gameplay/gameplay.js');
+const Party = require('./src/gameplay/party.js');
+const Quests = require('./src/gameplay/quests.js');
 
 const SaveGames = require('./src/ui/models/save_games.js');
 const TitleView = require('./src/ui/views/title.js');
@@ -27,7 +29,10 @@ function read_saves() {
     const out = [];
     const save_files = fs.readdirSync(path.join(__dirname, 'saves'));
     save_files.forEach(save_file => {
-        out.push(JSON.parse(fs.readFileSync(path.join(__dirname, 'saves', save_file), 'utf-8')));
+        out.push({
+            filename: save_file,
+            data: JSON.parse(fs.readFileSync(path.join(__dirname, 'saves', save_file), 'utf-8'))
+        });
     });
     return out;
 }
@@ -55,7 +60,8 @@ document.addEventListener("DOMContentLoaded", () => {
     game_view.run();
     game_view.running = false;
 
-    const save_games = new SaveGames(read_saves());
+    // const save_games = new SaveGames(read_saves());
+    const save_games = read_saves();
     const title = new TitleView({collection: save_games});
     title.on('new_game_out', () => {
         const new_game_view = new NewGameView();
@@ -70,7 +76,7 @@ document.addEventListener("DOMContentLoaded", () => {
             // Set the players, for saving.
             game_template.party = gameplay.party.serialize();
             // Generate a new game unique file for saves.
-            const save_filename = `${(new Date).getTime()}.json`;
+            const save_filename = `${(new Date()).getTime()}.json`;
             // Save that file to the saves dir.
             const save_file_path = path.join(__dirname, 'saves', `${save_filename}`);
             try {
@@ -89,7 +95,17 @@ document.addEventListener("DOMContentLoaded", () => {
         // gameplay.new_game(__dirname);
     });
     title.on('continue_game', () => {
-        gameplay.continue_game();
+        let save_data = null;
+        save_games.forEach(save => {
+            save_data = save.data;
+        });
+        gameplay.party = new Party(save_data.party); // .set(save_data);
+        gameplay.quests = new Quests(save_data.quests);
+        // gameplay.continue_game();
+        console.log(gameplay);
+        game_view.running = true;
+        game_view.run();
+        title.element.parentNode.removeChild(title.element);
     });
     title.on('game_options', () => {
         //

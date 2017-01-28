@@ -1,9 +1,0 @@
-{
-    "id": "environment",
-    "name": "environment",
-    "path": "tileset.png",
-    "width": 256,
-    "height": 256,
-    "tile_width": 8,
-    "tile_height": 8
-}

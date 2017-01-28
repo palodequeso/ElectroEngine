@@ -1,82 +1,90 @@
-const path = require('path');
-const fs = require('fs');
+'use strict';
 
-const electron = require('electron');
-// Module to control application life.
-const app = electron.app;
-// Module to create native browser window.
-const BrowserWindow = electron.BrowserWindow;
-
-// Keep a global reference of the window object, if you don't, the window will
-// be closed automatically when the JavaScript object is garbage collected.
-var mainWindow;
-
-function createWindow() {
-
-    var resolution = [800, 600];
-    var maximize = true;
-    var index_path = `file://${__dirname}/editor/index.html`;
-    var open_dev_tools = true;
-    var dev_tool_size = 500;
-    if (process.argv[2] && process.argv[2].startsWith('--')) {
-        var game_folder = process.argv[2].slice(2);
-        index_path = `file://${__dirname}/${game_folder}/index.html`;
-        console.log(path.join(__dirname, game_folder, 'config.json'));
-        try {
-            var config = JSON.parse(fs.readFileSync(path.join(__dirname, game_folder, 'config.json'), 'utf-8'));
-            resolution = config.resolution;
-            maximize = config.maximize;
-            open_dev_tools = config.open_dev_tools;
-            dev_tool_size = config.dev_tool_size;
-        } catch (e) {
-            console.log("Config doesn't exist, or doesn't have both resolution array and maximize, using defaults.");
-        }
+module.exports = {
+    models: {
+        characters: {
+            CharacterInstance: require('./engine/models/characters/character_instance.js'),
+            CharacterInstances: require('./engine/models/characters/character_instances.js'),
+            Character: require('./engine/models/characters/character.js'),
+            Characters: require('./engine/models/characters/characters.js')
+        },
+        components: {
+            Character: require('./engine/models/components/character.js'),
+            CollisionBody: require('./engine/models/components/collision_body.js'),
+            Map: require('./engine/models/components/map.js'),
+            ParticleSystem: require('./engine/models/components/particle_system.js'),
+            Sprite: require('./engine/models/components/sprite.js')
+        },
+        ecs: {
+            Component: require('./engine/models/ecs/component.js'),
+            Components: require('./engine/models/ecs/components.js'),
+            Entities: require('./engine/models/ecs/entities.js'),
+            Entity: require('./engine/models/ecs/entity.js'),
+            System: require('./engine/models/ecs/system.js'),
+            Systems: require('./engine/models/ecs/systems.js')
+        },
+        graphics: {
+            Camera: require('./engine/models/graphics/camera.js'),
+            Cameras: require('./engine/models/graphics/cameras.js'),
+            SpriteInstance: require('./engine/models/graphics/sprite_instance.js'),
+            SpriteInstances: require('./engine/models/graphics/sprite_instances.js'),
+            SpriteSheet: require('./engine/models/graphics/sprite_sheet.js'),
+            SpriteSheets: require('./engine/models/graphics/sprite_sheets.js'),
+            Sprite: require('./engine/models/graphics/sprite.js'),
+            Sprites: require('./engine/models/graphics/sprites.js')
+        },
+        maps: {
+            CollisionLayer: require('./engine/models/maps/collision_layer.js'),
+            MapInstance: require('./engine/models/maps/map_instance.js'),
+            MapInstances: require('./engine/models/maps/map_instances.js'),
+            MapLayer: require('./engine/models/maps/map_layer.js'),
+            MapLayers: require('./engine/models/maps/map_layers.js'),
+            MapTileInstance: require('./engine/models/maps/map_tile_instance.js'),
+            MapTileInstances: require('./engine/models/maps/map_tile_instances.js'),
+            MapTile: require('./engine/models/maps/map_tile.js'),
+            MapTiles: require('./engine/models/maps/map_tiles.js'),
+            MapWarp: require('./engine/models/maps/map_warp.js'),
+            MapWarps: require('./engine/models/maps/map_warps.js'),
+            Map: require('./engine/models/maps/map.js'),
+            Maps: require('./engine/models/maps/maps.js')
+        },
+        particle_systems: {
+            ParticleSystemInstance: require('./engine/models/particle_systems/particle_system_instance.js'),
+            ParticleSystemInstances: require('./engine/models/particle_systems/particle_system_instances.js'),
+            ParticleSystem: require('./engine/models/particle_systems/particle_system.js'),
+            ParticleSystems: require('./engine/models/particle_systems/particle_systems.js'),
+            Particle: require('./engine/models/particle_systems/particle.js'),
+            Particles: require('./engine/models/particle_systems/particles.js')
+        },
+        physics: {
+            BasicPhysics: require('./engine/models/physics/basic_physics.js'),
+            Bodies: require('./engine/models/physics/bodies.js'),
+            Body: require('./engine/models/physics/body.js'),
+            Physics: require('./engine/models/physics/physics.js'),
+            RigidBodyPhysics: require('./engine/models/physics/rigid_body_physics.js'),
+            ShapeBox: require('./engine/models/physics/shape_box.js'),
+            ShapeCircle: require('./engine/models/physics/shape_circle.js'),
+            ShapeEdge: require('./engine/models/physics/shape_edge.js'),
+            ShapePolygon: require('./engine/models/physics/shape_polygon.js'),
+            Shape: require('./engine/models/physics/shape.js')
+        },
+        systems: {
+            Audio: require('./engine/models/systems/audio.js'),
+            Gameplay: require('./engine/models/systems/gameplay.js'),
+            Graphics: require('./engine/models/systems/graphics.js'),
+            Map: require('./engine/models/systems/map.js'),
+            Physics: require('./engine/models/systems/physics.js')
+        },
+        Game: require('./engine/models/game.js'),
+        input: require('./engine/models/input.js')
+    },
+    util: {
+        gameio: require('./util/gameio.js'),
+        image_manager: require('./util/image_manager.js'),
+        util: require('./util/util.js')
+    },
+    views: {
+        Game: require('./views/game.js'),
+        Renderer: require('./views/renderer.js')
     }
-
-    // Create the browser window.
-    mainWindow = new BrowserWindow({width: resolution[0] + (open_dev_tools ? dev_tool_size : 0),
-                                    height: resolution[1], autoHideMenuBar: true});
-    if (maximize) {
-        mainWindow.maximize();
-    }
-    // and load the index.html of the app.
-    mainWindow.loadURL(index_path);
-
-    // Open the DevTools.
-    if (open_dev_tools) {
-        mainWindow.webContents.openDevTools();
-    }
-
-    // Emitted when the window is closed.
-    mainWindow.on('closed', function() {
-        // Dereference the window object, usually you would store windows
-        // in an array if your app supports multi windows, this is the time
-        // when you should delete the corresponding element.
-        mainWindow = null;
-    });
-}
-
-// This method will be called when Electron has finished
-// initialization and is ready to create browser windows.
-// Some APIs can only be used after this event occurs.
-app.on('ready', createWindow);
-
-// Quit when all windows are closed.
-app.on('window-all-closed', function() {
-    // On OS X it is common for applications and their menu bar
-    // to stay active until the user quits explicitly with Cmd + Q
-    if (process.platform !== 'darwin') {
-        app.quit();
-    }
-});
-
-app.on('activate', function() {
-    // On OS X it's common to re-create a window in the app when the
-    // dock icon is clicked and there are no other windows open.
-    if (mainWindow === null) {
-        createWindow();
-    }
-});
-
-// In this file you can include the rest of your app's specific main process
-// code. You can also put them in separate files and require them here.
+};

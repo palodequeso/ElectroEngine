@@ -79,12 +79,12 @@ module.exports = {
         input: require('./engine/models/input.js')
     },
     util: {
-        gameio: require('./util/gameio.js'),
-        image_manager: require('./util/image_manager.js'),
-        util: require('./util/util.js')
+        gameio: require('./engine/util/gameio.js'),
+        image_manager: require('./engine/util/image_manager.js'),
+        util: require('./engine/util/util.js')
     },
     views: {
-        Game: require('./views/game.js'),
-        Renderer: require('./views/renderer.js')
+        Game: require('./engine/views/game.js'),
+        Renderer: require('./engine/views/renderer.js')
     }
 };

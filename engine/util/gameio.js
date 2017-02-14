@@ -71,6 +71,7 @@ class GameLoader {
         this.character_body_data = {};
         this.map_bodies = {};
         this.game = new game_model({
+            path_prefix: folder_path,
             systems: systems,
             sprite_sheets: new SpriteSheets(),
             sprites: new Sprites(),

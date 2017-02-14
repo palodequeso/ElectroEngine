@@ -1,45 +1,47 @@
 "use strict";
 
-var path = require('path');
-var View = require('exo').View;
-var glmatrix = require("gl-matrix");
+const path = require('path');
+const View = require('exo').View;
+const glmatrix = require("gl-matrix");
 
-var textured_quad_shader_vert_source = '' +
-    'attribute vec4 vertex_position;' +
-    'attribute vec4 vertex_texcoord;' +
-    'uniform mat4 projection_matrix;' +
-    'uniform mat4 view_matrix;' +
-    'uniform mat4 model_matrix;' +
-    'uniform vec4 sprite_texcoord;' +
-    'uniform vec2 sprite_size;' +
-    'varying vec2 texcoord;' +
-    'void main(void) {' +
-    '    gl_Position = projection_matrix * view_matrix * model_matrix * vertex_position;' +
-    '    vec2 texcoord_out = sprite_texcoord.st;' +
-    '    if (vertex_texcoord.s > 0.5) {' +
-    '        texcoord_out.s = sprite_texcoord.z;' +
-    '    }' +
-    '    if (vertex_texcoord.t > 0.5) {' +
-    '        texcoord_out.t = sprite_texcoord.w;' +
-    '    }' +
-    '    texcoord_out /= sprite_size;' +
-    '    texcoord = texcoord_out;' +
-    '}';
+const textured_quad_shader_vert_source = `
+    attribute vec4 vertex_position;
+    attribute vec4 vertex_texcoord;
+    uniform mat4 projection_matrix;
+    uniform mat4 view_matrix;
+    uniform mat4 model_matrix;
+    uniform vec4 sprite_texcoord;
+    uniform vec2 sprite_size;
+    varying vec2 texcoord;
+    void main(void) {
+        gl_Position = projection_matrix * view_matrix * model_matrix * vertex_position;
+        vec2 texcoord_out = sprite_texcoord.st;
+        if (vertex_texcoord.s > 0.5) {
+            texcoord_out.s = sprite_texcoord.z;
+        }
+        if (vertex_texcoord.t > 0.5) {
+            texcoord_out.t = sprite_texcoord.w;
+        }
+        texcoord_out /= sprite_size;
+        texcoord = texcoord_out;
+    }`;
 
-var textured_quad_shader_frag_source = '' +
-    'precision mediump float;' +
-    'varying vec2 texcoord;' +
-    'uniform sampler2D texture;' +
-    'uniform vec4 color;' +
-    'void main(void) {' +
-    '    vec4 color_out = texture2D(texture, texcoord) * color;' +
-    '    gl_FragColor = color_out;' +
-    '}';
+const textured_quad_shader_frag_source = `
+    precision mediump float;
+    varying vec2 texcoord;
+    uniform sampler2D texture;
+    uniform vec4 color;
+    void main(void) {
+        vec4 color_out = texture2D(texture, texcoord) * color;
+        gl_FragColor = color_out;
+    }`;
 
 
 class Renderer extends View {
     constructor(options) {
         super(options);
+
+        this.path_prefix = options.path_prefix;
 
         this.canvas_size = [
             this.model.camera.resolution[0] * this.model.camera.scale[0],
@@ -104,7 +106,7 @@ class Renderer extends View {
         var images_loaded_statuses = {};
         var image_loaded_promises = [];
 
-        var images_path = path.join(__dirname, '../../', this.model.path, 'images');
+        var images_path = path.join(this.path_prefix, this.model.path, 'images');
         var sprite_sheets_path = path.normalize(path.join(images_path, 'sprite_sheets'));
         var particles_path = path.normalize(path.join(images_path, 'particles'));
 

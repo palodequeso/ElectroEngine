@@ -9,8 +9,11 @@ class Game extends View {
     constructor(options) {
         super(options);
 
+        this.path_prefix = options.path_prefix;
+
         this.renderer = new Renderer({
-            model: this.model
+            model: this.model,
+            path_prefix: this.path_prefix
         });
         $("body").append(this.renderer.element);
 
